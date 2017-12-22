@@ -1,8 +1,8 @@
 ---
-title: Declarative
+title: 선언형
 order: 0
 ---
 
-React makes it painless to create interactive UIs. Design simple views for each state in your application, and React will efficiently update and render just the right components when your data changes.
+React는 대화형 UI를 만드는 데 어려움을 줄입니다. 어플리케이션의 각 상태에 대한 간단한 뷰를 설계하면 React는 데이터가 변경될 때 적절한 구성요소만 효과적으로 업데이트하고 렌더링합니다.
 
-Declarative views make your code more predictable and easier to debug.
+선언형 뷰는 코드를 예측 가능하고 디버그하기 쉽게 만듭니다.

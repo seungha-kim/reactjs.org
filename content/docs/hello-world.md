@@ -12,9 +12,9 @@ redirect_from:
   - "docs/getting-started-zh-CN.html"
 ---
 
-The easiest way to get started with React is to use [this Hello World example code on CodePen](codepen://hello-world). You don't need to install anything; you can just open it in another tab and follow along as we go through examples. If you'd rather use a local development environment, check out the [Installation](/docs/installation.html) page.
+React를 접하는 가장 쉬운 방법은 [Codepen에서 이 Hello World 예제](codepen://hello-world) 를 사용하는 것입니다. 아무것도 설치할 필요가 없습니다. 다른 탭을 열어서 예제를 따라 가면 됩니다. 로컬 개발 환경을 사용하려면 [설치](/docs/installation.html) 페이지를 확인하십시오.
 
-The smallest React example looks like this:
+가장 작은 Ract 예제는 다음과 같습니다.
 
 ```js
 ReactDOM.render(
@@ -23,12 +23,14 @@ ReactDOM.render(
 );
 ```
 
-It renders a header saying "Hello, world!" on the page.
+이 코드는 페에지에서 헤더의 "Hello, world!"를 렌더링합니다.
 
-The next few sections will gradually introduce you to using React. We will examine the building blocks of React apps: elements and components. Once you master them, you can create complex apps from small reusable pieces.
+다음 몇 섹션에서는 React를 사용하는 방법을 소개합니다. 요소와 컴포넌트 같은 React 앱의 구성 블록을 살펴볼 것입니다. 이를 마스터하면 재사용 가능한 작은 조각으로 복잡한 앱을 만들 수 있습니다.
 
-## A Note on JavaScript
+## 자바스크립트 참고사항
 
-React is a JavaScript library, and so it assumes you have a basic understanding of the JavaScript language. If you don't feel very confident, we recommend [refreshing your JavaScript knowledge](https://developer.mozilla.org/en-US/docs/Web/JavaScript/A_re-introduction_to_JavaScript) so you can follow along more easily.
+React는 자바스크립트 라이브러리이며 이는 곧 자바스크립트 언어에 대한 기본 지식이 필요하다는 것입니다. 자신감이 부족하시다면 [JavaScript 재입문하기](https://developer.mozilla.org/en-US/docs/Web/JavaScript/A_re-introduction_to_JavaScript) 문서를 읽어 더 쉽게 따라할 수 있게 하는 걸 권장합니다.
 
-We also use some of the ES6 syntax in the examples. We try to use it sparingly because it's still relatively new, but we encourage you to get familiar with [arrow functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions), [classes](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes), [template literals](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Template_literals), [`let`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let), and [`const`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const) statements. You can use the [Babel REPL](babel://es5-syntax-example) to check what ES6 code compiles to.
+또한 예제에서 ES6 문법을 종종 사용합니다. 여전히 비교적 새로운 문법이기 때문에 조심히 사용하고 있지만,
+[arrow functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions),
+[classes](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes), [template literals](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Template_literals), [`let`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let), [`const`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const) 문에는 익숙해지는 것을 권장합니다. [Babel REPL](babel://es5-syntax-example) 을 사용해서 ES6 코드가 컴파일 되는 것을 볼 수 있습니다.

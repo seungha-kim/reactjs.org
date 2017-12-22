@@ -1,7 +1,7 @@
 - title: Quick Start
   items:
     - id: installation
-      title: Installation
+      title: 설치
     - id: hello-world
       title: Hello World
     - id: introducing-jsx

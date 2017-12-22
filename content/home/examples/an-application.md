@@ -1,6 +1,6 @@
 ---
-title: An Application
+title: 어플리케이션
 order: 2
 ---
 
-Using `props` and `state`, we can put together a small Todo application. This example uses `state` to track the current list of items as well as the text that the user has entered. Although event handlers appear to be rendered inline, they will be collected and implemented using event delegation.
+`props` 와 `state` 를 사용하여 간단한 Todo 어플리케이션을 만들 수 있습니다. 이 예제에서는 `state` 를 사용하여 사용자가 입력한 텍스트뿐만 아니라 아이템의 현재 리스트를 추적합니다. 이벤트 핸들러는 인라인으로 보이지만, 이벤트 위임을 사용해 구현하고 수집됩니다.

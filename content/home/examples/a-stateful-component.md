@@ -1,6 +1,6 @@
 ---
-title: A Stateful Component
+title: 상태 기반 컴포넌트 (Stateful component)
 order: 1
 ---
 
-In addition to taking input data (accessed via `this.props`), a component can maintain internal state data (accessed via `this.state`). When a component's state data changes, the rendered markup will be updated by re-invoking `render()`.
+입력 데이터를 가져오는 것 외에도 (`this.props` 를 통해 접근), 컴포넌트는 내부 상태 데이터를 관리할 수 있습니다 (`this.state` 를 통해 접근). 컴포넌트의 상태 데이터가 바뀌면, 렌더링된 마크업은 `render()` 를 다시 호출하여 업데이트됩니다.
