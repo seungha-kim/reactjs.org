@@ -1,6 +1,6 @@
 ---
 id: components-and-props
-title: Components and Props
+title: 컴포넌트와 props
 permalink: docs/components-and-props.html
 redirect_from:
   - "docs/reusable-components.html"
@@ -16,13 +16,13 @@ prev: rendering-elements.html
 next: state-and-lifecycle.html
 ---
 
-Components let you split the UI into independent, reusable pieces, and think about each piece in isolation.
+컴포넌트를 사용하여 UI를 독립적이고 재사용 가능한 부분으로 분리하고 각 부분을 독립적으로 생각할 수 있습니다.
 
-Conceptually, components are like JavaScript functions. They accept arbitrary inputs (called "props") and return React elements describing what should appear on the screen.
+개념상 컴포넌트는 자바스크립트 함수와 비슷합니다. 임의의 입력 ("props"라고 부르는)을 받아들이고 어떤 게 화면에 나타나야 하는 지를 설명하는 React 요소를 반환합니다.
 
-## Functional and Class Components
+## 함수형 및 클래스 컴포넌트
 
-The simplest way to define a component is to write a JavaScript function:
+컴포넌트를 정의하는 가장 간단한 방법은 자바스크립트 함수로 작성하는 것입니다.
 
 ```js
 function Welcome(props) {
@@ -30,9 +30,10 @@ function Welcome(props) {
 }
 ```
 
-This function is a valid React component because it accepts a single "props" (which stands for properties) object argument with data and returns a React element. We call such components "functional" because they are literally JavaScript functions.
+이 함수는 단일 "props" (속성을 나타냄) 객체 인수를 받고 React 요소를 반환하기 때문에 유효한 React 컴포넌트입니다.
+이러한 컴포넌트는 말 그대로 자바스크립트 함수이기 때문에 "함수형"이라고 부릅니다.
 
-You can also use an [ES6 class](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Classes) to define a component:
+컴포넌트를 정의하기 위해 [ES6 class](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Classes) 를 사용할 수도 있습니다.
 
 ```js
 class Welcome extends React.Component {
@@ -42,27 +43,27 @@ class Welcome extends React.Component {
 }
 ```
 
-The above two components are equivalent from React's point of view.
+우 컴포넌트는 React 관점에서 보면 동일합니다.
 
-Classes have some additional features that we will discuss in the [next sections](/docs/state-and-lifecycle.html). Until then, we will use functional components for their conciseness.
+클래스는 몇가지 기능을 더 가지고 있는데 이는 [다음 섹션](/docs/state-and-lifecycle.html) 에서 다룹니다. 그 때까지 간결함을 유지하기 위해 함수형 컴포넌트를 사용할 것입니다.
 
-## Rendering a Component
+## 컴포넌트 렌더링
 
-Previously, we only encountered React elements that represent DOM tags:
+이전에는 DOM 태그를 나타내는 React 요소만 있었습니다.
 
 ```js
 const element = <div />;
 ```
 
-However, elements can also represent user-defined components:
+그러나, 요소에 유저가 정의한 컴포넌트를 나타낼 수도 있습니다.
 
 ```js
 const element = <Welcome name="Sara" />;
 ```
 
-When React sees an element representing a user-defined component, it passes JSX attributes to this component as a single object. We call this object "props".
+React가 유저가 정의한 컴포넌트를 나타내는 요소를 볼 때 JSX 속성을 이 컴포넌트에 단일 객체로 전달합니다. 이 객체를 "props" 라고 부릅니다.
 
-For example, this code renders "Hello, Sara" on the page:
+예를 들어, 이 코드는 "Hello, Sara"를 페이지에 렌더링합니다.
 
 ```js{1,5}
 function Welcome(props) {
@@ -78,24 +79,24 @@ ReactDOM.render(
 
 [](codepen://components-and-props/rendering-a-component).
 
-Let's recap what happens in this example:
+이 예제에서 무슨 일이 일어났는 지 다시 살펴봅시다.
 
-1. We call `ReactDOM.render()` with the `<Welcome name="Sara" />` element.
-2. React calls the `Welcome` component with `{name: 'Sara'}` as the props.
-3. Our `Welcome` component returns a `<h1>Hello, Sara</h1>` element as the result.
-4. React DOM efficiently updates the DOM to match `<h1>Hello, Sara</h1>`.
+1. `<Welcome name="Sara" />` 요소로 `ReactDOM.render()` 를 호출합니다.
+2. React가 `{name: 'Sara'}` 를 props로 하여 `Welcome` 컴포넌트를 호출합니다.
+3. `Welcome` 컴포넌트가 그 결과로 `<h1>Hello, Sara</h1>` 요소를 반환합니다.
+4. React DOM이 `<h1>Hello, Sara</h1>` 과 일치하도록 DOM을 효율적으로 업데이트합니다.
 
 >**Caveat:**
 >
->Always start component names with a capital letter.
+> 컴포넌트 이름은 항상 대문자로 시작하길 바랍니다.
 >
->For example, `<div />` represents a DOM tag, but `<Welcome />` represents a component and requires `Welcome` to be in scope.
+> 예를 들어 `<div />` 는 DOM 태그를 나타내지만 `<Welcome />` 은 컴포넌트를 나타내며 스코프에 `Welcome` 을 필요로 합니다.
 
-## Composing Components
+## 컴포넌트 결합
 
-Components can refer to other components in their output. This lets us use the same component abstraction for any level of detail. A button, a form, a dialog, a screen: in React apps, all those are commonly expressed as components.
+컴포넌트는 출력될 때 다른 컴포넌트를 참조할 수 있습니다. 이를 통해 모든 세부 레벨에서 동일한 컴포넌트 추상화를 사용할 수 있습니다.  React 앱에서 버튼, 폼, 다이얼로그, 스크린 같은 것들은 모두 일반적으로 컴포넌트로 표현됩니다.
 
-For example, we can create an `App` component that renders `Welcome` many times:
+예를 들어, `Welcome` 을 여러번 렌더링하는 `App` 컴포넌트를 만들 수 있습니다.
 
 ```js{8-10}
 function Welcome(props) {
@@ -120,13 +121,13 @@ ReactDOM.render(
 
 [](codepen://components-and-props/composing-components).
 
-Typically, new React apps have a single `App` component at the very top. However, if you integrate React into an existing app, you might start bottom-up with a small component like `Button` and gradually work your way to the top of the view hierarchy.
+일반적으로, 새 React 앱은 단일 `App` 컴포넌트를 최상위에 둡니다. 그러나 기존 앱에 React를 도입하는 경우, `Button` 같은 작은 컴포넌트부터 덩치를 키워나가기 시작하여 점차적으로 뷰 계층의 최상단으로 나아갈 수 있습니다.
 
-## Extracting Components
+## 컴포넌트 추출
 
-Don't be afraid to split components into smaller components.
+컴포넌트를 더 작은 컴포넌트로 쪼개는 것을 두려워하지 마십시오.
 
-For example, consider this `Comment` component:
+예를 들어, `Comment` 컴포넌트를 살펴봅시다.
 
 ```js
 function Comment(props) {
@@ -154,11 +155,11 @@ function Comment(props) {
 
 [](codepen://components-and-props/extracting-components).
 
-It accepts `author` (an object), `text` (a string), and `date` (a date) as props, and describes a comment on a social media website.
+이 컴포넌트는 `author` (객체), `text` (문자열), `date` (date)를 props로 받고, 소셜 미디어 웹사이트의 덧글을 나타냅니다.
 
-This component can be tricky to change because of all the nesting, and it is also hard to reuse individual parts of it. Let's extract a few components from it.
+이 컴포넌트는 중첩 때문에 변경하기 까다로울 수 있으며, 각 파트를 다시 사용하기도 어렵습니다. 여기에서 몇가지 컴포넌트를 추출해봅시다.
 
-First, we will extract `Avatar`:
+먼저, `Avatar` 를 추출할 수 있습니다.
 
 ```js{3-6}
 function Avatar(props) {
@@ -171,11 +172,9 @@ function Avatar(props) {
 }
 ```
 
-The `Avatar` doesn't need to know that it is being rendered inside a `Comment`. This is why we have given its prop a more generic name: `user` rather than `author`.
+`Avatar` 는 `Comment` 내에서 렌더링되는 지 알 필요가 없습니다. 따라서 속성을 `author` 대신 `user` 라는 더 일반적인 이름을 사용합니다. 컴포넌트가 사용되는 상황이 아닌 컴포넌트 자체 관점에서 props 이름을 짓는 걸 권장합니다.
 
-We recommend naming props from the component's own point of view rather than the context in which it is being used.
-
-We can now simplify `Comment` a tiny bit:
+이제 `Comment` 를 약간 단순화시킬 수 있습니다.
 
 ```js{5}
 function Comment(props) {
@@ -198,7 +197,7 @@ function Comment(props) {
 }
 ```
 
-Next, we will extract a `UserInfo` component that renders an `Avatar` next to the user's name:
+이어서, `Avartar` 다음에 유저의 이름을 렌더링하는 `UserInfo` 컴포넌트를 추출해봅시다.
 
 ```js{3-8}
 function UserInfo(props) {
@@ -213,7 +212,7 @@ function UserInfo(props) {
 }
 ```
 
-This lets us simplify `Comment` even further:
+이제 `Comment` 가 더 단순해졌습니다.
 
 ```js{4}
 function Comment(props) {
@@ -233,11 +232,11 @@ function Comment(props) {
 
 [](codepen://components-and-props/extracting-components-continued).
 
-Extracting components might seem like grunt work at first, but having a palette of reusable components pays off in larger apps. A good rule of thumb is that if a part of your UI is used several times (`Button`, `Panel`, `Avatar`), or is complex enough on its own (`App`, `FeedStory`, `Comment`), it is a good candidate to be a reusable component.
+컴포넌트를 추출하는 건 처음에는 쓸데없는 일처럼 보일 수 있지만 재사용 가능한 컴포넌트 팔레트를 사용하면 큰 앱에서 비용을 줄입니다. 좋은 규칙은 UI의 일부가 여러번 사용되거나 (`Button`, `Panel`, `Avatar`), 자체적으로 충분히 복잡하면서 (`App`, `FeedStory`, `Comment`), 재사용 가능한 컴포넌트가 될 후보들 입니다.
 
-## Props are Read-Only
+## Props는 읽기전용
 
-Whether you declare a component [as a function or a class](#functional-and-class-components), it must never modify its own props. Consider this `sum` function:
+컴포넌트를 [함수나 클래스](#functional-and-class-components) 중 어떤 걸로 선언했 건, props를 수정할 수 없습니다. `sum` 함수를 살펴봅시다.
 
 ```js
 function sum(a, b) {
@@ -245,9 +244,9 @@ function sum(a, b) {
 }
 ```
 
-Such functions are called ["pure"](https://en.wikipedia.org/wiki/Pure_function) because they do not attempt to change their inputs, and always return the same result for the same inputs.
+일부 함수는 입력을 변경하려 하지 않고 항상 동일한 입력에 대해 동일한 결과를 반환하기 때문에 ["순수"](https://en.wikipedia.org/wiki/Pure_function) 함수라고 부릅니다.
 
-In contrast, this function is impure because it changes its own input:
+대조적으로, 이 함수는 입력을 변경하기 때문에 순수하지 않습니다.
 
 ```js
 function withdraw(account, amount) {
@@ -255,8 +254,8 @@ function withdraw(account, amount) {
 }
 ```
 
-React is pretty flexible but it has a single strict rule:
+React는 매우 유연하지만 한가지 엄격한 규칙이 있습니다.
 
-**All React components must act like pure functions with respect to their props.**
+**모든 React 컴포넌트는 props와 관련한 동작을 할 때 순수 함수처럼 동작해야한다.**
 
-Of course, application UIs are dynamic and change over time. In the [next section](/docs/state-and-lifecycle.html), we will introduce a new concept of "state". State allows React components to change their output over time in response to user actions, network responses, and anything else, without violating this rule.
+물론 어플리케이션 UI는 동적이며 시간이 지남에 따라 변합니다. [다음 섹션](/docs/state-and-lifecycle.html) 에서는 새로운 컨셉인 "state"를 소개합니다. state는 React 컴포넌트가 이 규칙을 어기지 않고 유저 액션, 네트워크 응답, 기타 등등에 대한 응답으로 시간 경과에 따라 출력을 변경할 수 있게 합니다.

@@ -1,17 +1,17 @@
 ---
 id: state-and-lifecycle
-title: State and Lifecycle
+title: State와 라이프사이클
 permalink: docs/state-and-lifecycle.html
 redirect_from: "docs/interactivity-and-dynamic-uis.html"
 prev: components-and-props.html
 next: handling-events.html
 ---
 
-Consider the ticking clock example from [one of the previous sections](/docs/rendering-elements.html#updating-the-rendered-element).
+[바로 전 섹션](/docs/rendering-elements.html#updating-the-rendered-element) 에서 보았던 깜빡이는 시계 예제를 살펴봅시다.
 
-So far we have only learned one way to update the UI.
+지금까지 우리는 UI를 업데이트하는 한가지 방법을 배웠습니다.
 
-We call `ReactDOM.render()` to change the rendered output:
+`ReactDOM.render()` 을 호출하여 렌더링된 출력을 변경합니다.
 
 ```js{8-11}
 function tick() {
@@ -32,9 +32,9 @@ setInterval(tick, 1000);
 
 [Try it on CodePen.](http://codepen.io/gaearon/pen/gwoJZk?editors=0010)
 
-In this section, we will learn how to make the `Clock` component truly reusable and encapsulated. It will set up its own timer and update itself every second.
+이 섹션에서는 재사용가능하고 캡슐화된 `Clock` 컴포넌트를 만드는 방법에 대해 배웁니다. 자체 타이머를 설정하고 매 초마다 스스로 업데이트합니다.
 
-We can start by encapsulating how the clock looks:
+시계가 어떻게 보이는 지 캡슐화하는 것부터 시작합니다.
 
 ```js{3-6,12}
 function Clock(props) {
@@ -58,9 +58,9 @@ setInterval(tick, 1000);
 
 [Try it on CodePen.](http://codepen.io/gaearon/pen/dpdoYR?editors=0010)
 
-However, it misses a crucial requirement: the fact that the `Clock` sets up a timer and updates the UI every second should be an implementation detail of the `Clock`.
+그러나 중요한 요구사항이 하나 빠져있습니다. `Clock` 이 타이머를 설정하고 매 초 UI를 업데이트 하는 것은 `Clock` 의 구현 세부사항이어야 합니다.
 
-Ideally we want to write this once and have the `Clock` update itself:
+이상적으로 `Clock` 은 한번만 작성하고 자체적으로 업데이트 시키려고 합니다.
 
 ```js{2}
 ReactDOM.render(
@@ -69,25 +69,25 @@ ReactDOM.render(
 );
 ```
 
-To implement this, we need to add "state" to the `Clock` component.
+이걸 구현하기 위해, `Clock` 컴포넌트에 "state"를 추가할 필요가 있습니다.
 
-State is similar to props, but it is private and fully controlled by the component.
+State는 props와 비슷하지만 컴포넌트에 의해 완전히 제어되며 prviate 속성입니다.
 
-We [mentioned before](/docs/components-and-props.html#functional-and-class-components) that components defined as classes have some additional features. Local state is exactly that: a feature available only to classes.
+[이전에 언급](/docs/components-and-props.html#functional-and-class-components) 했던 대로 클래스로 정의한 컴포넌트에는 몇가지 추가 기능이 있습니다. 로컬 state는 클래스에서만 사용 가능한 기능입니다.
 
-## Converting a Function to a Class
+## 함수를 클래스로 변환
 
-You can convert a functional component like `Clock` to a class in five steps:
+`Clock` 같은 함수형 컴포넌트를 클래스로 변환하려면 다섯 단계를 진행합니다.
 
-1. Create an [ES6 class](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Classes), with the same name, that extends `React.Component`.
+1. [ES6 class](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Classes)를 같은 이름으로 만들고, `React.Component` 를 확장합니다.
 
-2. Add a single empty method to it called `render()`.
+2. 비어있는 `render()` 메서드를 하나 추가합니다.
 
-3. Move the body of the function into the `render()` method.
+3. 함수의 바디를 `render()` 메서드 안으로 옮깁니다.
 
-4. Replace `props` with `this.props` in the `render()` body.
+4. `render()` 바디 내에서 `props` 를 `this.props` 로 바꿉니다.
 
-5. Delete the remaining empty function declaration.
+5. 남아있는 빈 함수 선언문을 제거합니다.
 
 ```js
 class Clock extends React.Component {
@@ -104,15 +104,15 @@ class Clock extends React.Component {
 
 [Try it on CodePen.](http://codepen.io/gaearon/pen/zKRGpo?editors=0010)
 
-`Clock` is now defined as a class rather than a function.
+`Clock` 은 이제 함수 대신 클래스로 정의합니다.
 
-This lets us use additional features such as local state and lifecycle hooks.
+이를 통해 로컬 state나 라이프사이클 훅 같은 추가 기능을 사용할 수 있습니다.
 
-## Adding Local State to a Class
+## Class에 로컬 state 추가하기
 
-We will move the `date` from props to state in three steps:
+`date` 를 props에서 state로 옮기기 위해서 세 단계를 진행합니다.
 
-1) Replace `this.props.date` with `this.state.date` in the `render()` method:
+1) `render()` 메서드 내의 `this.props.date` 를 `this.state.date` 로 바꿉니다.
 
 ```js{6}
 class Clock extends React.Component {
@@ -127,7 +127,7 @@ class Clock extends React.Component {
 }
 ```
 
-2) Add a [class constructor](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Classes#Constructor) that assigns the initial `this.state`:
+2) `this.state` 를 초기화 하는 [클래스 생성자](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Classes#Constructor) 를 추가합니다.
 
 ```js{4}
 class Clock extends React.Component {
@@ -147,7 +147,7 @@ class Clock extends React.Component {
 }
 ```
 
-Note how we pass `props` to the base constructor:
+`props` 를 기본 생성자에 어떻게 전달하는 지 살펴보길 바랍니다.
 
 ```js{2}
   constructor(props) {
@@ -156,9 +156,9 @@ Note how we pass `props` to the base constructor:
   }
 ```
 
-Class components should always call the base constructor with `props`.
+클래스 컴포넌트는 항상 `props` 와 함께 기본 생성자를 호출합니다.
 
-3) Remove the `date` prop from the `<Clock />` element:
+3) `<Clock />` 요소에서 `date` prop을 삭제합니다.
 
 ```js{2}
 ReactDOM.render(
@@ -167,9 +167,9 @@ ReactDOM.render(
 );
 ```
 
-We will later add the timer code back to the component itself.
+나중에 타이머 코드를 컴포넌트 자체에 다시 추가합니다.
 
-The result looks like this:
+이 결과는 다음과 같은 코드가 됩니다.
 
 ```js{2-5,11,18}
 class Clock extends React.Component {
@@ -196,17 +196,17 @@ ReactDOM.render(
 
 [Try it on CodePen.](http://codepen.io/gaearon/pen/KgQpJd?editors=0010)
 
-Next, we'll make the `Clock` set up its own timer and update itself every second.
+다음으로, `Clock` 에 자체 타이머를 설정하고 매 초마다 자체적으로 업데이트 하는 걸 만들어봅시다.
 
-## Adding Lifecycle Methods to a Class
+## 클래스에 라이프사이클 메서드 추가하기
 
-In applications with many components, it's very important to free up resources taken by the components when they are destroyed.
+많은 컴포넌트를 가진 어플리케이션에서, 컴포넌트가 제거될 때 리소스를 풀어주는 건 아주 중요한 일입니다.
 
-We want to [set up a timer](https://developer.mozilla.org/en-US/docs/Web/API/WindowTimers/setInterval) whenever the `Clock` is rendered to the DOM for the first time. This is called "mounting" in React.
+`Clock` 이 DOM에 최초로 렌더링 될 때 [타이머를 설정](https://developer.mozilla.org/en-US/docs/Web/API/WindowTimers/setInterval) 하려고 합니다. React에서 이를 "mounting" 이라고 부릅니다.
 
-We also want to [clear that timer](https://developer.mozilla.org/en-US/docs/Web/API/WindowTimers/clearInterval) whenever the DOM produced by the `Clock` is removed. This is called "unmounting" in React.
+그리고 DOM에서 `Clock` 을 삭제했을 때 [타이머를 해제](https://developer.mozilla.org/en-US/docs/Web/API/WindowTimers/clearInterval) 하려고 합니다. React에서 이를 "unmounting" 이라고 부릅니다.
 
-We can declare special methods on the component class to run some code when a component mounts and unmounts:
+컴포넌트가 마운트 (mount) 되고 언마운트 (unmount) 될 때 특정 코드를 실행하기 위해 컴포넌트 클래스에 특별한 메서드를 선언할 수 있습니다.
 
 ```js{7-9,11-13}
 class Clock extends React.Component {
@@ -234,9 +234,9 @@ class Clock extends React.Component {
 }
 ```
 
-These methods are called "lifecycle hooks".
+이런 메서드들을 "라이프사이클 훅" 이라고 부릅니다.
 
-The `componentDidMount()` hook runs after the component output has been rendered to the DOM. This is a good place to set up a timer:
+`componentDidMount()` 훅은 컴포넌트 출력이 DOM에 렌더링된 이후 동작합니다. 이 부분이 타이머를 설정하기 좋아보입니다.
 
 ```js{2-5}
   componentDidMount() {
@@ -247,23 +247,22 @@ The `componentDidMount()` hook runs after the component output has been rendered
   }
 ```
 
-Note how we save the timer ID right on `this`.
+`this` 에 timer ID를 어떻게 저장하는 지 살펴봅시다.
 
-While `this.props` is set up by React itself and `this.state` has a special meaning, you are free to add additional fields to the class manually if you need to store something that is not used for the visual output.
+`this.props` 는 React 자체에 의해 설정되고 `this.state` 는 특별한 의미가 있지만, 시각적 출력에 사용되지 않는 것을 저장해야하는 경우 클래스에 수동으로 필드를 추가할 수 있습니다.
 
-If you don't use something in `render()`, it shouldn't be in the state.
+만약 `render()` 내에서 사용하지 않는다면, state가 되어서는 안됩니다.
 
-We will tear down the timer in the `componentWillUnmount()` lifecycle hook:
+`componentWillUnmount()` 라이프사이클 훅에서 타이머를 종료합니다.
 
 ```js{2}
   componentWillUnmount() {
     clearInterval(this.timerID);
   }
 ```
+마지막으로 `Clock` 컴포넌트에서 매 초마다 동작하는 `tick()` 이라는 메서드를 구현해봅시다.
 
-Finally, we will implement a method called `tick()` that the `Clock` component will run every second.
-
-It will use `this.setState()` to schedule updates to the component local state:
+`this.setSTate()` 를 사용해서 컴포넌트 로컬 state에 대한 업데이트를 예약합니다.
 
 ```js{18-22}
 class Clock extends React.Component {
@@ -307,49 +306,49 @@ ReactDOM.render(
 
 [Try it on CodePen.](http://codepen.io/gaearon/pen/amqdNA?editors=0010)
 
-Now the clock ticks every second.
+이제 시계는 매 초 깜빡입니다.
 
-Let's quickly recap what's going on and the order in which the methods are called:
+어떤 작업을 했는 지와 메서드가 호출되는 순서를 간단히 요약해봅시다.]
 
-1) When `<Clock />` is passed to `ReactDOM.render()`, React calls the constructor of the `Clock` component. Since `Clock` needs to display the current time, it initializes `this.state` with an object including the current time. We will later update this state.
+1) `<Clock />` 이 `ReactDOM.render()` 에 전달될 때, React는 `Clock` 컴포넌트의 생성자 함수를 호출합니다. `Clock`이 현 시간 화면에 보여질 때, 현 시간을 포함하는 `this.state` 객체를 초기화합니다. 이 state는 추후 업데이트합니다.
 
-2) React then calls the `Clock` component's `render()` method. This is how React learns what should be displayed on the screen. React then updates the DOM to match the `Clock`'s render output.
+2) React가 `Clock` 컴포넌트의 `render()` 메서드를 호출합니다. React가 어떤 걸 화면에 보여줘야하는 지 배우는 방법입니다. 그 다음 React는 `Clock` 의 렌더링 출력과 일치하도록 DOM을 업데이트합니다.
 
-3) When the `Clock` output is inserted in the DOM, React calls the `componentDidMount()` lifecycle hook. Inside it, the `Clock` component asks the browser to set up a timer to call the component's `tick()` method once a second.
+3) `Clock` 출력이 DOM에 주입되었일 때, React는 `componentDidMount()` 라이프 훅을 호출합니다. 내부에서, `Clock` 컴포넌트는 브라우저에게 컴포넌트의 `tick()` 메서드를 초당 한번 호출하는 타이머를 설정하라고 요구합니다.
 
-4) Every second the browser calls the `tick()` method. Inside it, the `Clock` component schedules a UI update by calling `setState()` with an object containing the current time. Thanks to the `setState()` call, React knows the state has changed, and calls `render()` method again to learn what should be on the screen. This time, `this.state.date` in the `render()` method will be different, and so the render output will include the updated time. React updates the DOM accordingly.
+4) 브라우저에서 매 초마다 `tick()` 메서드를 호출합니다. 내부에서, `Clock` 컴포넌트는 현재 시간을 포함하는 객체로 `setState()` 를 호출하여 UI 업데이트를 예약합니다. `setState()` 호출 덕분에, React는 상태가 변경된 걸 알고있고, `render()` 메서드를 다시 한번 호출해 스크린에 무엇이 있어야하는 지 알 수 있습니다. 이번에는, `render()` 메서드 내의 `this.state.date` 가 달라지므로 렌더 출력에 업데이트된 시간이 포함됩니다. React는 그에 따라 DOM을 업데이트합니다.
 
-5) If the `Clock` component is ever removed from the DOM, React calls the `componentWillUnmount()` lifecycle hook so the timer is stopped.
+5) 만약 `Clock` 컴포넌트가 DOM에서 삭제되었다면, React는 `componentWillUnmount()` 라이프사이클 훅을 호출하고 타이머를 멈춥니다.
 
-## Using State Correctly
+## State 바르게 사용하기
 
-There are three things you should know about `setState()`.
+`setState()` 에 대해 알아야할 세가지 것이 있습니다.
 
-### Do Not Modify State Directly
+### State를 직접 수정하지 마세요
 
-For example, this will not re-render a component:
+예를 들어, 이 코드는 컴포넌트를 다시 렌더링하지 않습니다.
 
 ```js
 // Wrong
 this.state.comment = 'Hello';
 ```
 
-Instead, use `setState()`:
+대신, `setState()` 를 사용하세요.
 
 ```js
 // Correct
 this.setState({comment: 'Hello'});
 ```
 
-The only place where you can assign `this.state` is the constructor.
+`this.state` 를 지정할 수 있는 유일한 곳은 생성자 함수 내부입니다.
 
-### State Updates May Be Asynchronous
+### State 업데이트는 비동기일 수 있습니다
 
-React may batch multiple `setState()` calls into a single update for performance.
+React는 여러 `setState()` 호출을 성능을 위해 단일 업데이트로 배치할 수 있습니다.
 
-Because `this.props` and `this.state` may be updated asynchronously, you should not rely on their values for calculating the next state.
+`this.props` 및 `this.state` 가 비동기로 업데이트될 수 있기 때문에, 다음 state를 계산할 때 해당 값을 신뢰해서는 안됩니다.
 
-For example, this code may fail to update the counter:
+예를 들어, 카운터를 업데이트하는 이 코드는 실패할 수 있습니다.
 
 ```js
 // Wrong
@@ -358,7 +357,7 @@ this.setState({
 });
 ```
 
-To fix it, use a second form of `setState()` that accepts a function rather than an object. That function will receive the previous state as the first argument, and the props at the time the update is applied as the second argument:
+이 문제를 해결하기 위해 객체가 아닌 함수를 받는 두 번째 형식의 `setState()` 를 사용할 수 있습니다. 이 함수는 이전 state를 첫번째 인수로 받고, 두번째 인수로 업데이트가 적용 될 때 props를 받습니다.
 
 ```js
 // Correct
@@ -367,7 +366,7 @@ this.setState((prevState, props) => ({
 }));
 ```
 
-We used an [arrow function](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Functions/Arrow_functions) above, but it also works with regular functions:
+위 예제에서는 [arrow function](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Functions/Arrow_functions) 을 사용했지만, 평범한 함수도 동작합니다.
 
 ```js
 // Correct
@@ -378,11 +377,11 @@ this.setState(function(prevState, props) {
 });
 ```
 
-### State Updates are Merged
+### State 업데이트는 병합됨
 
-When you call `setState()`, React merges the object you provide into the current state.
+`setState()` 를 호출할 때, React는 현재 state와 제공한 객체를 병합합니다.
 
-For example, your state may contain several independent variables:
+예를 들어, state는 여러 독립적인 변수를 가질 수 있습니다.
 
 ```js{4,5}
   constructor(props) {
@@ -394,7 +393,7 @@ For example, your state may contain several independent variables:
   }
 ```
 
-Then you can update them independently with separate `setState()` calls:
+그런 다음 개별 `setState()` 를 호출하여 아이템을 각각 업데이트할 수 있습니다.
 
 ```js{4,10}
   componentDidMount() {
@@ -412,27 +411,27 @@ Then you can update them independently with separate `setState()` calls:
   }
 ```
 
-The merging is shallow, so `this.setState({comments})` leaves `this.state.posts` intact, but completely replaces `this.state.comments`.
+병합은 얕아서, `this.setState({comments})` 는 `this.state.posts` 는 그대로 두지만, `this.state.comments` 는 완전히 대체합니다.
 
-## The Data Flows Down
+## 데이터가 아래로 흐릅니다.
 
-Neither parent nor child components can know if a certain component is stateful or stateless, and they shouldn't care whether it is defined as a function or a class.
+부모 컴포넌트나 자식 컴포넌트는 특정 컴포넌트의 state 유무를 알 수 없으며 해당 컴포넌트가 함수나 클래스로 선언되었는 지 알 수 없습니다.
 
-This is why state is often called local or encapsulated. It is not accessible to any component other than the one that owns and sets it.
+이는 state가 로컬이라고 부르거나 캡슐화된 이유입니다. 컴포넌트 자신 외에는 접근할 수 없습니다.
 
-A component may choose to pass its state down as props to its child components:
+컴포넌트는 자신의 state를 자식 컴포넌트에 props 로 내려줄 수 있습니다.
 
 ```js
 <h2>It is {this.state.date.toLocaleTimeString()}.</h2>
 ```
 
-This also works for user-defined components:
+이 코드는 유저가 정의한 컴포넌트에서도 동작합니다.
 
 ```js
 <FormattedDate date={this.state.date} />
 ```
 
-The `FormattedDate` component would receive the `date` in its props and wouldn't know whether it came from the `Clock`'s state, from the `Clock`'s props, or was typed by hand:
+`FormattedDate` 컴포넌트는 props에서 `date` 를 받지만 이 값이 `Clock` 의 상태인 지, `Clock` 의 props인 지, 혹은 손으로 입력한 건지 알 수 없습니다.
 
 ```js
 function FormattedDate(props) {
@@ -442,11 +441,11 @@ function FormattedDate(props) {
 
 [Try it on CodePen.](http://codepen.io/gaearon/pen/zKRqNB?editors=0010)
 
-This is commonly called a "top-down" or "unidirectional" data flow. Any state is always owned by some specific component, and any data or UI derived from that state can only affect components "below" them in the tree.
+이런 데이터 흐름을 보통 "하향식(top-down)" 혹은 "단방향(unidirectional)" 데이터 흐름이라고 합니다. 모든 state는 항상 특정 컴포넌트가 가지며, 해당 state에서 파생된 모든 데이터 또는 UI는 트리의 컴포넌트 "아래(below)"에만 영향을 미칩니다.
 
-If you imagine a component tree as a waterfall of props, each component's state is like an additional water source that joins it at an arbitrary point but also flows down.
+컴포넌트 트리를 props의 폭포라고 상상해보면, 각 컴포넌트의 상태는 임의의 지점에서 추가되는 물과 비슷하지만 또한 아래로 흐릅니다.
 
-To show that all components are truly isolated, we can create an `App` component that renders three `<Clock>`s:
+모든 컴포넌트가 실제로 분리되어있음을 보여주기 위해, 세개의 `<Clock>` 을 렌더링하는 `App` 컴포넌트를 만들어봅시다.
 
 ```js{4-6}
 function App() {
@@ -467,6 +466,6 @@ ReactDOM.render(
 
 [Try it on CodePen.](http://codepen.io/gaearon/pen/vXdGmd?editors=0010)
 
-Each `Clock` sets up its own timer and updates independently.
+각 `Clock` 은 자체적으로 타이머를 생성하고 독립적으로 업데이트합니다.
 
-In React apps, whether a component is stateful or stateless is considered an implementation detail of the component that may change over time. You can use stateless components inside stateful components, and vice versa.
+React 앱에서 컴포넌트가 state의 유무는 시간이 지남에 따라 바뀔 수 있는 컴포넌트의 구현 세부 사항으로 간주합니다. state를 가진 컴포넌트 내부에서 state가 없는 컴포넌트를 사용할 수 있으며, 그 반대 경우도 마찬가지입니다.
