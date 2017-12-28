@@ -1,6 +1,6 @@
 ---
 id: forms
-title: Forms
+title: 폼
 permalink: docs/forms.html
 prev: lists-and-keys.html
 next: lifting-state-up.html
@@ -9,7 +9,7 @@ redirect_from:
   - "docs/forms-zh-CN.html"
 ---
 
-HTML form elements work a little bit differently from other DOM elements in React, because form elements naturally keep some internal state. For example, this form in plain HTML accepts a single name:
+HTML 폼(form) 요소는 폼 요소 자체가 내부 상태를 가지기 때문에 React에서 다른 DOM 요소가 조금 다르게 동작합니다. 예를 들어, 순수한 HTML에서 이 폼은 이름을 받습니다.
 
 ```html
 <form>
@@ -21,15 +21,15 @@ HTML form elements work a little bit differently from other DOM elements in Reac
 </form>
 ```
 
-This form has the default HTML form behavior of browsing to a new page when the user submits the form. If you want this behavior in React, it just works. But in most cases, it's convenient to have a JavaScript function that handles the submission of the form and has access to the data that the user entered into the form. The standard way to achieve this is with a technique called "controlled components".
+이 폼은 유저가 폼을 전송(submit)하면 새로운 페이지로 이동하는 기본 HTML 폼 동작을 수행합니다. 만약 React에서 동일한 동작을 원한다면, 그냥 동작합니다. 그러나 대부분의 경우 form 제출을 처리하고 사용자가 form에 입력한 데이터에 접근할 수 있게하는 자바스크립트 함수를 가지는 게 편합니다. 이 동작을 위한 표준 방식은 "제어되는 컴포넌트 (Controlled Components)" 기법을 사용하는 것입니다.
 
-## Controlled Components
+## 제어되는 컴포넌트 (Controlled Components)
 
-In HTML, form elements such as `<input>`, `<textarea>`, and `<select>` typically maintain their own state and update it based on user input. In React, mutable state is typically kept in the state property of components, and only updated with [`setState()`](/docs/react-component.html#setstate).
+HTML에서 `<input>`, `<textarea>`, `<select>` 같은 form 요소는 자기만의 state를 가지고 유저 입력에 따라 업데이트됩니다. React에서, 변경 가능한 state는 일반적으로 컴포넌트의 state 속성에 존재하며, [`setState()`](/docs/react-component.html#setstate) 로만 업데이트할 수 있습니다.
 
-We can combine the two by making the React state be the "single source of truth". Then the React component that renders a form also controls what happens in that form on subsequent user input. An input form element whose value is controlled by React in this way is called a "controlled component".
+React state를 "신뢰 가능한 단일 소스 (single source of truth)"로 만들어 두 요소를 결합할 수 있습니다. 그런 다음 렌더링 되는 React 컴포넌트는 이후에 폼에서 발생하는 유저 입력을 제어합니다. 이런 방식으로 React에 의해 제어되는 Input 폼 요소는 "제어되는 컴포넌트" 라고 부릅니다.
 
-For example, if we want to make the previous example log the name when it is submitted, we can write the form as a controlled component:
+예를 들어, 위 예제에서 이름을 입력할 때 이름을 log로 남기고싶다면, 해당 폼을 제어되는 컴포넌트로 작성할 수 있습니다.
 
 ```javascript{4,10-12,24}
 class NameForm extends React.Component {
@@ -66,9 +66,9 @@ class NameForm extends React.Component {
 
 [Try it on CodePen.](https://codepen.io/gaearon/pen/VmmPgp?editors=0010)
 
-Since the `value` attribute is set on our form element, the displayed value will always be `this.state.value`, making the React state the source of truth. Since `handleChange` runs on every keystroke to update the React state, the displayed value will update as the user types.
+`value` 속성은 폼 요소에 설정되므로 표시되는 값은 항상 `this.state.value` 가 되고 React state가 신뢰 가능한 소스가 됩니다. React state를 업데이트하기 위해 모든 키스트로크에서 `handleChange` 가 동작하기 때문에 사용자가 입력할 때 표시되는 값이 업데이트됩니다.
 
-With a controlled component, every state mutation will have an associated handler function. This makes it straightforward to modify or validate user input. For example, if we wanted to enforce that names are written with all uppercase letters, we could write `handleChange` as:
+제어되는 컴포넌트를 사용하면 모든 state 변경과 연관되는 핸들러 함수가 생깁니다. 이를 통해 사용자 입력을 수정하거나 검증하는 것이 간단해집니다. 예를 들어 모든 유저의 이름을 강제로 대문자로 받고싶다면 `handleChange` 를 다음과 같이 쓸 수 있습니다.
 
 ```javascript{2}
 handleChange(event) {
@@ -76,9 +76,9 @@ handleChange(event) {
 }
 ```
 
-## The textarea Tag
+## textarea 태그
 
-In HTML, a `<textarea>` element defines its text by its children:
+HTML에서, `<textarea>` 요소는 자식으로 텍스트를 정의합니다.
 
 ```html
 <textarea>
@@ -86,7 +86,7 @@ In HTML, a `<textarea>` element defines its text by its children:
 </textarea>
 ```
 
-In React, a `<textarea>` uses a `value` attribute instead. This way, a form using a `<textarea>` can be written very similarly to a form that uses a single-line input:
+React에서 `<textarea>` 는 대신 `value` 속성을 사용합니다. 이렇게 하면 `<textarea>` 를 사용하는 폼은 한 줄 입력을 사용하는 폼과 매우 유사하게 작성할 수 있습니다.
 
 ```javascript{4-6,12-14,26}
 class EssayForm extends React.Component {
@@ -123,11 +123,11 @@ class EssayForm extends React.Component {
 }
 ```
 
-Notice that `this.state.value` is initialized in the constructor, so that the text area starts off with some text in it.
+`this.state.value` 를 생성자 함수에서 초기화하기 때문에, 일부 텍스트를 가진채로 text area를 시작할 수 있습니다.
 
-## The select Tag
+## select 태그
 
-In HTML, `<select>` creates a drop-down list. For example, this HTML creates a drop-down list of flavors:
+HTML에서, `<select>` 는 드롭 다운 목록을 만듭니다. 예를 들어, 이 HTML은 과일 드롭 다운 목록을 만듭니다.
 
 ```html
 <select>
@@ -138,7 +138,7 @@ In HTML, `<select>` creates a drop-down list. For example, this HTML creates a d
 </select>
 ```
 
-Note that the Coconut option is initially selected, because of the `selected` attribute. React, instead of using this `selected` attribute, uses a `value` attribute on the root `select` tag. This is more convenient in a controlled component because you only need to update it in one place. For example:
+Coconut 옵션에 `selected` 속성이 있기 때문에 기본적으로 선택되는 걸 주목합시다. React에서는 `selected` 속성을 사용하는 대신 루트 `select` 태그에 `value` 속성을 사용합니다. 한 곳에서 업데이트만 하면 되기 때문에 제어되는 컴포넌트에서 사용하기 더 편합니다. 예를 들어,
 
 ```javascript{4,10-12,24}
 class FlavorForm extends React.Component {
@@ -180,21 +180,21 @@ class FlavorForm extends React.Component {
 
 [Try it on CodePen.](https://codepen.io/gaearon/pen/JbbEzX?editors=0010)
 
-Overall, this makes it so that `<input type="text">`, `<textarea>`, and `<select>` all work very similarly - they all accept a `value` attribute that you can use to implement a controlled component.
+전반적으로 이렇게 하면 `<input type="text">`, `<textarea>`, `<select>` 가 비슷하게 동작합니다. 모두 제어되는 컴포넌트를 구현할 때 `value` 속성을 사용할 수 있습니다.
 
 > Note
 >
-> You can pass an array into the `value` attribute, allowing you to select multiple options in a `select` tag:
+> `select` 태그에서 여러개의 옵션을 사용하고 싶다면, `value` 속성에 배열을 전달할 수도 있습니다.
 >
 >```js
 ><select multiple={true} value={['B', 'C']}>
 >```
 
-## Handling Multiple Inputs
+## 여러 Input 제어하기
 
-When you need to handle multiple controlled `input` elements, you can add a `name` attribute to each element and let the handler function choose what to do based on the value of `event.target.name`.
+여러개의 `input` 요소를 제어해야할 때 각 요소에 `name` 속성을 추가한 후 `event.target.name` 값을 기반으로 핸들러 함수를 고를 수 있습니다.
 
-For example:
+예를 들어,
 
 ```javascript{15,18,28,37}
 class Reservation extends React.Component {
@@ -246,7 +246,7 @@ class Reservation extends React.Component {
 
 [Try it on CodePen.](https://codepen.io/gaearon/pen/wgedvV?editors=0010)
 
-Note how we used the ES6 [computed property name](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Object_initializer#Computed_property_names) syntax to update the state key corresponding to the given input name:
+주어진 input 이름에 해당하는 state 키를 업데이트하기 위해 ES6 [computed property name](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Object_initializer#Computed_property_names) 구문을 사용하고 있습니다.
 
 ```js{2}
 this.setState({
@@ -254,7 +254,7 @@ this.setState({
 });
 ```
 
-It is equivalent to this ES5 code:
+ES5 코드에선 이렇게 작성합니다.
 
 ```js{2}
 var partialState = {};
@@ -262,13 +262,13 @@ partialState[name] = value;
 this.setState(partialState);
 ```
 
-Also, since `setState()` automatically [merges a partial state into the current state](/docs/state-and-lifecycle.html#state-updates-are-merged), we only needed to call it with the changed parts.
+또한, `setState()` 가 자동으로 [현재 상태에 일부 상태를 병합](/docs/state-and-lifecycle.html#state-updates-are-merged) 하기 때문에, 바뀐 부분에 대해서만 호출하면 됩니다.
 
-## Controlled Input Null Value
+## 제어되는 Input Null 값
 
-Specifying the value prop on a [controlled component](/docs/forms.html#controlled-components) prevents the user from changing the input unless you desire so. If you've specified a `value` but the input is still editable, you may have accidentally set `value` to `undefined` or `null`.
+[제어되는 컴포넌트](/docs/forms.html#controlled-components) 의 prop 값을 정의하면 개발자가 원하는 경우가 아니라면 사용자가 input을 변경할 수 있습니다. `value` 를 정의했지만 여전히 input이 수정 가능한 경우라면 실수로 `value` 를 `undefined` 나 `null` 로 설정했을 수 있습니다.
 
-The following code demonstrates this. (The input is locked at first but becomes editable after a short delay.)
+다음 코드는 이를 보여줍니다. (처음 보이는 input은 잠겨있지만 약간의 딜레이 후 수정 가능하게 바뀝니다)
 
 ```javascript
 ReactDOM.render(<input value="hi" />, mountNode);
@@ -279,6 +279,6 @@ setTimeout(function() {
 
 ```
 
-## Alternatives to Controlled Components
+## 제외되는 컴포넌트 대안
 
-It can sometimes be tedious to use controlled components, because you need to write an event handler for every way your data can change and pipe all of the input state through a React component. This can become particularly annoying when you are converting a preexisting codebase to React, or integrating a React application with a non-React library. In these situations, you might want to check out [uncontrolled components](/docs/uncontrolled-components.html), an alternative technique for implementing input forms.
+데이터를 변경하는 모든 방법에 대한 이벤트 핸들러를 작성하고 React 컴포넌트에서 모든 input state를 파이프해야하기 때문에 제어되는 컴포넌트를 사용하는 것이 떄로 지루할 수 있습니다. 기존 코드베이스를 React로 변경하거나 React 어플리케이션을 React가 아닌 라이브러리와 통합할 때 이 작업은 성가신 작업일 수 있습니다. 이런 상황에서는 입력 폼을 구현하기 위한 대체 기술인 [제어되지않는 컴포넌트](/docs/uncontrolled-components.html) 를 확인할 수 있습니다.

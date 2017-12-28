@@ -7,11 +7,11 @@ next: lists-and-keys.html
 redirect_from: "tips/false-in-jsx.html"
 ---
 
-In React, you can create distinct components that encapsulate behavior you need. Then, you can render only some of them, depending on the state of your application.
+React에서 원하는 동작을 수행하는 캡슐화된 별개의 컴포넌트를 생성할 수 있습니다. 그리고 나서, 어플리케이션의 state에 의존하여 그 중 일부만 렌더링시키는 것도 가능합니다.
 
-Conditional rendering in React works the same way conditions work in JavaScript. Use JavaScript operators like [`if`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/if...else) or the [conditional operator](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Conditional_Operator) to create elements representing the current state, and let React update the UI to match them.
+React의 조건부 렌더링은 자바스크립트에서 동작하는 것과 동일하게 동작합니다. [`if`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/if...else) 나 [조건 연산자](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Conditional_Operator) 같은 자바스크립트 연산자를 사용하여 현재 state를 나타내는 요소를 만들고 React가 UI를 업데이트하여 일치시킵니다.
 
-Consider these two components:
+두 컴포넌트를 살펴봅시다.
 
 ```js
 function UserGreeting(props) {
@@ -23,7 +23,7 @@ function GuestGreeting(props) {
 }
 ```
 
-We'll create a `Greeting` component that displays either of these components depending on whether a user is logged in:
+사용자의 로그인 여부에 따라 다음 컴포넌트 중 하나를 표시하는 `Greeting` 컴포넌트를 만들었습니다.
 
 ```javascript{3-7,11,12}
 function Greeting(props) {
@@ -43,13 +43,13 @@ ReactDOM.render(
 
 [Try it on CodePen.](https://codepen.io/gaearon/pen/ZpVxNq?editors=0011)
 
-This example renders a different greeting depending on the value of `isLoggedIn` prop.
+이 예제는 `isLoggedIn` prop의 값에 따라 다른 인사를 노출시킵니다.
 
-### Element Variables
+### 요소 변수
 
-You can use variables to store elements. This can help you conditionally render a part of the component while the rest of the output doesn't change.
+요소를 담기 위해 변수를 사용할 수 있습니다. 이렇게 하면 컴포넌트의 일부를 조건부로 렌더링하는 데 도움이 되며 나머지 출력은 변경되지 않습니다.
 
-Consider these two new components representing Logout and Login buttons:
+로그아웃과 로그인 버튼을 나타내는 두개의 새 컴포넌트를 살펴봅시다.
 
 ```js
 function LoginButton(props) {
@@ -69,9 +69,9 @@ function LogoutButton(props) {
 }
 ```
 
-In the example below, we will create a [stateful component](/docs/state-and-lifecycle.html#adding-local-state-to-a-class) called `LoginControl`.
+위 예제에서, `LoginControl` 이라는 [state를 가진 컴포넌트](/docs/state-and-lifecycle.html#adding-local-state-to-a-class) 를 생성했습니다.
 
-It will render either `<LoginButton />` or `<LogoutButton />` depending on its current state. It will also render a `<Greeting />` from the previous example:
+이 컴포넌트는 현재 상태에 따라 `<LoginButton />` 혹은 `<LogoutButton />` 중 하나를 렌더링 할 것입니다. 이전 예제에서 만들었던 `<Greeting />` 도 렌더링합니다.
 
 ```javascript{20-25,29,30}
 class LoginControl extends React.Component {
@@ -117,11 +117,11 @@ ReactDOM.render(
 
 [Try it on CodePen.](https://codepen.io/gaearon/pen/QKzAgB?editors=0010)
 
-While declaring a variable and using an `if` statement is a fine way to conditionally render a component, sometimes you might want to use a shorter syntax. There are a few ways to inline conditions in JSX, explained below.
+변수를 선언하고 `if` 문을 사용하는 것은 조건부로 컴포넌트를 렌더링하는 훌륭한 방법이지만, 원한다면 더 짧은 구문을 사용할 수도 있습니다. JSX에 조건을 인라인으로 넣는 몇가지 방법을 소개합니다.
 
-### Inline If with Logical && Operator
+### 논리 && 연산자가 있는 인라인 조건
 
-You may [embed any expressions in JSX](/docs/introducing-jsx.html#embedding-expressions-in-jsx) by wrapping them in curly braces. This includes the JavaScript logical `&&` operator. It can be handy for conditionally including an element:
+중괄호로 감싸면 [JSX에 어떤 표현식이던 넣을 수](/docs/introducing-jsx.html#embedding-expressions-in-jsx) 있습니다. 여기에는 자바스크립트 논리 `&&` 연산자도 포함됩니다. 이를 사용하면 요소의 조건부 포함을 더 편리하게 할 수 있습니다.
 
 ```js{6-10}
 function Mailbox(props) {
@@ -147,15 +147,15 @@ ReactDOM.render(
 
 [Try it on CodePen.](https://codepen.io/gaearon/pen/ozJddz?editors=0010)
 
-It works because in JavaScript, `true && expression` always evaluates to `expression`, and `false && expression` always evaluates to `false`.
+자바스크립트에서 `true && expression` 은 항상 `expression` 으로 평가되고, `false && expression` 은 항상 `false` 로 평가되기 때문에 이 코드는 동작합니다.
 
-Therefore, if the condition is `true`, the element right after `&&` will appear in the output. If it is `false`, React will ignore and skip it.
+따라서 조건이 `true` 라면 `&&` 다음에 오는 요소가 노출됩니다. 만약 조건이 `false` 라면, React는 이를 무시하고 건너뜁니다.
 
-### Inline If-Else with Conditional Operator
+### 조건부 연산자를 사용한 인라인 If-Else
 
-Another method for conditionally rendering elements inline is to use the JavaScript conditional operator [`condition ? true : false`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Conditional_Operator).
+인라인으로 요소를 조건부 렌더링하는 다른 방법은 자바스크립트의 조건부 연산자인 [`condition ? true : false`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Conditional_Operator) 를 사용하는 것입니다.
 
-In the example below, we use it to conditionally render a small block of text.
+아래 예제에서, 작은 텍스트 블록을 조건부로 렌더링합니다.
 
 ```javascript{5}
 render() {
@@ -168,7 +168,7 @@ render() {
 }
 ```
 
-It can also be used for larger expressions although it is less obvious what's going on:
+또한 더 큰 표현을 위해 사용할 수도 있지만 덜 명백하게 보입니다.
 
 ```js{5,7,9}
 render() {
@@ -185,13 +185,13 @@ render() {
 }
 ```
 
-Just like in JavaScript, it is up to you to choose an appropriate style based on what you and your team consider more readable. Also remember that whenever conditions become too complex, it might be a good time to [extract a component](/docs/components-and-props.html#extracting-components).
+자바스크립트에서와 마찬가지로 당신과 당신의 팀이 더 읽기 쉽다고 생각하는 것을 바탕으로 적절한 스타일을 선택하면 됩니다. 또한 조건이 너무 복잡해질 때마다 [컴포넌트를 추출](/docs/components-and-props.html#extracting-components) 하면 좋습니다.
 
-### Preventing Component from Rendering
+### 컴포넌트가 렌더링 되지 못하도록 방지
 
-In rare cases you might want a component to hide itself even though it was rendered by another component. To do this return `null` instead of its render output.
+흔하지 않지만 컴포넌트가 다른 컴포넌트에 의해 렌더링 되었더라도 이를 숨길 수 있습니다. 이렇게 하려면 렌더 출력 대신 `null` 을 반환합니다.
 
-In the example below, the `<WarningBanner />` is rendered depending on the value of the prop called `warn`. If the value of the prop is `false`, then the component does not render:
+아래 예제에서, `<WarningBanner />` 는 `warn` prop의 값에 의존해 렌더링됩니다. 만약 prop 값이 `false` 라면, 이 컴포넌트는 렌더링되지 않습니다.
 
 ```javascript{2-4,29}
 function WarningBanner(props) {
@@ -239,4 +239,4 @@ ReactDOM.render(
 
 [Try it on CodePen.](https://codepen.io/gaearon/pen/Xjoqwm?editors=0010)
 
-Returning `null` from a component's `render` method does not affect the firing of the component's lifecycle methods. For instance, `componentWillUpdate` and `componentDidUpdate` will still be called.
+컴포넌트의 `render` 메서드에서 `null` 을 반환하면 컴포넌트의 라이프사이클 메서드가 구동하지 않습니다. 대신, `componentWillUpdate` 와 `componentDidUpdate` 는 여전히 호출됩니다.
