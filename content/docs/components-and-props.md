@@ -43,7 +43,7 @@ class Welcome extends React.Component {
 }
 ```
 
-우 컴포넌트는 React 관점에서 보면 동일합니다.
+위의 두 컴포넌트는 React 관점에서 보면 동일합니다.
 
 클래스는 몇가지 기능을 더 가지고 있는데 이는 [다음 섹션](/docs/state-and-lifecycle.html) 에서 다룹니다. 그 때까지 간결함을 유지하기 위해 함수형 컴포넌트를 사용할 것입니다.
 
