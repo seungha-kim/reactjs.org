@@ -71,7 +71,7 @@ ReactDOM.render(
 
 이걸 구현하기 위해, `Clock` 컴포넌트에 "state"를 추가할 필요가 있습니다.
 
-State는 props와 비슷하지만 컴포넌트에 의해 완전히 제어되며 prviate 속성입니다.
+State는 props와 비슷하지만 컴포넌트에 의해 완전히 제어되며 private 속성입니다.
 
 [이전에 언급](/docs/components-and-props.html#functional-and-class-components) 했던 대로 클래스로 정의한 컴포넌트에는 몇가지 추가 기능이 있습니다. 로컬 state는 클래스에서만 사용 가능한 기능입니다.
 
@@ -236,7 +236,7 @@ class Clock extends React.Component {
 
 이런 메서드들을 "라이프사이클 훅" 이라고 부릅니다.
 
-`componentDidMount()` 훅은 컴포넌트 출력이 DOM에 렌더링된 이후 동작합니다. 이 부분이 타이머를 설정하기 좋아보입니다.
+`componentDidMount()` 훅은 컴포넌트 출력이 DOM에 렌더링 된 이후 동작합니다. 이 부분이 타이머를 설정하기 좋아 보입니다.
 
 ```js{2-5}
   componentDidMount() {
@@ -249,7 +249,7 @@ class Clock extends React.Component {
 
 `this` 에 timer ID를 어떻게 저장하는 지 살펴봅시다.
 
-`this.props` 는 React 자체에 의해 설정되고 `this.state` 는 특별한 의미가 있지만, 시각적 출력에 사용되지 않는 것을 저장해야하는 경우 클래스에 수동으로 필드를 추가할 수 있습니다.
+`this.props` 는 React 자체에 의해 설정되고 `this.state` 는 특별한 의미가 있지만, 시각적 출력에 사용되지 않는 것을 저장해야 하는 경우 클래스에 수동으로 필드를 추가할 수 있습니다.
 
 만약 `render()` 내에서 사용하지 않는다면, state가 되어서는 안됩니다.
 
@@ -308,21 +308,21 @@ ReactDOM.render(
 
 이제 시계는 매 초 깜빡입니다.
 
-어떤 작업을 했는 지와 메서드가 호출되는 순서를 간단히 요약해봅시다.]
+어떤 작업을 했는 지와 메서드가 호출되는 순서를 간단히 요약해봅시다:
 
 1) `<Clock />` 이 `ReactDOM.render()` 에 전달될 때, React는 `Clock` 컴포넌트의 생성자 함수를 호출합니다. `Clock`이 현 시간 화면에 보여질 때, 현 시간을 포함하는 `this.state` 객체를 초기화합니다. 이 state는 추후 업데이트합니다.
 
-2) React가 `Clock` 컴포넌트의 `render()` 메서드를 호출합니다. React가 어떤 걸 화면에 보여줘야하는 지 배우는 방법입니다. 그 다음 React는 `Clock` 의 렌더링 출력과 일치하도록 DOM을 업데이트합니다.
+2) React가 `Clock` 컴포넌트의 `render()` 메서드를 호출합니다. React가 어떤 걸 화면에 보여줘야 하는 지 배우는 방법입니다. 그다음 React는 `Clock` 의 렌더링 출력과 일치하도록 DOM을 업데이트합니다.
 
-3) `Clock` 출력이 DOM에 주입되었일 때, React는 `componentDidMount()` 라이프 훅을 호출합니다. 내부에서, `Clock` 컴포넌트는 브라우저에게 컴포넌트의 `tick()` 메서드를 초당 한번 호출하는 타이머를 설정하라고 요구합니다.
+3) `Clock` 출력이 DOM에 주입되었을 때, React는 `componentDidMount()` 라이프 훅을 호출합니다. 내부에서, `Clock` 컴포넌트는 브라우저에게 컴포넌트의 `tick()` 메서드를 초당 한번 호출하는 타이머를 설정하라고 요구합니다.
 
-4) 브라우저에서 매 초마다 `tick()` 메서드를 호출합니다. 내부에서, `Clock` 컴포넌트는 현재 시간을 포함하는 객체로 `setState()` 를 호출하여 UI 업데이트를 예약합니다. `setState()` 호출 덕분에, React는 상태가 변경된 걸 알고있고, `render()` 메서드를 다시 한번 호출해 스크린에 무엇이 있어야하는 지 알 수 있습니다. 이번에는, `render()` 메서드 내의 `this.state.date` 가 달라지므로 렌더 출력에 업데이트된 시간이 포함됩니다. React는 그에 따라 DOM을 업데이트합니다.
+4) 브라우저에서 매 초마다 `tick()` 메서드를 호출합니다. 내부에서, `Clock` 컴포넌트는 현재 시간을 포함하는 객체로 `setState()` 를 호출하여 UI 업데이트를 예약합니다. `setState()` 호출 덕분에, React는 상태가 변경된 걸 알고 있고, `render()` 메서드를 다시 한번 호출해 스크린에 무엇이 있어야 하는 지 알 수 있습니다. 이번에는, `render()` 메서드 내의 `this.state.date` 가 달라지므로 렌더 출력에 업데이트된 시간이 포함됩니다. React는 그에 따라 DOM을 업데이트합니다.
 
 5) 만약 `Clock` 컴포넌트가 DOM에서 삭제되었다면, React는 `componentWillUnmount()` 라이프사이클 훅을 호출하고 타이머를 멈춥니다.
 
 ## State 바르게 사용하기
 
-`setState()` 에 대해 알아야할 세가지 것이 있습니다.
+`setState()` 에 대해 알아야 할 세 가지 것이 있습니다.
 
 ### State를 직접 수정하지 마세요
 
