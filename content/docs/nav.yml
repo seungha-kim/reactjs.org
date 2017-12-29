@@ -25,7 +25,7 @@
     - id: composition-vs-inheritance
       title: 구성 (composition) vs 상속 (inheritance)
     - id: thinking-in-react
-      title: Thinking In React
+      title: React스럽게 생각하기
 - title: Advanced Guides
   items:
     - id: jsx-in-depth
