@@ -307,23 +307,23 @@ input을 수정할 때 무슨 일이 일어나는 지 다시 살펴봅시다.
 
 * React는 DOM `<input>` 이 바뀔 때마다 `onChange` 로 정의된 함수를 호출합니다. 이 케이스에서는 `TemperatureInput` 컴포넌트의 `handleChange` 메서드가 이 역할을 수행합니다.
 * `TemperatureInput` 컴포넌트 안의 `handleChange` 메서드는 새 이상적인 값으로 `this.props.onTemperatureChange()` 를 호출합니다. `onTemperatureChange` 를 포함한 props는 부모 컴포넌트인 `Calculator` 에서 제공합니다.
-* When it previously rendered, the `Calculator` has specified that `onTemperatureChange` of the Celsius `TemperatureInput` is the `Calculator`'s `handleCelsiusChange` method, and `onTemperatureChange` of the Fahrenheit `TemperatureInput` is the `Calculator`'s `handleFahrenheitChange` method. So either of these two `Calculator` methods gets called depending on which input we edited.
-* Inside these methods, the `Calculator` component asks React to re-render itself by calling `this.setState()` with the new input value and the current scale of the input we just edited.
-* React calls the `Calculator` component's `render` method to learn what the UI should look like. The values of both inputs are recomputed based on the current temperature and the active scale. The temperature conversion is performed here.
-* React calls the `render` methods of the individual `TemperatureInput` components with their new props specified by the `Calculator`. It learns what their UI should look like.
-* React DOM updates the DOM to match the desired input values. The input we just edited receives its current value, and the other input is updated to the temperature after conversion.
+* 이전에 렌더링되었을 때, `Calculator` 는 섭씨 `TemperatureInput` 의 `onTemperatureChange` 는 `Calculator` 의 `handleCelsiusChange` 이고, 화씨 `TemperatureInput` 의 `onTemperatureChange` 메서드는 `Calculator` 의 `handleFahrenheitChange` 메서드로 정의합니다. 따라서 수정한 입력에 따라 두 `Calculator` 메서드 중 하나가 호출됩니다.
+* 이 메서드들에서 `Calculator` 컴포넌트는 React에게 새로운 입력 값과 막 수정된 input의 현재 scale로 `this.setState()` 를 호출해 스스로를 다시 렌더링하도록 요청합니다.
+* React는 `Calculator` 컴포넌트의 `render` 메서드를 호출하여 UI가 어떻게 보여야하는 지 알아냅니다. 두 입력 값은 현재 온도와 활성 scale에 따라 다시 계산됩니다. 온도 변환은 여기에서 수행합니다.
+* React는 `Calculator` 에서 계산한 새 props로 개별 `TemperatureInput` 의 `render` 메서드를 호출합니다. 이를 통해 UI가 어떻게 보여아하는 지 알아냅니다.
+* React DOM은 이상적인 입력 값과 매치하는 DOM을 업데이트합니다. 방금 수정한 input은 현재 값을 받고, 다른 input은 변환 후 온도를 업데이트합니다.
 
-Every update goes through the same steps so the inputs stay in sync.
+모든 업데이트는 같은 단계를 통하기때문에 input이 동기화 상태를 유지합니다.
 
-## Lessons Learned
+## 여기서 배운 것
 
-There should be a single "source of truth" for any data that changes in a React application. Usually, the state is first added to the component that needs it for rendering. Then, if other components also need it, you can lift it up to their closest common ancestor. Instead of trying to sync the state between different components, you should rely on the [top-down data flow](/docs/state-and-lifecycle.html#the-data-flows-down).
+React에서 변경되는 모든 데이터에 대한 단일 "신뢰 가능한 소스"가 있어야합니다. 일반적으로 state는 렌더링을 위해 필요한 컴포넌트에 처음 추가됩니다. 그런 다음 다른 컴포넌트에서도 그 state를 필요로하면, 가장 가까운 공통 조상으로 state를 들어올릴 수 있습니다. 다른 컴포넌트 간의 state를 동기화하는 대신, [top-down 데이터 플로우](/docs/state-and-lifecycle.html#the-data-flows-down) 에 의존할 수 있습니다.
 
-Lifting state involves writing more "boilerplate" code than two-way binding approaches, but as a benefit, it takes less work to find and isolate bugs. Since any state "lives" in some component and that component alone can change it, the surface area for bugs is greatly reduced. Additionally, you can implement any custom logic to reject or transform user input.
+state를 올리는 것은 two-way 바인딩 접근방식보다 더 "보일러플레이트" 코드를 작성하지만 그 이점으로 버그를 찾고 격리하는 작업이 줄어듭니다. 특ㄷ정 컴포넌트에 모든 state가 "존재"하고 컴포넌트만 변경될 수 있기 때문에, 버그가 나타날 수 있는 표면적이 크게 줍니다. 또한 유저 입력을 거부하거나 변형하는 커스텀 로직을 구현할 수도 있습니다.
 
-If something can be derived from either props or state, it probably shouldn't be in the state. For example, instead of storing both `celsiusValue` and `fahrenheitValue`, we store just the last edited `temperature` and its `scale`. The value of the other input can always be calculated from them in the `render()` method. This lets us clear or apply rounding to the other field without losing any precision in the user input.
+props나 state에서 파생될 수 있는 게 있다면, 그건 state여서는 안됩니다. 예를 들어, `celsiusValue` 와 `fahrenheitValue` 를 둘 다 저장하는 대신 마지막으로 수정된 `temperature` 와 그 `scale` 만 보관합니다. 다른 input 값은 `render()` 메서드ㄷ에서 그 값들을 가지고 계산할 수 있습니다. 이를 통해 유저 입력에서 정밀도를 잃지 않고 다른 필드에서 반올림을 하거나 지울 수 있습니다.
 
-When you see something wrong in the UI, you can use [React Developer Tools](https://github.com/facebook/react-devtools) to inspect the props and move up the tree until you find the component responsible for updating the state. This lets you trace the bugs to their source:
+UI에서 문제가 발생하면 [React Developer Tools](https://github.com/facebook/react-devtools) 를 사용해서 state 업데이트를 담당하는 컴포넌트를 찾을 때까지 prop을 검사하고 트리를 위로 옮길 수 있습니다. 이제 버그를 소스에서 추적할 수 있습니다.
 
 <img src="../images/docs/react-devtools-state.gif" alt="Monitoring State in React DevTools" max-width="100%" height="100%">
 
