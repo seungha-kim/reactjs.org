@@ -97,7 +97,7 @@ function BlueDatePicker() {
 
 컴포넌트 이름을 지을 때는 대문자로 시작하는 게 좋습니다. 만약 컴포넌트의 이름이 소문자로 시작한다면, 대문자로 시작하는 변수에 할당한 뒤 JSX에서 사용하세요.
 
-예를 들어, 아래 코드는 원하는대로 동작하지 않습니다.
+예를 들어, 아래 코드는 원하는 대로 동작하지 않습니다.
 
 ```js{3,4,10,11}
 import React from 'react';
@@ -114,7 +114,7 @@ function HelloWorld() {
 }
 ```
 
-이 코드를 고쳐보면, `hello` 를 `Hello` 로 바꾼 후 참조할 떄도 `<Hello />` 를 사용합니다.
+이 코드를 고쳐보면, `hello` 를 `Hello` 로 바꾼 후 참조할 때도 `<Hello />` 를 사용합니다.
 
 ```js{3,4,10,11}
 import React from 'react';
@@ -131,7 +131,7 @@ function HelloWorld() {
 }
 ```
 
-### 실핼 중에 타입 선택하기
+### 실행 중에 타입 선택하기
 
 React 요소 타입에 일반적인 표현식을 사용할 수 없습니다. 엘리먼트 타입을 지정하기 위해 일반적인 표현식을 사용하고 싶다면 대문자로 시작하는 변수에 할당하세요. 예를 들어 prop을 기준으로 다른 컴포넌트를 렌더링해야할 때가 있습니다.
 
@@ -228,7 +228,7 @@ prop에 아무 값도 전달하지 않으면, 기본값은 `true` 입니다. 아
 <MyTextBox autocomplete={true} />
 ```
 
-일반적으로 이 방식을 사용하지 않는 것을 권장하는 데 [ES6 object shorthand](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Object_initializer#New_notations_in_ECMAScript_2015) 와 헷갈릴 수 있기 떄문입니다. `{foo}` 는 `{foo: true}` 가 아닌 `{foo: foo}` 와 동일합니다. HTML 동작방식과 일치시키기 위해 남겨두었습니다.
+일반적으로 이 방식을 사용하지 않는 것을 권장하는 데 [ES6 object shorthand](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Object_initializer#New_notations_in_ECMAScript_2015) 와 헷갈릴 수 있기 때문입니다. `{foo}` 는 `{foo: true}` 가 아닌 `{foo: foo}` 와 동일합니다. HTML 동작방식과 일치시키기 위해 남겨두었습니다.
 
 ### 속성 펼치기
 
@@ -265,14 +265,14 @@ const App = () => {
 };
 ```
 
-위 예제에서는 `kind` prop이 안전하게 소모되었고 DOM의 `<button>` 요소로 전달되지않았습니다.
+위 예제에서는 `kind` prop이 안전하게 소모되었고 DOM의 `<button>` 요소로 전달되지 않았습니다.
 다른 props 들은 이 컴포넌트를 실제로 유연하게 만드는 `...other` 객체를 통해 전달됩니다. 전달된 값들을 `onClick` 과 `children` props에서 볼 수 있습니다.
 
-속성 펼치기 기법은 유효하지않은 props를 컴포넌트로 쉽게 전달할 수 있게 만들어서 유용하지만, 그 부분에 그렇게 신경쓰지 않게 만들거나 DOM에서 유효하지 않은 HTML 속성을 전달하게 만들기도 합니다. 꼭 필요할 떄만 사용가는 걸 권장합니다.
+속성 펼치기 기법은 유효하지 않은 props를 컴포넌트로 쉽게 전달할 수 있게 만들어서 유용하지만, 그 부분에 그렇게 신경쓰지 않게 만들거나 DOM에서 유효하지 않은 HTML 속성을 전달하게 만들기도 합니다. 꼭 필요할 때만 사용하는 걸 권장합니다.
 
 ## JSX에서 자식다루기
 
-J여는 태그와 닫는 태그가 있는 JSX 표현식에서 이 콘텐츠 사이의 내용은 `props.children` 이라는 특별한 prop으로 전달됩니다. 자식을 전달하는 몇가지 방법이 있습니다.
+여는 태그와 닫는 태그가 있는 JSX 표현식에서 이 콘텐츠 사이의 내용은 `props.children` 이라는 특별한 prop으로 전달됩니다. 자식을 전달하는 몇 가지 방법이 있습니다.
 
 ### 문자열 리터럴
 
@@ -355,7 +355,7 @@ render() {
 <MyComponent>{'foo'}</MyComponent>
 ```
 
-알 수없는 길이의 JSX 표현식 목록을 렌더링할 때 유용합니다. 예를 들어 아래와 같이 HTML 목록을 렌더링합니다.
+알 수 없는 길이의 JSX 표현식 목록을 렌더링할 때 유용합니다. 예를 들어 아래와 같이 HTML 목록을 렌더링합니다.
 
 ```js{2,9}
 function Item(props) {
@@ -431,7 +431,7 @@ function ListOfTenThings() {
 </div>
 ```
 
-한가지 주의해야할 점은 `0` 숫자 같은 ["falsy" 값](https://developer.mozilla.org/en-US/docs/Glossary/Falsy) 은 여저힌 리액트에서 렌더링된다는 점입니다. 예를 들어 아래 코드는 예상대로 동작하지 않는데 왜냐하면 `props.message` 가 빈 배열일 때 `0` 이 나타나기 때문입니다.
+한가지 주의해야할 점은 `0` 숫자 같은 ["falsy" 값](https://developer.mozilla.org/en-US/docs/Glossary/Falsy) 은 여전히 리액트에서 렌더링된다는 점입니다. 예를 들어 아래 코드는 예상대로 동작하지 않는데 왜냐하면 `props.message` 가 빈 배열일 때 `0` 이 나타나기 때문입니다.
 
 ```js{2}
 <div>
