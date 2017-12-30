@@ -1,6 +1,6 @@
 ---
 id: typechecking-with-proptypes
-title: Typechecking With PropTypes
+title: Proptypes를 이용한 타입 체크
 permalink: docs/typechecking-with-proptypes.html
 redirect_from:
   - "docs/react-api.html#typechecking-with-proptypes"
@@ -8,11 +8,11 @@ redirect_from:
 
 > Note:
 >
-> `React.PropTypes` has moved into a different package since React v15.5. Please use [the `prop-types` library instead](https://www.npmjs.com/package/prop-types).
+> React v15.5부터 `React.PropTypes` 는 별도 패키지로 옮겨졌습니다. 대신 [`prop-types` 라이브러리](https://www.npmjs.com/package/prop-types)를 사용하시길 바랍니다.
 >
 >We provide [a codemod script](/blog/2017/04/07/react-v15.5.0.html#migrating-from-reactproptypes) to automate the conversion.
 
-As your app grows, you can catch a lot of bugs with typechecking. For some applications, you can use JavaScript extensions like [Flow](https://flowtype.org/) or [TypeScript](https://www.typescriptlang.org/) to typecheck your whole application. But even if you don't use those, React has some built-in typechecking abilities. To run typechecking on the props for a component, you can assign the special `propTypes` property:
+앱이 커짐에 따라 타입체킹을 통해 많은 버그를 잡을 수 있습니다. 일부 어플리케이션에서 [Flow](https://flowtype.org/) 나 [TypeScript](https://www.typescriptlang.org/) 같이 어플리케이션 전체에서 타입체크를 할 수 있는 자바스크립트 확장을 사용할 수도 있습니다. 하지만 이런 것들을 사용하지 않는다면 React에서 빌트 인 타입 체킹이 가능합니다. 컴포넌트의 props에서 타입을 체크하고싶다면 특별한 `propTypes` 속성을 할당할 수 있습니다.
 
 ```javascript
 import PropTypes from 'prop-types';
@@ -30,11 +30,11 @@ Greeting.propTypes = {
 };
 ```
 
-`PropTypes` exports a range of validators that can be used to make sure the data you receive is valid. In this example, we're using `PropTypes.string`. When an invalid value is provided for a prop, a warning will be shown in the JavaScript console. For performance reasons, `propTypes` is only checked in development mode.
+`PropTypes` 는 받은 데이터가 유효한 지 확인하는 데 사용할 수 있는 유효성 검사기의 범위를 내보냅니다. 이 예제에서는 `PropTypes.string` 을 사용합니다. prop에 유효하지않은 값이 전달되면 자바스크립트 콘솔에 경고가 노출됩니다. 성능상의 이유로 `propTypes` 는 개발 모드에서만 체크합니다.
 
 ### PropTypes
 
-Here is an example documenting the different validators provided:
+다른 유효성 검사리를 제공하는 예제 문서입니다.
 
 ```javascript
 import PropTypes from 'prop-types';
@@ -119,9 +119,9 @@ MyComponent.propTypes = {
 };
 ```
 
-### Requiring Single Child
+### 단일 자식 요구하기
 
-With `PropTypes.element` you can specify that only a single child can be passed to a component as children.
+`PropTypes.element` 를 사용하면 하나의 컴포넌트만 자식으로써 전달되게 할 수 있습니다.
 
 ```javascript
 import PropTypes from 'prop-types';
@@ -143,9 +143,8 @@ MyComponent.propTypes = {
 };
 ```
 
-### Default Prop Values
-
-You can define default values for your `props` by assigning to the special `defaultProps` property:
+### 기본 Prop 값
+`defaultProps` 속성을 사용하면 `props` 의 기본 값을 할당할 수 있습니다.
 
 ```javascript
 class Greeting extends React.Component {
@@ -168,7 +167,7 @@ ReactDOM.render(
 );
 ```
 
-If you are using a Babel transform like [transform-class-properties](https://babeljs.io/docs/plugins/transform-class-properties/) , you can also declare `defaultProps` as static property within a React component class. This syntax has not yet been finalized though and will require a compilation step to work within a browser. For more information, see the [class fields proposal](https://github.com/tc39/proposal-class-fields).
+만약 [transform-class-properties](https://babeljs.io/docs/plugins/transform-class-properties/) 같은 Babel 변형을 사용한다면, React 컴포넌트 클래스와 함께 `defaultProps` 를 정적 속성으로 선언할 수 있습니다. 이 구문은 아직 완성되지 않았으므로 브라우저 내에서 작업하려면 컴파일이 필요합니다. 더 자세항 정보는 [class fields proposal](https://github.com/tc39/proposal-class-fields) 를 살펴보세요.
 
 ```javascript
 class Greeting extends React.Component {
@@ -184,4 +183,4 @@ class Greeting extends React.Component {
 }
 ```
 
-The `defaultProps` will be used to ensure that `this.props.name` will have a value if it was not specified by the parent component. The `propTypes` typechecking happens after `defaultProps` are resolved, so typechecking will also apply to the `defaultProps`.
+부모 컴포넌트에 의해 지정되지 않은 경우 `this.props.name` 에 값을 보장하기 위해 `defaultProps` 를 사용합니다. `propTypes` 타입 체크는 `defaultProps` 가 해결된 후 발생하므로 `defaultProps` 에서도 타입 체크가 발생합니다.

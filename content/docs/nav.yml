@@ -31,7 +31,7 @@
     - id: jsx-in-depth
       title: JSX 톺아보기
     - id: typechecking-with-proptypes
-      title: Typechecking With PropTypes
+      title: Proptypes를 이용한 타입 체크
     - id: static-type-checking
       title: Static Type Checking
     - id: refs-and-the-dom
