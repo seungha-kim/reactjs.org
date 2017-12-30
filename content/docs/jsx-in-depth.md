@@ -1,6 +1,6 @@
 ---
 id: jsx-in-depth
-title: JSX In Depth
+title: JSX 톺아보기
 permalink: docs/jsx-in-depth.html
 redirect_from:
   - "docs/jsx-spread.html"
@@ -13,7 +13,7 @@ redirect_from:
   - "docs/jsx-in-depth-ko-KR.html"
 ---
 
-Fundamentally, JSX just provides syntactic sugar for the `React.createElement(component, props, ...children)` function. The JSX code:
+근본적으로 JSX는 `React.createElement(component, props, ...children)` 함수에 대한 문법 설탕 (syntactic sugar)을 제공할 뿐입니다. JSX 코드는
 
 ```js
 <MyButton color="blue" shadowSize={2}>
@@ -21,7 +21,7 @@ Fundamentally, JSX just provides syntactic sugar for the `React.createElement(co
 </MyButton>
 ```
 
-compiles into:
+이렇게 컴파일됩니다.
 
 ```js
 React.createElement(
@@ -31,13 +31,13 @@ React.createElement(
 )
 ```
 
-You can also use the self-closing form of the tag if there are no children. So:
+만약 자식이 없다면 스스로 닫는 형태의 태그를 사용할 수도 있습니다. 이 코드는
 
 ```js
 <div className="sidebar" />
 ```
 
-compiles into:
+이렇게 컴파일됩니다.
 
 ```js
 React.createElement(
@@ -47,19 +47,19 @@ React.createElement(
 )
 ```
 
-If you want to test out how some specific JSX is converted into JavaScript, you can try out [the online Babel compiler](babel://jsx-simple-example).
+특정 JSX가 자바스크립트로 어떻게 컴파일되는 지 테스트해보고싶다면, [온라인 Babel 컴파일러](babel://jsx-simple-example) 를 사용해보세요.
 
-## Specifying The React Element Type
+## React 요소 타입 정의하기
 
-The first part of a JSX tag determines the type of the React element.
+JSX 태그의 첫 부분은 React 요소의 타입을 정의합니다.
 
-Capitalized types indicate that the JSX tag is referring to a React component. These tags get compiled into a direct reference to the named variable, so if you use the JSX `<Foo />` expression, `Foo` must be in scope.
+대문자로 시작하는 JSX 태그는 React 컴포넌트를 가리킵니다. 이 태그들은 같은 이름을 가진 변수를 참고하도록 컴파일되며, JSX `<Foo />` 표현을 사용하려면, 반드시 `Foo` 가 스코프 안에 있어야합니다.
 
-### React Must Be in Scope
+### React가 스코프 안에 있어야합니다
 
-Since JSX compiles into calls to `React.createElement`, the `React` library must also always be in scope from your JSX code.
+JSX는 `React.createElement` 를 호출하도록 컴파일되기 때문에, `React` 라이브러리가 JSX 코드의 스코프 내에 존재해야합니다.
 
-For example, both of the imports are necessary in this code, even though `React` and `CustomButton` are not directly referenced from JavaScript:
+예를 들어 아래 코드에서 `React` 와 `CustomButton` 을 자바스크립트에서 직접적으로 참조하지 않더라도 위쪽의 두 import를 꼭 작성해주어야합니다.
 
 ```js{1,2,5}
 import React from 'react';
@@ -71,11 +71,11 @@ function WarningButton() {
 }
 ```
 
-If you don't use a JavaScript bundler and loaded React from a `<script>` tag, it is already in scope as the `React` global.
+만약 자바스크립트 번들러를 사용하지 않고 `<script>` 태그를 이용해 React를 불러왔다면 `React` 는 이미 전역 스코프에 있습니다.
 
-### Using Dot Notation for JSX Type
+### JSX 타입을 위한 점 표기법 사용하기
 
-You can also refer to a React component using dot-notation from within JSX. This is convenient if you have a single module that exports many React components. For example, if `MyComponents.DatePicker` is a component, you can use it directly from JSX with:
+JSX에서 React 컴포넌트를 참조하기 위해 점 표기법을 사용할 수 있습니다. 이 방법은 하나의 모듈에서 많은 React 컴포넌트를 export 할 때 유용합니다. 예를 들어, `MyComponents.DatePicker` 가 컴포넌트라면 JSX에서 직접 참조할 수 있습니다.
 
 ```js{10}
 import React from 'react';
@@ -91,13 +91,13 @@ function BlueDatePicker() {
 }
 ```
 
-### User-Defined Components Must Be Capitalized
+### 사용자 정의 컴포넌트는 대문자로 시작해야합니다
 
-When an element type starts with a lowercase letter, it refers to a built-in component like `<div>` or `<span>` and results in a string `'div'` or `'span'` passed to `React.createElement`. Types that start with a capital letter like `<Foo />` compile to `React.createElement(Foo)` and correspond to a component defined or imported in your JavaScript file.
+엘리먼트 타입이 소문자로 시작한다는 건 `<div>` 나 `<span>` 같은 빌트인 컴포넌트라는 것을 뜻하며 결과적으로는 `React.createElement` 에 `'div'` 나 `'span'` 같은 문자열로 전달됩니다. `<Foo />` 같이 대문자로 시작하는 타입은 `React.createElement(Foo)` 로 컴파일되고 자바스크립트 파일 내에서 정의되었거나 import해온 컴포넌트여야합니다.
 
-We recommend naming components with a capital letter. If you do have a component that starts with a lowercase letter, assign it to a capitalized variable before using it in JSX.
+컴포넌트 이름을 지을 때는 대문자로 시작하는 게 좋습니다. 만약 컴포넌트의 이름이 소문자로 시작한다면, 대문자로 시작하는 변수에 할당한 뒤 JSX에서 사용하세요.
 
-For example, this code will not run as expected:
+예를 들어, 아래 코드는 원하는대로 동작하지 않습니다.
 
 ```js{3,4,10,11}
 import React from 'react';
@@ -114,7 +114,7 @@ function HelloWorld() {
 }
 ```
 
-To fix this, we will rename `hello` to `Hello` and use `<Hello />` when referring to it:
+이 코드를 고쳐보면, `hello` 를 `Hello` 로 바꾼 후 참조할 떄도 `<Hello />` 를 사용합니다.
 
 ```js{3,4,10,11}
 import React from 'react';
@@ -131,9 +131,9 @@ function HelloWorld() {
 }
 ```
 
-### Choosing the Type at Runtime
+### 실핼 중에 타입 선택하기
 
-You cannot use a general expression as the React element type. If you do want to use a general expression to indicate the type of the element, just assign it to a capitalized variable first. This often comes up when you want to render a different component based on a prop:
+React 요소 타입에 일반적인 표현식을 사용할 수 없습니다. 엘리먼트 타입을 지정하기 위해 일반적인 표현식을 사용하고 싶다면 대문자로 시작하는 변수에 할당하세요. 예를 들어 prop을 기준으로 다른 컴포넌트를 렌더링해야할 때가 있습니다.
 
 ```js{10,11}
 import React from 'react';
@@ -150,7 +150,7 @@ function Story(props) {
 }
 ```
 
-To fix this, we will assign the type to a capitalized variable first:
+위 코드를 고쳐보면, 먼저 대문자로 시작하는 변수에 타입을 할당합니다.
 
 ```js{10-12}
 import React from 'react';
@@ -168,21 +168,21 @@ function Story(props) {
 }
 ```
 
-## Props in JSX
+## JSX 안애서 prop 사용하기
 
-There are several different ways to specify props in JSX.
+JSX에서 props를 정의하는 몇가지 다른 방법이 있습니다.
 
-### JavaScript Expressions as Props
+### 자바스크립트 표현식을 Props로 사용하기
 
-You can pass any JavaScript expression as a prop, by surrounding it with `{}`. For example, in this JSX:
+어떤 자바스크립트 표현식이던 prop으로 전달 가능하며, 이 때 `{}` 로 감싸줘야합니다. 예를 들어, JSX에서 이를 보면
 
 ```js
 <MyComponent foo={1 + 2 + 3 + 4} />
 ```
 
-For `MyComponent`, the value of `props.foo` will be `10` because the expression `1 + 2 + 3 + 4` gets evaluated.
+`MyComponent` 에서 `props.foo` 의 값은 표현식 `1 + 2 + 3 + 4` 를 계산한 값인 `10` 입니다.
 
-`if` statements and `for` loops are not expressions in JavaScript, so they can't be used in JSX directly. Instead, you can put these in the surrounding code. For example:
+`if` 문과 `for` 반복은 자바스크립트 표현식이 아니기 때문에, JSX에서 바로 사용할 수 없습니다. 대신 JSX 바깥에서는 사용할 수 있습니다. 예를 들면,
 
 ```js{3-7}
 function NumberDescriber(props) {
@@ -196,11 +196,11 @@ function NumberDescriber(props) {
 }
 ```
 
-You can learn more about [conditional rendering](/docs/conditional-rendering.html) and [loops](/docs/lists-and-keys.html) in the corresponding sections.
+더 자세한 사항은 [조건부 렌더링](/docs/conditional-rendering.html) 과 [반복](/docs/lists-and-keys.html) 을 살펴보세요
 
-### String Literals
+### 문자열 리터럴
 
-You can pass a string literal as a prop. These two JSX expressions are equivalent:
+문자열 리터럴은 그대로 prop으로 넘겨줄 수 있습니다. 아래 두 JSX 표현은 동일합니다.
 
 ```js
 <MyComponent message="hello world" />
@@ -208,7 +208,7 @@ You can pass a string literal as a prop. These two JSX expressions are equivalen
 <MyComponent message={'hello world'} />
 ```
 
-When you pass a string literal, its value is HTML-unescaped. So these two JSX expressions are equivalent:
+문자열 리터럴을 전달할 때, 이 값들은 HTML 이스케이핑되지 않습니다. 아래 두 JSX 표현은 동일합니다.
 
 ```js
 <MyComponent message="&lt;3" />
@@ -216,11 +216,11 @@ When you pass a string literal, its value is HTML-unescaped. So these two JSX ex
 <MyComponent message={'<3'} />
 ```
 
-This behavior is usually not relevant. It's only mentioned here for completeness.
+보통 이런 동작은 신경쓰지 않아도 되지만, 문서의 완결성을 위해 언급해둡니다.
 
-### Props Default to "True"
+### Props의 기본값은 "True"
 
-If you pass no value for a prop, it defaults to `true`. These two JSX expressions are equivalent:
+prop에 아무 값도 전달하지 않으면, 기본값은 `true` 입니다. 아래 두 JSX 표현은 동일합니다.
 
 ```js
 <MyTextBox autocomplete />
@@ -228,11 +228,11 @@ If you pass no value for a prop, it defaults to `true`. These two JSX expression
 <MyTextBox autocomplete={true} />
 ```
 
-In general, we don't recommend using this because it can be confused with the [ES6 object shorthand](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Object_initializer#New_notations_in_ECMAScript_2015) `{foo}` which is short for `{foo: foo}` rather than `{foo: true}`. This behavior is just there so that it matches the behavior of HTML.
+일반적으로 이 방식을 사용하지 않는 것을 권장하는 데 [ES6 object shorthand](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Object_initializer#New_notations_in_ECMAScript_2015) 와 헷갈릴 수 있기 떄문입니다. `{foo}` 는 `{foo: true}` 가 아닌 `{foo: foo}` 와 동일합니다. HTML 동작방식과 일치시키기 위해 남겨두었습니다.
 
-### Spread Attributes
+### 속성 펼치기
 
-If you already have `props` as an object, and you want to pass it in JSX, you can use `...` as a "spread" operator to pass the whole props object. These two components are equivalent:
+`props` 객체를 이미 가지고 있다면, 전체를 그대로 JSX에 전달해주기 위해 `...` "펼치기" 연산자를 사용할 수 있습니다. 아래 두 컴포넌트는 동일합니다.
 
 ```js{7}
 function App1() {
@@ -245,7 +245,7 @@ function App2() {
 }
 ```
 
-You can also pick specific props that your component will consume while passing all other props using the spread operator.
+펼치기 연산자를 사용하면서 다른 모든 props를 통과하면서 컴포넌트가 소비할 특정 props를 고를 수 있습니다.
 
 ```js{2}
 const Button = props => {
@@ -265,30 +265,30 @@ const App = () => {
 };
 ```
 
-In the example above, the `kind` prop is safely consumed and *is not* passed on to the `<button>` element in the DOM.
-All other props are passed via the `...other` object making this component really flexible. You can see that it passes an `onClick` and `children` props.
+위 예제에서는 `kind` prop이 안전하게 소모되었고 DOM의 `<button>` 요소로 전달되지않았습니다.
+다른 props 들은 이 컴포넌트를 실제로 유연하게 만드는 `...other` 객체를 통해 전달됩니다. 전달된 값들을 `onClick` 과 `children` props에서 볼 수 있습니다.
 
-Spread attributes can be useful but they also make it easy to pass unnecessary props to components that don't care about them or to pass invalid HTML attributes to the DOM. We recommend using this syntax sparingly.  
+속성 펼치기 기법은 유효하지않은 props를 컴포넌트로 쉽게 전달할 수 있게 만들어서 유용하지만, 그 부분에 그렇게 신경쓰지 않게 만들거나 DOM에서 유효하지 않은 HTML 속성을 전달하게 만들기도 합니다. 꼭 필요할 떄만 사용가는 걸 권장합니다.
 
-## Children in JSX
+## JSX에서 자식다루기
 
-In JSX expressions that contain both an opening tag and a closing tag, the content between those tags is passed as a special prop: `props.children`. There are several different ways to pass children:
+J여는 태그와 닫는 태그가 있는 JSX 표현식에서 이 콘텐츠 사이의 내용은 `props.children` 이라는 특별한 prop으로 전달됩니다. 자식을 전달하는 몇가지 방법이 있습니다.
 
-### String Literals
+### 문자열 리터럴
 
-You can put a string between the opening and closing tags and `props.children` will just be that string. This is useful for many of the built-in HTML elements. For example:
+여는 태그와 닫는 태그 사이에 문자열을 넣고 `props.children` 을 문자열로 둘 수 있습니다. 이는 빌트인 HTML 요소에서 유용합니다. 예를 들어,
 
 ```js
 <MyComponent>Hello world!</MyComponent>
 ```
 
-This is valid JSX, and `props.children` in `MyComponent` will simply be the string `"Hello world!"`. HTML is unescaped, so you can generally write JSX just like you would write HTML in this way:
+이는 유효한 JSX이며 `MyComponent` 의 `props.children` 은 문자열 `"Hello world!"` 가 됩니다. HTML은 이스케이핑되지 않기 때문에 HTML을 작성하듯이 JSX를 작성할 수 있습니다.
 
 ```html
 <div>This is valid HTML &amp; JSX at the same time.</div>
 ```
 
-JSX removes whitespace at the beginning and ending of a line. It also removes blank lines. New lines adjacent to tags are removed; new lines that occur in the middle of string literals are condensed into a single space. So these all render to the same thing:
+JSX는 각 줄의 처음과 끝에 있는 공백문자를 제거합니다. 또한 빈 줄도 제거합니다. 태그에 붙어있는 개행 문자 또한 삭제됩니다. 문자열 리터럴 중간중간에 나타나는 여러 개행 하나의 공백으로 줄어듭니다. 아래는 모두 동일하게 렌더링됩니다.
 
 ```js
 <div>Hello World</div>
@@ -308,9 +308,9 @@ JSX removes whitespace at the beginning and ending of a line. It also removes bl
 </div>
 ```
 
-### JSX Children
+### JSX 자식
 
-You can provide more JSX elements as the children. This is useful for displaying nested components:
+JSX 요소를 자식으로 제공할 수 있습니다. 중첩된 컴포넌트를 보여줄 때 유용합니다.
 
 ```js
 <MyContainer>
@@ -319,7 +319,7 @@ You can provide more JSX elements as the children. This is useful for displaying
 </MyContainer>
 ```
 
-You can mix together different types of children, so you can use string literals together with JSX children. This is another way in which JSX is like HTML, so that this is both valid JSX and valid HTML:
+다른 타입의 자식을 섞어서 사용할 수 있습니다. 따라서 JSX 자식과 함께 문자열 리터럴을 사용할 수 있습니다. 이는 JSX를 HTML처럼 사용하는 다른 방법이고, 아래 코드는 JSX와 HTML에서 유효합니다.
 
 ```html
 <div>
@@ -331,7 +331,7 @@ You can mix together different types of children, so you can use string literals
 </div>
 ```
 
-A React component can also return an array of elements:
+React 컴포넌트는 요소의 배열을 반환할 수 있습니다.
 
 ```js
 render() {
@@ -345,9 +345,9 @@ render() {
 }
 ```
 
-### JavaScript Expressions as Children
+### 자바스크립트 표현식을 자식으로 사용하기
 
-You can pass any JavaScript expression as children, by enclosing it within `{}`. For example, these expressions are equivalent:
+`{}` 로 감싸서 자바스크립트 표현식을 자식으로 전달할 수 있습니다. 예를 들어, 아래 표현은 동일합니다.
 
 ```js
 <MyComponent>foo</MyComponent>
@@ -355,7 +355,7 @@ You can pass any JavaScript expression as children, by enclosing it within `{}`.
 <MyComponent>{'foo'}</MyComponent>
 ```
 
-This is often useful for rendering a list of JSX expressions of arbitrary length. For example, this renders an HTML list:
+알 수없는 길이의 JSX 표현식 목록을 렌더링할 때 유용합니다. 예를 들어 아래와 같이 HTML 목록을 렌더링합니다.
 
 ```js{2,9}
 function Item(props) {
@@ -372,7 +372,7 @@ function TodoList() {
 }
 ```
 
-JavaScript expressions can be mixed with other types of children. This is often useful in lieu of string templates:
+자바스크립트 표현식은 다른 타입의 자식과 섞어서 사용할 수 있습니다. 때로 문자열 템플릿 대신 사용하기도 합니다.
 
 ```js{2}
 function Hello(props) {
@@ -380,9 +380,9 @@ function Hello(props) {
 }
 ```
 
-### Functions as Children
+### 함수를 자식으로 사용하기
 
-Normally, JavaScript expressions inserted in JSX will evaluate to a string, a React element, or a list of those things. However, `props.children` works just like any other prop in that it can pass any sort of data, not just the sorts that React knows how to render. For example, if you have a custom component, you could have it take a callback as `props.children`:
+보통 JSX에 포함된 자바스크립트 표현식은 문자열, React 요소, 이러한 것들의 목록으로 취급됩니다. 하지만 `props.children` 는 React가 렌더링하는 방법을 아는 것 뿐만 아니라 다른 prop처럼 동작하기 때문에 모든 종류의 데이터를 전달할 수 있습니다. 예를 들어 커스텀 컴포넌트가 있다면 `props.children` 으로 콜백을 전달할 수 있습니다.
 
 ```js{4,13}
 // Calls the children callback numTimes to produce a repeated component
@@ -403,11 +403,10 @@ function ListOfTenThings() {
 }
 ```
 
-Children passed to a custom component can be anything, as long as that component transforms them into something React can understand before rendering. This usage is not common, but it works if you want to stretch what JSX is capable of.
+커스텀 엘리먼트에 전달되는 자식은 해당 컴포넌트가 렌더링 되기 전에 React가 이해할 수 있는 것으로 변환되는 한 아무것이나 될 수 있습니다. 이 사용법은 일반적이지 않지만 JSX가 수행할 수 있는 작업을 확장하고자 할 때 유용합니다.
 
-### Booleans, Null, and Undefined Are Ignored
-
-`false`, `null`, `undefined`, and `true` are valid children. They simply don't render. These JSX expressions will all render to the same thing:
+### 불리언, Null, Undefined는 무시된다
+`false`, `null`, `undefined`, `true` 는 유효한 자식입니다. 단순히 렌더링되지 않습니다. 아래 JSX 표현식은 동일하게 렌더링됩니다.
 
 ```js
 <div />
@@ -423,7 +422,7 @@ Children passed to a custom component can be anything, as long as that component
 <div>{true}</div>
 ```
 
-This can be useful to conditionally render React elements. This JSX only renders a `<Header />` if `showHeader` is `true`:
+조건부로 React 요소를 렌더링할 때 유용하게 쓰입니다. 아래 JSX는 `showHeader` 가 `true` 일 때만 `<Header />` 를 렌더링합니다.
 
 ```js{2}
 <div>
@@ -432,7 +431,7 @@ This can be useful to conditionally render React elements. This JSX only renders
 </div>
 ```
 
-One caveat is that some ["falsy" values](https://developer.mozilla.org/en-US/docs/Glossary/Falsy), such as the `0` number, are still rendered by React. For example, this code will not behave as you might expect because `0` will be printed when `props.messages` is an empty array:
+한가지 주의해야할 점은 `0` 숫자 같은 ["falsy" 값](https://developer.mozilla.org/en-US/docs/Glossary/Falsy) 은 여저힌 리액트에서 렌더링된다는 점입니다. 예를 들어 아래 코드는 예상대로 동작하지 않는데 왜냐하면 `props.message` 가 빈 배열일 때 `0` 이 나타나기 때문입니다.
 
 ```js{2}
 <div>
@@ -442,7 +441,7 @@ One caveat is that some ["falsy" values](https://developer.mozilla.org/en-US/doc
 </div>
 ```
 
-To fix this, make sure that the expression before `&&` is always boolean:
+이를 고치기 위해, `&&` 앞의 표현식이 항상 불리언이게 만듭시다.
 
 ```js{2}
 <div>
@@ -452,7 +451,7 @@ To fix this, make sure that the expression before `&&` is always boolean:
 </div>
 ```
 
-Conversely, if you want a value like `false`, `true`, `null`, or `undefined` to appear in the output, you have to [convert it to a string](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String#String_conversion) first:
+반대로, `false`, `true`, `null`, `undefined` 를 출력시키고 싶다면, 먼저 [문자열로 변환](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String#String_conversion) 해야합니다.
 
 ```js{2}
 <div>
