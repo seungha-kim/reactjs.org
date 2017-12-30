@@ -22,7 +22,7 @@ Flow를 사용하기 위해서는
 
 ### 프로젝트에 Flow 추가하기
 
-먼저 터미널에서 프로젝트 디렉토리로 이동합니다. 그리고 두 커민드를 실행합니다.
+먼저 터미널에서 프로젝트 디렉토리로 이동합니다. 그리고 두 커드를 실행합니다.
 
 만약 [Yarn](https://yarnpkg.com/) 을 쓴다면,
 
@@ -57,11 +57,11 @@ npm run flow init
 
 Flow는 주석 형태를 확장한 특수한 구문을 사용하는 자바스크립트 언어 확장입니다. 그러나 브러우저는 그런 구문을 모르기 때문에 브라우저에 전송되는 컴파일된 자바스크립트 번들로 끝내면 안됩니다.
 
-이를 수행하는 방법은 자바스크립트를 컴파일할 떄 사용하는 도구에 따라 다릅니다.
+이를 수행하는 방법은 자바스크립트를 컴파일할 때 사용하는 도구에 따라 다릅니다.
 
 #### Create React App
 
-만약 [Create React App](https://github.com/facebookincubator/create-react-app) 을 사용해 프로젝트를 세팅했다면, 축하합니다! Flow 주석이 기본적으로 벗겨져 있기 떄문에 이 단계를 밟지 않아도 됩니다.
+만약 [Create React App](https://github.com/facebookincubator/create-react-app) 을 사용해 프로젝트를 세팅했다면, 축하합니다! Flow 주석이 기본적으로 벗겨져 있기 때문에 이 단계를 밟지 않아도 됩니다.
 
 #### Babel
 
