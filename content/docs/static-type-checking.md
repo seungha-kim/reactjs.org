@@ -300,7 +300,7 @@ Reason은 페이스북이 개발하였으며 메신저같은 제품에 사용하
 
 ## Kotlin
 
-[Kotlin](https://kotlinlang.org/)은 JetBrains가 개발한 정적 타입 언어입니다. 타겟 플램폼은 JVM, Android, LLVM, [자바스크립트](https://kotlinlang.org/docs/reference/js-overview.html)입니다.
+[Kotlin](https://kotlinlang.org/)은 JetBrains가 개발한 정적 타입 언어입니다. 타겟 플랫폼은 JVM, Android, LLVM, [자바스크립트](https://kotlinlang.org/docs/reference/js-overview.html)입니다.
 
 JetBrains은 React 커뮤니티에서 여러가지 도구를 만들고 유지하고 있습니다. [React bindings](https://github.com/JetBrains/kotlin-wrappers) 뿐만 아니라 [Create React Kotlin App](https://github.com/JetBrains/create-react-kotlin-app)도 있습니다. 후자는 빌드 구성 없이 Kotlin으로 React 앱을 만드는 데 도움이 됩니다.
 
