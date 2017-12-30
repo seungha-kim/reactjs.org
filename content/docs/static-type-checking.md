@@ -1,46 +1,46 @@
 ---
 id: static-type-checking
-title: Static Type Checking
+title: 정적 타입 체크
 permalink: docs/static-type-checking.html
 prev: typechecking-with-prototypes.html
 next: refs-and-the-dom.html
 ---
 
-Static type checkers like [Flow](https://flowtype.org/) and [TypeScript](https://www.typescriptlang.org/) identify certain types of problems before you even run your code. They can also improve developer workflow by adding features like auto-completion. For this reason, we recommend using Flow or TypeScript instead of `PropTypes` for larger code bases.
+[Flow](https://flowtype.org/) 와 [TypeScript](https://www.typescriptlang.org/) 같은 정적 타입 체커는 코드를 실행하기 전에 몇몇 문제를 식별합니다. 자동 완성같은 기능을 추가하여 개발자의 작업흐름을 개선하기도 합니다. 이런 이유로 큰 코드 베이스에서는 `PropTypes` 대신 Flow나 TypeScript 사용을 권장합니다.
 
 ## Flow
 
-[Flow](https://flow.org/) is a static type checker for your JavaScript code. It is developed at Facebook and is often used with React. It lets you annotate the variables, functions, and React components with a special type syntax, and catch mistakes early. You can read an [introduction to Flow](https://flow.org/en/docs/getting-started/) to learn its basics.
+[Flow](https://flow.org/) 는 자바스크립트 코드를 위한 정적 타입 체커입니다. Facebook에 의해 개발되었으며 종종 React와 함께 사용합니다. 변수, 함수 및 React 컴포넌트에 특수한 타입 구문을 사용하여 주석을 달고 실수를 조기에 발견 할 수 있습니다. 더 자세한 건 [Flow 소개](https://flow.org/en/docs/getting-started/) 를 읽어볼 수 있습니다.
 
-To use Flow, you need to:
+Flow를 사용하기 위해서는
 
-* Add Flow to your project as a dependency.
-* Ensure that Flow syntax is stripped from the compiled code.
-* Add type annotations and run Flow to check them.
+* 프로젝트 의존성에 Flow를 추가해야합니다.
+* Flow 구문이 컴파일 코드에서 제거되었는 지 확인하세요.
+* 타입 주석을 추가하고 Flow를 실행해 체크해야합니다.
 
-We will explain these steps below in detail.
+아래에서 이 단계를 더 상세하게 소개합니다.
 
-### Adding Flow to a Project
+### 프로젝트에 Flow 추가하기
 
-First, navigate to your project directory in the terminal. You will need to run two commands.
+먼저 터미널에서 프로젝트 디렉토리로 이동합니다. 그리고 두 커민드를 실행합니다.
 
-If you use [Yarn](https://yarnpkg.com/), run:
+만약 [Yarn](https://yarnpkg.com/) 을 쓴다면,
 
 ```bash
 yarn add --dev flow-bin
 yarn run flow init
 ```
 
-If you use [npm](https://www.npmjs.com/), run:
+만약 [npm](https://www.npmjs.com/) 을 쓴다면,
 
 ```bash
 npm install --save-dev flow-bin
 npm run flow init
 ```
 
-The first command installs the latest version of Flow into your project. The second command creates a Flow configuration file that you will need to commit.
+첫번째 커맨드는 프로젝트에 최신 버전 Flow를 설치합니다. 두번째 커맨드는 Flow 설정 파일을 만들고 추후에 커밋해야합니다.
 
-Finally, add `flow` to the `"scripts"` section of your `package.json`:
+마지막으로, `flow` 를 `package.json` 의 `"scripts"` 섹션에 추가합니다.
 
 ```js{4}
 {
@@ -53,37 +53,37 @@ Finally, add `flow` to the `"scripts"` section of your `package.json`:
 }
 ```
 
-### Stripping Flow Syntax from the Compiled Code
+### 컴파일된 코드에서 Flow 구문 벗겨내기
 
-Flow extends the JavaScript language with a special syntax for type annotations. However, browsers aren't aware of this syntax, so we need to make sure it doesn't end up in the compiled JavaScript bundle that is sent to the browser.
+Flow는 주석 형태를 확장한 특수한 구문을 사용하는 자바스크립트 언어 확장입니다. 그러나 브러우저는 그런 구문을 모르기 때문에 브라우저에 전송되는 컴파일된 자바스크립트 번들로 끝내면 안됩니다.
 
-The exact way to do this depends on the tools you use to compile JavaScript.
+이를 수행하는 방법은 자바스크립트를 컴파일할 떄 사용하는 도구에 따라 다릅니다.
 
 #### Create React App
 
-If your project was set up using [Create React App](https://github.com/facebookincubator/create-react-app), congratulations! The Flow annotations are already being stripped by default so you don't need to do anything else in this step.
+만약 [Create React App](https://github.com/facebookincubator/create-react-app) 을 사용해 프로젝트를 세팅했다면, 축하합니다! Flow 주석이 기본적으로 벗겨져 있기 떄문에 이 단계를 밟지 않아도 됩니다.
 
 #### Babel
 
 >Note:
 >
->These instructions are *not* for Create React App users. Even though Create React App uses Babel under the hood, it is already configured to understand Flow. Only follow this step if you *don't* use Create React App.
+>아래 지시사항은 Create React App 유저를 위한 것이 *아닙니다*. Create React App 이 Babel을 사용하고 있다고는 하지만, 이미 Flow를 이해하도록 설정되어있습니다. Create React App을 사용하지 *않는* 경우에만 이 단계를 진행하십시오.
 
-If you manually configured Babel for your project, you will need to install a special preset for Flow.
+프로젝트에서 수동으로 Babel을 설정한 경우 Flow를 위한 특별한 프리셋을 설치해야합니다.
 
-If you use Yarn, run:
+만약 Yarn을 사용한다면,
 
 ```bash
 yarn add --dev babel-preset-flow
 ```
 
-If you use npm, run:
+만약 npm을 사용한다면,
 
 ```bash
 npm install --save-dev babel-preset-flow
 ```
 
-Then add the `flow` preset to your [Babel configuration](http://babeljs.io/docs/usage/babelrc/). For example, if you configure Babel through `.babelrc` file, it could look like this:
+그리고 나서 [Babel configuration](http://babeljs.io/docs/usage/babelrc/)에 `flow` 프리셋을 추가합니다. 예를 들어, Babel을 `.babelrc` 파일을 통해 설정한다면 아래와 같이 할 수 있습니다.
 
 ```js{3}
 {
@@ -94,50 +94,50 @@ Then add the `flow` preset to your [Babel configuration](http://babeljs.io/docs/
 }
 ```
 
-This will let you use the Flow syntax in your code.
+이게 코드에서 Flow 구문을 사용할 수 있게 만듭니다.
 
 >Note:
 >
->Flow does not require the `react` preset, but they are often used together. Flow itself understands JSX syntax out of the box.
+>Flow는 `react` 프리셋을 필수로하지 않지만 종종 함께 사용됩니다. Flow 자체가 JSX 구문을 이해할 수 있습니다.
 
-#### Other Build Setups
+#### 다른 빌드 셋업
 
-If you don't use either Create React App or Babel, you can use [flow-remove-types](https://github.com/flowtype/flow-remove-types) to strip the type annotations.
+만약 Create React App이나 Babel을 사용하지 않는다면 [flow-remove-types](https://github.com/flowtype/flow-remove-types) 을 사용해 주석을 벗겨낼 수 있습니다.
 
-### Running Flow
+### Flow 동작시키기
 
-If you followed the instructions above, you should be able to run Flow for the first time.
+위 지침을 따른 경우 처음부터 Flow를 싱핼할 수 있습니다.
 
 ```bash
 yarn flow
 ```
 
-If you use npm, run:
+npm을 사용한다면,
 
 ```bash
 npm run flow
 ```
 
-You should see a message like:
+아래와 같은 메시지가 나옵니다.
 
 ```
 No errors!
 ✨  Done in 0.17s.
 ```
 
-### Adding Flow Type Annotations
+### Flow 타입 주석 추가하기
 
-By default, Flow only checks the files that include this annotation:
+기본적으로 Flow는 아래 주석이 포함된 파일만 체크합니다.
 
 ```js
 // @flow
 ```
 
-Typically it is placed at the top of a file. Try adding it to some files in your project and run `yarn flow` or `npm run flow` to see if Flow already found any issues.
+일반적으로는 파일 최상단에 둡니다. 프로젝트 안의 일부 파일에 추가하고 `yarn flow` 나 `npm run flow` 를 실행하여 Flow가 이미 문제를 발견했는 지 살펴보세요.
 
-There is also [an option](https://flow.org/en/docs/config/options/#toc-all-boolean) to force Flow to check *all* files regardless of the annotation. This can be too noisy for existing projects, but is reasonable for a new project if you want to fully type it with Flow.
+또한 주석에 상관없이 *모든* 파일을 강제로 검사하게 하는 [옵션](https://flow.org/en/docs/config/options/#toc-all-boolean)이 있습니다. 기존 프로젝트에서는 너무 많겠지만 Flow를 사용하여 모든 타입을 체크하려는 경우 새로운 프로젝트에서 적합합니다.
 
-Now you're all set! We recommend to check out the following resources to learn more about Flow:
+이제 모든 준비가 끝났습니다! Flow에 대해 자세히 알아보려면 다음 자료를 확인해보시길 바랍니다.
 
 * [Flow Documentation: Type Annotations](https://flow.org/en/docs/types/)
 * [Flow Documentation: Editors](https://flow.org/en/docs/editors/)
