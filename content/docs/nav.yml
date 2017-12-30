@@ -33,9 +33,9 @@
     - id: typechecking-with-proptypes
       title: Proptypes를 이용한 타입 체크
     - id: static-type-checking
-      title: Static Type Checking
+      title: 정적 타입 체크
     - id: refs-and-the-dom
-      title: Refs and the DOM
+      title: Refs와 DOM
     - id: uncontrolled-components
       title: Uncontrolled Components
     - id: optimizing-performance

@@ -144,34 +144,34 @@ No errors!
 * [Flow Documentation: React](https://flow.org/en/docs/react/)
 * [Linting in Flow](https://medium.com/flow-type/linting-in-flow-7709d7a7e969)
 
-## TypeScript
+## 타입스크립트 (TypeScript)
 
-[TypeScript](https://www.typescriptlang.org/) is a programming language developed by Microsoft. It is a typed superset of JavaScript, and includes its own compiler. Being a typed language, Typescript can catch errors and bugs at build time, long before your app goes live. You can learn more about using TypeScript with React [here](https://github.com/Microsoft/TypeScript-React-Starter#typescript-react-starter).
+[타입스크립트 (TypeScript)](https://www.typescriptlang.org/) 는 Microsoft 가 개발한 프로그래밍 언어입니다. 타입스크립트는 자바스크립트이 타입 슈퍼셋이며 자체적인 컴파일러를 가지고 있습니다. 타입 언어이기 때문에 타입스크립트는 앱이 실행되기 훨씬 전에 빌드할 때 오류와 버그를 잡을 수 있습니다. 리액트와 타입스크립트를 사용하는 법에 대해서는 [여기](https://github.com/Microsoft/TypeScript-React-Starter#typescript-react-starter)서 살펴보세요.
 
-To use TypeScript, you need to:
-* Add Typescript as a dependency to your project
-* Configure the TypeScript compiler options
-* Use the right file extensions
-* Add definitions for libraries you use
+타입스크립트를 사용하려면,
+* 프로젝트의 의존성에 타입스크립트를 추가해야합니다
+* 타입스크립트 컴파일 옵션을 설정합니다
+* 올바른 파일 확장을 사용합니다
+* 사용할 라이브러리의 정의를 추가합니다
 
-Let's go over these in detail.
+더 자세히 살펴봅시다
 
-### Adding TypeScript to a Project
-It all begins with running one command in your terminal.
+### 프로젝트에 타입스크립트 추가하기
+모든 일은 터미널에서 한 커맨드로 시작합니다.
 
-If you use [Yarn](https://yarnpkg.com/), run:
+[Yarn](https://yarnpkg.com/)을 사용한다면,
 
 ```bash
 yarn add --dev typescript
 ```
 
-If you use [npm](https://www.npmjs.com/), run:
+[npm](https://www.npmjs.com/)을 사용한다면,
 
 ```bash
 npm install --save-dev typescript
 ```
 
-Congrats! You've installed the latest version of TypeScript into your project. Installing TypeScript gives us access to the `tsc` command. Before configuration, let's add `tsc` to the "scripts" section in our `package.json`:
+축하합니다! 프로젝트에 최신 버전 타입스크립트를 설치했습니다. 타입스크립트를 설치하면 `tsc` 커맨드에 접근할 수 있습니다. 설정하기 전에, `tsc` 를 `package.json` 의 "scripts" 섹션에 추가합니다.
 
 ```js{4}
 {
@@ -184,19 +184,19 @@ Congrats! You've installed the latest version of TypeScript into your project. I
 }
 ```
 
-### Configuring the TypeScript Compiler
-The compiler is of no help to us until we tell it what to do. In TypeScript, these rules are defined in a special file called `tsconfig.json`. To generate this file run:
+### 타입스크립트 컴파일러 설정하기
+컴파일러는 우리가 해야할 일을 말하기 전에는 도움이 되지 않습니다. 타입스크립트에서는 `tsconfig.json` 이라는 특별한 파일에서 규칙을 정의합니다. 이 파일을 생성하려면
 
 ```bash
 tsc --init
 ```
 
-Looking at the now generated `tsconfig.json`, you can see that there are many options you can use to configure the compiler. For a detailed description of all the options, check [here](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html).
+새로이 생성된 `tsconfig.json` 을 보면 컴파일러를 설정할 때 사용하는 많은 옵션을 가지고 있습니다. 모든 옵션에 대한 더 상세한 설명은 [여기](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html)를 참고하세요.
 
-Of the many options, we'll look at `rootDir` and `outDir`. In its true fashion, the compiler will take in typescript files and generate javascript files. However we don't want to get confused with our source files and the generated output.
+많은 옵션 중에 `rootDir` 과 `outDir` 을 살펴보려고 합니다. 진정한 의미에서 컴파일러는 타입스크립트 파일을 받아 자바스크립트 파일을 생성합니다. 그러나 우리는 소스 파일과 생성된 출력에 혼란을 겪지 않기를 원합니다.
 
-We'll address this in two steps:
-* Firstly, let's arrange our project structure like this. We'll place all our source code in the `src` directory.
+우리는 이것을 두 단계로 다룹니다.
+* 먼저 프로젝트 구조를 아래와 같이 바꿉니다. 소스 코드를 `src` 디렉토리 안에 넣습니다.
 
 ```
 ├── package.json
@@ -205,7 +205,7 @@ We'll address this in two steps:
 └── tsconfig.json
 ```
 
-* Next, we'll tell the compiler where our source code is and where the output should go.
+* 다음으로 소스 코드가 어디에 있고 어디에 출력되어야하는 지 컴파일러에 알릴 것입니다.
 
 ```js{6,7}
 // tsconfig.json
@@ -220,40 +220,40 @@ We'll address this in two steps:
 }
 ```
 
-Great! Now when we run our build script the compiler will output the generated javascript to the `build` folder. The [TypeScript React Starter](https://github.com/Microsoft/TypeScript-React-Starter/blob/master/tsconfig.json) provides a `tsconfig.json` with a good set of rules to get you started.
+좋습니다! 이제 빌드스크립트를 동작시키면 컴파일러가 `build` 폴더 안에 생성된 자바스크립트를 둡니다. [TypeScript React Starter](https://github.com/Microsoft/TypeScript-React-Starter/blob/master/tsconfig.json)는 시작하기에 좋은 규칙 세트가 설정된 `tsconfig.json` 를 제공합니다.
 
-Generally, you don't want to keep the generated javascript in your source control, so be sure to add the build folder to your `.gitignore`.
+일반적으로 생성된 자바스크립트를 소스 컨트롤에 두지 않으려면, `.gitignore` 에 build 폴더를 추가해야합니다.
 
-### File extensions
-In React, you most likely write your components in a `.js` file. In TypeScript we have 2 file extensions:
+### 파일 확장
+React에서 대부분의 컴포넌트를 `.js` 파일로 작성할 것입니다. 타입스크립트에는 2가지 파일 확장이 있습니다.
 
-`.ts` is the default file extension while `.tsx` is a special extension used for files which contain `JSX`.
+`.ts` 는 기본 파일 확장이고 `.tsx` 는 `JSX` 를 포함하는 파일에 사용되는 특수한 확장입니다.
 
-### Running TypeScript
+### 타입스크립트 실행하기
 
-If you followed the instructions above, you should be able to run TypeScript for the first time.
+위 구조를 따랐다면 타입스크립트를 실행할 수 있습니다.
 
 ```bash
 yarn build
 ```
 
-If you use npm, run:
+만약 npm을 사용한다면,
 
 ```bash
 npm run build
 ```
 
-If you see no output, it mean's that it completed successfully.
+만약 아무런 출력이 없다면, 컴파일이 성공적으로 이루어졌다는 것입니다.
 
 
-### Type Definitions
-To be able to show errors and hints from other packages, the compiler relies on declaration files. A declaration file provides all the type information about a library. This enables us to use javascript libraries like those on npm in our project. 
+### 타입 정의
+컴파일러는 다른 패키지의 오류 및 힌트를 나타내도록 선언 파일을 사용합니다. 선언 파일은 라이브러리에 대한 모든 타입 정보를 제공합니다. 이는 프로젝트에서 npm에 있는 것과 같은 자바스크립트 라이브러리를 사용할 수 있게 합니다.
 
-There are two main ways to get declarations for a library:
+라이브러리에서 선언하는 두가지 방법이 있습니다.
 
-__Bundled__ - The library bundles it's own declaration file. This is great for us, since all we need to do is install the library, and we can use it right away. To check if a library has bundled types, look for an `index.d.ts` file in the project. Some libraries will have it specified in their `package.json` under the `typings` or `types` field.
+__Bundled__ - 라이브러리는 자신의 선언 파일을 번들합니다. 해야할 일은 라이브러리를 설치하는 일 뿐이므로 바로 사용할 수 있습니다. 라이브러리에 번들 타입이 있는 지 확인하려면 프로젝트 내의 `index.d.ts` 파일을 살펴보세요. 일부 라이브러리는 `typings` 혹은 `types` 필드 아래 `package.json` 에 정의됩니다.
 
-__[DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped)__ - DefinitelyTyped is a huge repository of declarations for libraries that don't bundle a declaration file. The declarations are crowd-sourced and managed by Microsoft and open source contributors. React for example doesn't bundle it's own declaration file. Instead we can get it from DefinitelyTyped. To do so enter this command in your terminal.
+__[DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped)__ - DefinitelyTyped는 선언 파일을 번들하지 않는 라이브러리에 대한 거대한 저장소입니다. 선언은 Microsoft 및 오픈 소스 컨트리뷰터가 제공하는 크라우드 소스입니다. 예를 들어 React는 선언 파일을 번들하지 않습니다. 대신 DefinitelyTyped에서 가져올 수 있습니다. 이렇게 하려면 터미널에서 커맨드를 실행하세요.
 
 ```bash
 # yarn
@@ -264,7 +264,7 @@ npm i --save-dev @types/react
 ```
 
 __Local Declarations__
-Sometimes the package that you want to use doesn't bundle declarations nor is it available on DefinitelyTyped. In that case, we can have a local declaration file. To do this, create a `declarations.d.ts` file in the root of your source directory. A simple declaration could look like this:
+경우에 따라 사용하려는 패키지가 선언을 번들로 제공하지 않거나 DefinitelyTyped에서 사용할 수 없는 경우가 있습니다. 이 경우 로컬 선언 파일을 가질 수 있습니다. 이렇게 하려면 소스 디렉토리의 루트에 `declarations.d.ts` 파일을 생성합니다. 간단한 선언은 다음과 같습니다.
 
 ```typescript
 declare module 'querystring' {
@@ -273,19 +273,19 @@ declare module 'querystring' {
 }
 ```
 
-### Using TypeScript with Create React App
+### Create React App에서 타입스크립트 사용하기
 
-[react-scripts-ts](https://www.npmjs.com/package/react-scripts-ts) automatically configures a `create-react-app` project to support TypeScript. You can use it like this:
+[react-scripts-ts](https://www.npmjs.com/package/react-scripts-ts) 는 타입스크립트를 지원하는 `create-react-app` 프로젝트를 자동으로 설정합니다. 다음과 같이 사용할 수 있습니다.
 
 ```bash
 create-react-app my-app --scripts-version=react-scripts-ts
 ```
 
-Note that it is a **third party** project, and is not a part of Create React App.
+**서드 파티** 프로젝트임을 명심하십시오. Create React App의 일부가 아닙니다.
 
-You can also try [typescript-react-starter](https://github.com/Microsoft/TypeScript-React-Starter#typescript-react-starter).
+[typescript-react-starter](https://github.com/Microsoft/TypeScript-React-Starter#typescript-react-starter) 를 시도해볼 수도 있습니다.
 
-You are now ready to code! We recommend to check out the following resources to learn more about Typescript:
+이제 코드를 작성할 준비가 되었습니다! 타입스크립트에 대한 자세한 내용은 다음 리소스를 참조하십시오.
 
 * [TypeScript Documentation: Basic Types](https://www.typescriptlang.org/docs/handbook/basic-types.html)
 * [TypeScript Documentation: Migrating from Javascript](http://www.typescriptlang.org/docs/handbook/migrating-from-javascript.html)
@@ -293,16 +293,17 @@ You are now ready to code! We recommend to check out the following resources to 
 
 ## Reason
 
-[Reason](https://reasonml.github.io/) is not a new language; it's a new syntax and toolchain powered by the battle-tested language, [OCaml](http://ocaml.org/). Reason gives OCaml a familiar syntax geared toward JavaScript programmers, and caters to the existing NPM/Yarn workflow folks already know.
+[Reason](https://reasonml.github.io/) 은 새로운 언어가 아닙니다. battle-tested 언어인 [OCaml](http://ocaml.org/) 가 제공하는 새로운 구문 및 툴체인입니다. Reason은 OCaml에 자바스크립트 개발자에게 익숙한 구문을 제공하며 이미 알고있는 기존 NPM/Yarn 워크플로우를 지원합니다.
 
-Reason is developed at Facebook, and is used in some of its products like Messenger. It is still somewhat experimental but it has [dedicated React bindings](https://reasonml.github.io/reason-react/) maintained by Facebook and a [vibrant community](https://reasonml.github.io/community/).
+Reason은 페이스북이 개발하였으며 메신저같은 제품에 사용하고 있습니다. 아직 다소 실험적이지만 Facebook과 [활발한 커뮤니티](https://reasonml.github.io/community/)가 유지하는 [React 전용 바인딩](https://reasonml.github.io/reason-react/)이 있습니다.
+
 
 ## Kotlin
 
-[Kotlin](https://kotlinlang.org/) is a statically typed language developed by JetBrains. Its target platforms include the JVM, Android, LLVM, and [JavaScript](https://kotlinlang.org/docs/reference/js-overview.html). 
+[Kotlin](https://kotlinlang.org/)은 JetBrains가 개발한 정적 타입 언어입니다. 타겟 플램폼은 JVM, Android, LLVM, [자바스크립트](https://kotlinlang.org/docs/reference/js-overview.html)입니다.
 
-JetBrains develops and maintains several tools specifically for the React community: [React bindings](https://github.com/JetBrains/kotlin-wrappers) as well as [Create React Kotlin App](https://github.com/JetBrains/create-react-kotlin-app). The latter helps you start building React apps with Kotlin with no build configuration.
+JetBrains은 React 커뮤니티에서 여러가지 도구를 만들고 유지하고 있습니다. [React bindings](https://github.com/JetBrains/kotlin-wrappers) 뿐만 아니라 [Create React Kotlin App](https://github.com/JetBrains/create-react-kotlin-app)도 있습니다. 후자는 빌드 구성 없이 Kotlin으로 React 앱을 만드는 데 도움이 됩니다.
 
-## Other Languages
+## 다른 언어
 
-Note there are other statically typed languages that compile to JavaScript and are thus React compatible. For example, [F#/Fable](http://fable.io) with [elmish-react](https://fable-elmish.github.io/react). Check out their respective sites for more information, and feel free to add more statically typed languages that work with React to this page!
+자바스크립트로 컴파일될 수 있는 다른 정적 언어는 React와 호환합니다. 예를 들어 [elmish-react](https://fable-elmish.github.io/react) 를 사용한 [F#/Fable](http://fable.io) 같은 것들이 있습니다. 자세한 내용은 해당 사이트를 참고하십시오. 이 페이지에 React에서 사용할 수 있는 정적 타입 언어를 자유로이 추가하세요.
