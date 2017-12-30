@@ -9,7 +9,7 @@ redirect_from:
   - "docs/flux-todo-list.html"
 ---
 
-가끔 일부 컴포넌트가 동일한 변경 데이터를 보여줘야할 필요가 있습니다. 이럴 때 공통 조상에 state를 끌어올리는 걸 권장합니다. 어떻게 하는 지 살펴봅시다.
+가끔 일부 컴포넌트가 동일한 변경 데이터를 보여줘야 할 필요가 있습니다. 이럴 때 공통 조상에 state를 끌어올리는 걸 권장합니다. 어떻게 하는 지 살펴봅시다.
 
 이 섹션에서는 주어진 온도에서 물의 끓음 여부를 확인하는 온도 계산기를 작성합니다.
 
@@ -310,18 +310,18 @@ input을 수정할 때 무슨 일이 일어나는 지 다시 살펴봅시다.
 * 이전에 렌더링되었을 때, `Calculator` 는 섭씨 `TemperatureInput` 의 `onTemperatureChange` 는 `Calculator` 의 `handleCelsiusChange` 이고, 화씨 `TemperatureInput` 의 `onTemperatureChange` 메서드는 `Calculator` 의 `handleFahrenheitChange` 메서드로 정의합니다. 따라서 수정한 입력에 따라 두 `Calculator` 메서드 중 하나가 호출됩니다.
 * 이 메서드들에서 `Calculator` 컴포넌트는 React에게 새로운 입력 값과 막 수정된 input의 현재 scale로 `this.setState()` 를 호출해 스스로를 다시 렌더링하도록 요청합니다.
 * React는 `Calculator` 컴포넌트의 `render` 메서드를 호출하여 UI가 어떻게 보여야하는 지 알아냅니다. 두 입력 값은 현재 온도와 활성 scale에 따라 다시 계산됩니다. 온도 변환은 여기에서 수행합니다.
-* React는 `Calculator` 에서 계산한 새 props로 개별 `TemperatureInput` 의 `render` 메서드를 호출합니다. 이를 통해 UI가 어떻게 보여아하는 지 알아냅니다.
+* React는 `Calculator` 에서 계산한 새 props로 개별 `TemperatureInput` 의 `render` 메서드를 호출합니다. 이를 통해 UI가 어떻게 보여야하는 지 알아냅니다.
 * React DOM은 이상적인 입력 값과 매치하는 DOM을 업데이트합니다. 방금 수정한 input은 현재 값을 받고, 다른 input은 변환 후 온도를 업데이트합니다.
 
-모든 업데이트는 같은 단계를 통하기때문에 input이 동기화 상태를 유지합니다.
+모든 업데이트는 같은 단계를 통하기 때문에 input이 동기화 상태를 유지합니다.
 
 ## 여기서 배운 것
 
-React에서 변경되는 모든 데이터에 대한 단일 "신뢰 가능한 소스"가 있어야합니다. 일반적으로 state는 렌더링을 위해 필요한 컴포넌트에 처음 추가됩니다. 그런 다음 다른 컴포넌트에서도 그 state를 필요로하면, 가장 가까운 공통 조상으로 state를 들어올릴 수 있습니다. 다른 컴포넌트 간의 state를 동기화하는 대신, [top-down 데이터 플로우](/docs/state-and-lifecycle.html#the-data-flows-down) 에 의존할 수 있습니다.
+React에서 변경되는 모든 데이터에 대한 단일 "신뢰 가능한 소스"가 있어야합니다. 일반적으로 state는 렌더링을 위해 필요한 컴포넌트에 처음 추가됩니다. 그런 다음 다른 컴포넌트에서도 그 state를 필요로 하면, 가장 가까운 공통 조상으로 state를 들어 올릴 수 있습니다. 다른 컴포넌트 간의 state를 동기화하는 대신, [top-down 데이터 플로우](/docs/state-and-lifecycle.html#the-data-flows-down) 에 의존할 수 있습니다.
 
-state를 올리는 것은 two-way 바인딩 접근방식보다 더 "보일러플레이트" 코드를 작성하지만 그 이점으로 버그를 찾고 격리하는 작업이 줄어듭니다. 특ㄷ정 컴포넌트에 모든 state가 "존재"하고 컴포넌트만 변경될 수 있기 때문에, 버그가 나타날 수 있는 표면적이 크게 줍니다. 또한 유저 입력을 거부하거나 변형하는 커스텀 로직을 구현할 수도 있습니다.
+state를 올리는 것은 two-way 바인딩 접근방식보다 더 "보일러플레이트" 코드를 작성하지만 그 이점으로 버그를 찾고 격리하는 작업이 줄어듭니다. 특정 컴포넌트에 모든 state가 "존재"하고 컴포넌트만 변경될 수 있기 때문에, 버그가 나타날 수 있는 표면적이 크게 줍니다. 또한 유저 입력을 거부하거나 변형하는 커스텀 로직을 구현할 수도 있습니다.
 
-props나 state에서 파생될 수 있는 게 있다면, 그건 state여서는 안됩니다. 예를 들어, `celsiusValue` 와 `fahrenheitValue` 를 둘 다 저장하는 대신 마지막으로 수정된 `temperature` 와 그 `scale` 만 보관합니다. 다른 input 값은 `render()` 메서드ㄷ에서 그 값들을 가지고 계산할 수 있습니다. 이를 통해 유저 입력에서 정밀도를 잃지 않고 다른 필드에서 반올림을 하거나 지울 수 있습니다.
+props나 state에서 파생될 수 있는 게 있다면, 그건 state여서는 안됩니다. 예를 들어, `celsiusValue` 와 `fahrenheitValue` 를 둘 다 저장하는 대신 마지막으로 수정된 `temperature` 와 그 `scale` 만 보관합니다. 다른 input 값은 `render()` 메서드에서 그 값들을 가지고 계산할 수 있습니다. 이를 통해 유저 입력에서 정밀도를 잃지 않고 다른 필드에서 반올림을 하거나 지울 수 있습니다.
 
 UI에서 문제가 발생하면 [React Developer Tools](https://github.com/facebook/react-devtools) 를 사용해서 state 업데이트를 담당하는 컴포넌트를 찾을 때까지 prop을 검사하고 트리를 위로 옮길 수 있습니다. 이제 버그를 소스에서 추적할 수 있습니다.
 
