@@ -37,7 +37,7 @@
     - id: refs-and-the-dom
       title: Refs와 DOM
     - id: uncontrolled-components
-      title: Uncontrolled Components
+      title: 제어되지않는 컴포넌트
     - id: optimizing-performance
       title: Optimizing Performance
     - id: react-without-es6
