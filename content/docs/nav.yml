@@ -39,7 +39,7 @@
     - id: uncontrolled-components
       title: 제어되지않는 컴포넌트
     - id: optimizing-performance
-      title: Optimizing Performance
+      title: 성능 최적화
     - id: react-without-es6
       title: React Without ES6
     - id: react-without-jsx

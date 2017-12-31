@@ -1,56 +1,56 @@
 ---
 id: optimizing-performance
-title: Optimizing Performance
+title: 성능 최적화
 permalink: docs/optimizing-performance.html
 redirect_from: "docs/advanced-performance.html"
 ---
 
-Internally, React uses several clever techniques to minimize the number of costly DOM operations required to update the UI. For many applications, using React will lead to a fast user interface without doing much work to specifically optimize for performance. Nevertheless, there are several ways you can speed up your React application.
+React는 내부적으로 UI 업데이트를 위해 필요한 값 비싼 DOM 연산 갯수를 최소화하기 위해 몇가지 영리한 기술을 사용합니다. 많은 어플리케이션에서 React를 사용하면 성능 최적화를 위해 많은 작업을 하지 않더라도 빠른 유저 인터페이스로 이어질 것입니다. 그럼에도 불구하고 React 어플리케이션의 속도를 높이는 몇가지 방법이 있습니다.
 
-## Use the Production Build
+## 프로덕션 빌드 사용하기
 
-If you're benchmarking or experiencing performance problems in your React apps, make sure you're testing with the minified production build.
+React 앱에서 벤치마킹 하였거나 성능상의 문제가 발생하는 경우 압축된 프로덕션 빌드에서 테스트하고 있는 지 살펴보십시오.
 
-By default, React includes many helpful warnings. These warnings are very useful in development. However, they make React larger and slower so you should make sure to use the production version when you deploy the app.
+React는 기본적으로 많은 도움이되는 경고를 포함합니다. 이러한 경고는 개발할 때 매우 유용합니다. 하지만 경고들은 React를 크고 느리게 만드므로 앱을 배포할 때는 프로덕션 버전을 사용해야함을 명심해야합니다.
 
-If you aren't sure whether your build process is set up correctly, you can check it by installing [React Developer Tools for Chrome](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi). If you visit a site with React in production mode, the icon will have a dark background:
+빌드 프로세스가 제대로 설정되었는 지 확신이 서지 않는다면 [React Developer Tools for Chrome](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi)을 설치해 확인해볼 수 있습니다. 프로덕션 모드인 React 사이트를 방문하면 아이콘이 검은색 배경으로 보입니다.
 
 <img src="../images/docs/devtools-prod.png" style="max-width:100%" alt="React DevTools on a website with production version of React">
 
-If you visit a site with React in development mode, the icon will have a red background:
+만약 개발 중인 React 사이트를 방문하면 아이콘이 붉은색 배경으로 보입니다.
 
 <img src="../images/docs/devtools-dev.png" style="max-width:100%" alt="React DevTools on a website with development version of React">
 
-It is expected that you use the development mode when working on your app, and the production mode when deploying your app to the users.
+앱을 개발할 때는 개발 모드를 사용하고 사용자에게 배포할 때는 프로덕션 모드를 사용해야합니다.
 
-You can find instructions for building your app for production below.
+아래에서 프로덕션을 위한 앱을 만드는 방법을 찾을 수 있습니다.
 
 ### Create React App
 
-If your project is built with [Create React App](https://github.com/facebookincubator/create-react-app), run:
+프로젝트가 [Create React App](https://github.com/facebookincubator/create-react-app)으로 만들어졌다면,
 
 ```
 npm run build
 ```
 
-This will create a production build of your app in the `build/` folder of your project.
+이 커맨드를 실행하면 프로젝트의 `build/` 폴더에 앱의 프로덕션 빌드를 생성합니다.
 
-Remember that this is only necessary before deploying to production. For normal development, use `npm start`.
+프로덕션을 배포하기 전에만 유효하다는 걸 명심하시길 바랍니다. 개발할 때는 `npm start` 를 사용합니다.
 
-### Single-File Builds
+### 단일 파일 빌드
 
-We offer production-ready versions of React and React DOM as single files:
+React와 React DOM의 프로덕션-레디 버전을 단일 파일로 제공합니다.
 
 ```html
 <script src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
 <script src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
 ```
 
-Remember that only React files ending with `.production.min.js` are suitable for production.
+프로덕션에 적합한 React 파일은 `.production.min.js` 로 끝나는 걸 명심하시길 바랍니다.
 
 ### Brunch
 
-For the most efficient Brunch production build, install the [`uglify-js-brunch`](https://github.com/brunch/uglify-js-brunch) plugin:
+가장 효율적인 Brunch 프로덕션 빌드를 위해 [`uglify-js-brunch`](https://github.com/brunch/uglify-js-brunch) 플러그인을 설치하십시오.
 
 ```
 # If you use npm
@@ -60,17 +60,17 @@ npm install --save-dev uglify-js-brunch
 yarn add --dev uglify-js-brunch
 ```
 
-Then, to create a production build, add the `-p` flag to the `build` command:
+프로덕션 빌드를 만들고 싶다면 `build` 커맨드에 `-p` 플래그를 추가하면 됩니다.
 
 ```
 brunch build -p
 ```
 
-Remember that you only need to do this for production builds. You shouldn't pass the `-p` flag or apply this plugin in development, because it will hide useful React warnings and make the builds much slower.
+프로덕션 빌드 때만 이게 필요하단 걸 명심하길 바랍니다. 유효한 경고를 가리고 빌드를 더 느리게하기 때문에 개발 중일 때에는 `-p` 플래그를 전달하지 않아도 됩니다.
 
 ### Browserify
 
-For the most efficient Browserify production build, install a few plugins:
+가장 효율적인 Browserify 프로덕션 빌드를 위해 몇가지 플러그인을 설치해야합니다.
 
 ```
 # If you use npm
@@ -80,13 +80,13 @@ npm install --save-dev envify uglify-js uglifyify
 yarn add --dev envify uglify-js uglifyify 
 ```
 
-To create a production build, make sure that you add these transforms **(the order matters)**:
+프로덕션 빌드를 만들려면 아래 transforms를 추가해야합니다. **(순서대로 해야함)**
 
-* The [`envify`](https://github.com/hughsk/envify) transform ensures the right build environment is set. Make it global (`-g`).
-* The [`uglifyify`](https://github.com/hughsk/uglifyify) transform removes development imports. Make it global too (`-g`).
-* Finally, the resulting bundle is piped to [`uglify-js`](https://github.com/mishoo/UglifyJS2) for mangling ([read why](https://github.com/hughsk/uglifyify#motivationusage)).
+* [`envify`](https://github.com/hughsk/envify) transform을 통해 올바른 빌드 환경이 설정됩니다. 글로벌하게 만드세요 (`-g`).
+* [`uglifyify`](https://github.com/hughsk/uglifyify) transform은 개발 import를 제거합니다. 글로벌하게 만드세요 (`-g`).
+* 마지막으로 결과 번들은 난독화를 위해 [`uglify-js`](https://github.com/mishoo/UglifyJS2) 에 파이프됩니다 ([read why](https://github.com/hughsk/uglifyify#motivationusage)).
 
-For example:
+예를 들어,
 
 ```
 browserify ./index.js \
@@ -97,14 +97,14 @@ browserify ./index.js \
 
 >**Note:**
 >
->The package name is `uglify-js`, but the binary it provides is called `uglifyjs`.<br>
->This is not a typo.
+>패키지명은 `uglify-js` 지만 바이너리에서는 `uglifyjs` 라고 제공합니다.<br>
+>이는 오타가 아닙니다.
 
-Remember that you only need to do this for production builds. You shouldn't apply these plugins in development because they will hide useful React warnings, and make the builds much slower.
+프로덕션 빌드 때만 이게 필요하단 걸 명심하길 바랍니다. React에서 유효한 경고를 가리고 빌드를 더 느리게하기 때문에 개발 중에는 이러한 플러그인을 사용하지 않는 걸 권장합니다.
 
 ### Rollup
 
-For the most efficient Rollup production build, install a few plugins:
+가장 효율적인 Rollup 프로덕션 빌드를 위해 몇가지 플러그인을 설치해야합니다.
 
 ```
 # If you use npm
@@ -114,11 +114,11 @@ npm install --save-dev rollup-plugin-commonjs rollup-plugin-replace rollup-plugi
 yarn add --dev rollup-plugin-commonjs rollup-plugin-replace rollup-plugin-uglify 
 ```
 
-To create a production build, make sure that you add these plugins **(the order matters)**:
+프로덕션 빌드를 만들려면 아래 플러그인을 추가해야합니다. **(순서대로 해야함)**
 
-* The [`replace`](https://github.com/rollup/rollup-plugin-replace) plugin ensures the right build environment is set.
-* The [`commonjs`](https://github.com/rollup/rollup-plugin-commonjs) plugin provides support for CommonJS in Rollup.
-* The [`uglify`](https://github.com/TrySound/rollup-plugin-uglify) plugin compresses and mangles the final bundle.
+* [`replace`](https://github.com/rollup/rollup-plugin-replace) 플러그인은 올바른 빌드 환경을 설정합니다.
+* [`commonjs`](https://github.com/rollup/rollup-plugin-commonjs) 플러그인은 Rollup에서 CommonJS 지원을 제공합니다.
+* [`uglify`](https://github.com/TrySound/rollup-plugin-uglify) 플러그인은 마지막 번들을 압축하고 난독화시킵니다.
 
 ```js
 plugins: [
@@ -132,18 +132,18 @@ plugins: [
 ]
 ```
 
-For a complete setup example [see this gist](https://gist.github.com/Rich-Harris/cb14f4bc0670c47d00d191565be36bf0).
+완전한 세팅 예제를 보려면 [이 gist를 보세요](https://gist.github.com/Rich-Harris/cb14f4bc0670c47d00d191565be36bf0).
 
-Remember that you only need to do this for production builds. You shouldn't apply the `uglify` plugin or the `replace` plugin with `'production'` value in development because they will hide useful React warnings, and make the builds much slower.
+프로덕션 빌드 때만 이게 필요하다는 사실을 명심하시길 바랍니다. 개발할 때 `'production'` 값으로 `uglify` 플러그인이나 `replace` 플러그인을 동작시키면 유용한 React 경고가 사라지거나 빌드를 느리게 만듭니다.
 
 ### webpack
 
 >**Note:**
 >
->If you're using Create React App, please follow [the instructions above](#create-react-app).<br>
->This section is only relevant if you configure webpack directly.
+>만약 Create React App을 사용한다면 [위 설정](#create-react-app)을 따르길 바랍니다.<br>
+>이 섹션은 webpack을 직접 설정한 경우에만 해당합니다.
 
-For the most efficient webpack production build, make sure to include these plugins in your production configuration:
+가장 효율적인 webpack 프로덕션 빌드를 위해 프로덕션 설정에 몇가지 플러그인을 포함해야합니다.
 
 ```js
 new webpack.DefinePlugin({
@@ -152,9 +152,9 @@ new webpack.DefinePlugin({
 new webpack.optimize.UglifyJsPlugin()
 ```
 
-You can learn more about this in [webpack documentation](https://webpack.js.org/guides/production-build/).
+더 자세한 사항은 [webpack 문서](https://webpack.js.org/guides/production-build/)에서 볼 수 있습니다.
 
-Remember that you only need to do this for production builds. You shouldn't apply `UglifyJsPlugin` or `DefinePlugin` with `'production'` value in development because they will hide useful React warnings, and make the builds much slower.
+프로덕션 빌드 때만 이게 필요하다는 사실을 명심하시길 바랍니다. 개발할 때 `'production'` 값으로 `UglifyJsPlugin` 이나 `DefinePlugin` 을 동작시키면 유용한 React 경고가 사라지거나 빌드를 느리게 만듭니다.
 
 ## Profiling Components with the Chrome Performance Tab
 
