@@ -156,37 +156,37 @@ new webpack.optimize.UglifyJsPlugin()
 
 프로덕션 빌드 때만 이게 필요하다는 사실을 명심하시길 바랍니다. 개발할 때 `'production'` 값으로 `UglifyJsPlugin` 이나 `DefinePlugin` 을 동작시키면 유용한 React 경고가 사라지거나 빌드를 느리게 만듭니다.
 
-## Profiling Components with the Chrome Performance Tab
+## Chrome 퍼포먼스 탭에서 컴포넌트 프로파일링
 
-In the **development** mode, you can visualize how components mount, update, and unmount, using the performance tools in supported browsers. For example:
+**개발** 모드에서는 지원되는 브라우저에서 성능 도구를 사용하여 컴포넌트의 마운트, 업데이트, 언마운트를 시각적으로 볼 수 있습니다. 예를 들어,
 
 <center><img src="../images/blog/react-perf-chrome-timeline.png" style="max-width:100%" alt="React components in Chrome timeline" /></center>
 
-To do this in Chrome:
+Chrome에서는
 
-1. Make sure you're running the application in the development mode.
+1. 어플리케이션이 개발 모드에서 동작 중인지 확인합니다.
 
-2. Open the Chrome DevTools **[Performance](https://developers.google.com/web/tools/chrome-devtools/evaluate-performance/timeline-tool)** tab and press **Record**.
+2. Chrome DevTools의 **[Performance](https://developers.google.com/web/tools/chrome-devtools/evaluate-performance/timeline-tool)** 탭을 열고 **Record** 를 누릅니다.
 
-3. Perform the actions you want to profile. Don't record more than 20 seconds or Chrome might hang.
+3. 프로파일링할 작업을 수행하십시오. 20초 이상 기록하지 않으면 Chrome이 중단될 수 있습니다.
 
-4. Stop recording.
+4. 기록을 중단하세요.
 
-5. React events will be grouped under the **User Timing** label.
+5. React 이벤트는 **User Timing** 레이블에 그룹되어있을 것입니다.
 
-For a more detailed walkthrough, check out [this article by Ben Schwarz](https://building.calibreapp.com/debugging-react-performance-with-react-16-and-chrome-devtools-c90698a522ad).
+더 자세한 동작은 [Ben Schwarz의 아티클](https://building.calibreapp.com/debugging-react-performance-with-react-16-and-chrome-devtools-c90698a522ad)을 참고하세요.
 
-Note that **the numbers are relative so components will render faster in production**. Still, this should help you realize when unrelated UI gets updated by mistake, and how deep and how often your UI updates occur.
+**숫자는 상대적이며 컴포넌트는 프로덕션에서 더 빠르게 렌더링된다**는 걸 기억하세요. 그래도 실수로 무의미한 UI가 얼마나 업데이트 되는 지, UI가 얼마나 자주 업데이트 되는 지 살펴볼 수 있습니다.
 
-Currently Chrome, Edge, and IE are the only browsers supporting this feature, but we use the standard [User Timing API](https://developer.mozilla.org/en-US/docs/Web/API/User_Timing_API) so we expect more browsers to add support for it.
+현재 이 기능은 Chrome, Edge, IE에서만 지원하지만 표준 [User Timing API](https://developer.mozilla.org/en-US/docs/Web/API/User_Timing_API) 를 이용하기 때문에 더 많은 브라우저에서 이 기능을 지원할 것입니다.
 
-## Virtualize Long Lists
+## 긴 리스트 가상화하기
 
-If your application renders long lists of data (hundreds or thousands of rows), we recommended using a technique known as "windowing". This technique only renders a small subset of your rows at any given time, and can dramatically reduce the time it takes to re-render the components as well as the number of DOM nodes created.
+만약 어플리케이션이 긴 목록 데이터 (수백 혹은 수천개 행)를 렌더링해야한다면, "윈도잉 (windowing)" 기술을 사용하는 걸 권장합니다. 이 기술은 주어진 시간 내에 행의 작은 부분만 렌더링하므로 컴포넌트를 다시 렌더링하는 데 걸리는 시간과 생성된 DOM 노드 갯수를 크게 줄일 수 있습니다.
 
-[React Virtualized](https://bvaughn.github.io/react-virtualized/) is one popular windowing library. It provides several reusable components for displaying lists, grids, and tabular data. You can also create your own windowing component, like [Twitter did](https://medium.com/@paularmstrong/twitter-lite-and-high-performance-react-progressive-web-apps-at-scale-d28a00e780a3), if you want something more tailored to your application's specific use case.
+[React Virtualized](https://bvaughn.github.io/react-virtualized/) 는 유명한 윈도잉 라이브러리입니다. 목록, 그리드, 표 데이터를 표현하기 위한 여러가지 재사용가능한 컴포넌트를 제공합니다. 어플리케이션의 특정 케이스에 더 적합한 것을 원한다면 [Twitter](https://medium.com/@paularmstrong/twitter-lite-and-high-performance-react-progressive-web-apps-at-scale-d28a00e780a3) 처럼 독자적인 윈도잉 컴포넌트를 만들 수도 있습니다.
  
-## Avoid Reconciliation
+## 재조정 (Reconciliation) 피하기
 
 React builds and maintains an internal representation of the rendered UI. It includes the React elements you return from your components. This representation lets React avoid creating DOM nodes and accessing existing ones beyond necessity, as that can be slower than operations on JavaScript objects. Sometimes it is referred to as a "virtual DOM", but it works the same way on React Native.
 
