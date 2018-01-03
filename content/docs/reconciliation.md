@@ -1,35 +1,35 @@
 ---
 id: reconciliation
-title: Reconciliation
+title: 재조정 (Reconciliation)
 permalink: docs/reconciliation.html
 ---
 
-React provides a declarative API so that you don't have to worry about exactly what changes on every update. This makes writing applications a lot easier, but it might not be obvious how this is implemented within React. This article explains the choices we made in React's "diffing" algorithm so that component updates are predictable while being fast enough for high-performance apps.
+React는 선언적 API를 제공하므로 모든 업데이트에서 변경사항이 정확히 어떤 것인지 걱정할 필요가 없습니다. 이렇게 하면 어플리케이션 작성이 많이 쉬워지지만 React 내에서 어떻게 구현되어있는지 분명하지않을수 있습니다. 이 섹션에서는 React에서 선택한 고성능 앱에서 충분히 빠르고 컴포넌트 업데이트를 예측하는 "비교 (diffing)" 알고리즘에 대해 소개합니다.
 
-## Motivation
+## 동기
 
-When you use React, at a single point in time you can think of the `render()` function as creating a tree of React elements. On the next state or props update, that `render()` function will return a different tree of React elements. React then needs to figure out how to efficiently update the UI to match the most recent tree.
+React를 사용할 때 한 시점에서 `render()` 함수가 React 요소 트리를 생성하는 것으로 생각할 수 있습니다. state나 props 업데이트 이후 `render()` 함수는 다른 React 요소 트리를 반환합니다. 그런 다음 React는 가장 최근 트리와 일치하도록 UI를 효율적으로 업데이트하는 방법을 찾아야합니다.
 
-There are some generic solutions to this algorithmic problem of generating the minimum number of operations to transform one tree into another. However, the [state of the art algorithms](http://grfia.dlsi.ua.es/ml/algorithms/references/editsurvey_bille.pdf) have a complexity in the order of O(n<sup>3</sup>) where n is the number of elements in the tree.
+한 트리를 다른 트리로 변환하기 위한 최소한의 연산을 생성하는 알고리즘 문제에 대한 일반적인 해결방법이 있습니다. 그러나 [state of the art algorithms](http://grfia.dlsi.ua.es/ml/algorithms/references/editsurvey_bille.pdf) 은 O (n<sup>3</sup>) 순서로 복잡성을 가지며 이때 n은 트리 내 요소 갯수입니다.
 
-If we used this in React, displaying 1000 elements would require in the order of one billion comparisons. This is far too expensive. Instead, React implements a heuristic O(n) algorithm based on two assumptions:
+이 알고리즘을 React에서 사용하면 1000개 요소를 표시하는 데 10억번 비교가 필요합니다. 이 비용은 너무 비쌉니다. 대신 React는 두가지 가정에 따른 발견적 0(n) 알고리즘을 사용합니다.
 
-1. Two elements of different types will produce different trees.
-2. The developer can hint at which child elements may be stable across different renders with a `key` prop.
+1. 다른 타입의 두 요소는 서로 다른 트리를 생성합니다.
+2. 개발자는 `key` prop을 이용해 다른 렌더링 사이에서 안정적인 자식 요소에대한 힌트를 얻을 수 있습니다.
 
-In practice, these assumptions are valid for almost all practical use cases.
+실제로 이런 가정은 거의 모든 실제 사용 사례에 유효합니다.
 
-## The Diffing Algorithm
+## 비교 알고리즘 (Diffing Algorithm)
 
-When diffing two trees, React first compares the two root elements. The behavior is different depending on the types of the root elements.
+두 트리를 비교할 때 React는 두 루트 요소부터 비교합니다. 이 동작은 루트 요소의 타입에 따라 다릅니다.
 
-### Elements Of Different Types
+### 다른 타입의 요소
 
-Whenever the root elements have different types, React will tear down the old tree and build the new tree from scratch. Going from `<a>` to `<img>`, or from `<Article>` to `<Comment>`, or from `<Button>` to `<div>` - any of those will lead to a full rebuild.
+루트 요소가 다른 타입을 가질때마다 React는 오래된 트리를 해체하고 새로운 트리를 처음부터 빌드합니다. `<a>` 에서 `<img>` 혹은 `<Article>` 에서 `<Comment>` 혹은 `<Button>` 에서 `<div>` 등 어떠한 것이던 완전히 재빌드로 이끕니다.
 
-When tearing down a tree, old DOM nodes are destroyed. Component instances receive `componentWillUnmount()`. When building up a new tree, new DOM nodes are inserted into the DOM. Component instances receive `componentWillMount()` and then `componentDidMount()`. Any state associated with the old tree is lost.
+트리를 해체할 때 이전 DOM 노드는 제거됩니다. 컴포넌트 인스턴스는 `componentWillUnmount()` 를 받습니다. 새 트리가 만들어질 때 새 DOM 노드는 DOM에 들어갑니다. 컴포넌트 인스턴스가 `componentWillMount()` 를 받은 후 `componentDidMount()` 를 받습니다. 이전 트리와 관련한 모든 state가 손실됩니다.
 
-Any components below the root will also get unmounted and have their state destroyed. For example, when diffing:
+루트 아래의 모든 컴포넌트의 마운트도 해제되고 state가 파괴됩니다. 예를 들어 아래 예제를 비교할 때:
 
 ```xml
 <div>
@@ -41,11 +41,11 @@ Any components below the root will also get unmounted and have their state destr
 </span>
 ```
 
-This will destroy the old `Counter` and remount a new one.
+이 예제는 이전 `Counter` 를 제거하고 새로운 것으로 다시 마운트합니다.
 
-### DOM Elements Of The Same Type
+### 같은 타입의 DOM 요소
 
-When comparing two React DOM elements of the same type, React looks at the attributes of both, keeps the same underlying DOM node, and only updates the changed attributes. For example:
+같은 타입의 두 React DOM 요소를 비교할 때 React는 두 요소의 속성을 보고 같은 DOM 노드를 유지하며 변경된 속성만 업데이트합니다. 예를 들어,
 
 ```xml
 <div className="before" title="stuff" />
@@ -53,9 +53,9 @@ When comparing two React DOM elements of the same type, React looks at the attri
 <div className="after" title="stuff" />
 ```
 
-By comparing these two elements, React knows to only modify the `className` on the underlying DOM node.
+두 요소를 비교하여 React는 DOM 노드에서 `className` 만 수정되고있다는 사실을 알게됩니다.
 
-When updating `style`, React also knows to update only the properties that changed. For example:
+`style` 을 업데이트할 때, React는 변경된 속성만 업데이트해야한다는 걸 알고있습니다. 예를 들어,
 
 ```xml
 <div style={{color: 'red', fontWeight: 'bold'}} />
@@ -63,21 +63,21 @@ When updating `style`, React also knows to update only the properties that chang
 <div style={{color: 'green', fontWeight: 'bold'}} />
 ```
 
-When converting between these two elements, React knows to only modify the `color` style, not the `fontWeight`.
+이 두 요소를 변환할 때 React는 `fontWeight` 에는 변경이 없고 `color` 스타일만 변경되었다는 것을 알고있습니다.
 
-After handling the DOM node, React then recurses on the children.
+DOM 노드를 처리한 후 React는 자식에 대해 반복됩니다.
 
-### Component Elements Of The Same Type
+### 같은 타입의 컴포넌트 요소
 
-When a component updates, the instance stays the same, so that state is maintained across renders. React updates the props of the underlying component instance to match the new element, and calls `componentWillReceiveProps()` and `componentWillUpdate()` on the underlying instance.
+컴포넌트가 업데이트될 때 인스턴스가 동일하게 유지되면 렌더링간에 state가 유지됩니다. React는 새 요소와 일치하도록 컴포넌트 인스턴스의 props를 업데이트하고 인스턴스에서 `componentWillReceiveProps()` 와 `componentWillUpdate()` 를 호출합니다.
 
-Next, the `render()` method is called and the diff algorithm recurses on the previous result and the new result.
+다음으로 `render()` 메서드가 호출되고 비교 알고리즘은 이전 결과와 새로운 결과에 반복됩니다.
 
-### Recursing On Children
+### 자식에서 반복
 
-By default, when recursing on the children of a DOM node, React just iterates over both lists of children at the same time and generates a mutation whenever there's a difference.
+기본적으로 DOM 노드의 자식에 대해 반복할 때 React는 동시에 두 자식 목록을 반복하여 실행하고 차이가 있을 때마다 변형을 생성합니다.
 
-For example, when adding an element at the end of the children, converting between these two trees works well:
+예를 들어 자식의 끝에 요소를 추가할 때 두 트리 사이의 변환은 잘 동작합니다.
 
 ```xml
 <ul>
@@ -92,9 +92,9 @@ For example, when adding an element at the end of the children, converting betwe
 </ul>
 ```
 
-React will match the two `<li>first</li>` trees, match the two `<li>second</li>` trees, and then insert the `<li>third</li>` tree.
+React는 두 `<li>first</li>` 트리와 일치하고, 두번째 `<li>second</li>` 트리와 일치한 다음 `<li>third</li>` 트리를 넣습니다.
 
-If you implement it naively, inserting an element at the beginning has worse performance. For example, converting between these two trees works poorly:
+순진하게 구현하면 처음에 요소를 넣으면 성능이 떨어집니다. 예를 들어 아래 두 트리 사이 변환은 제대로 작동하지않습니다.
 
 ```xml
 <ul>
@@ -109,11 +109,11 @@ If you implement it naively, inserting an element at the beginning has worse per
 </ul>
 ```
 
-React will mutate every child instead of realizing it can keep the `<li>Duke</li>` and `<li>Villanova</li>` subtrees intact. This inefficiency can be a problem.
+React는 모든 자식을 변형시켜 `<li>Duke</li>` 및 `<li>Villanova</li>` 서브 트리를 그대로 유지할 수 있음을 깨닫지 못합니다. 이러한 비효율은 문제가 될 수 있습니다.
 
 ### Keys
 
-In order to solve this issue, React supports a `key` attribute. When children have keys, React uses the key to match children in the original tree with children in the subsequent tree. For example, adding a `key` to our inefficient example above can make the tree conversion efficient:
+이 이슈를 해결하기 위해 React는 `key` 속성을 지원합니다. 자식이 키를 가질 때 React는 오리지널 트리의 자식을 후속 트리의 자식과 비교할 때 키를 사용합니다. 예를 들어 위의 비효율적인 예제에 `key` 를 추가하면 트리를 효율적으로 변환할 수 있습니다.
 
 ```xml
 <ul>
@@ -128,30 +128,30 @@ In order to solve this issue, React supports a `key` attribute. When children ha
 </ul>
 ```
 
-Now React knows that the element with key `'2014'` is the new one, and the elements with the keys `'2015'` and `'2016'` have just moved.
+이제 React는 `'2014'` 키를 가진 요소가 새로운 것임을 알고 있고 `'2015'` 와 `'2016'` 키를 가진 요소는 옮겨진 것임을 압니다.
 
-In practice, finding a key is usually not hard. The element you are going to display may already have a unique ID, so the key can just come from your data:
+실제로 키를 찾는 건 보통 어려집 않습니다. 표시하려는 요소에 이미 고유한 ID가 있을 수 있으므로 키는 데이터에서 올 수도 있습니다.
 
 ```js
 <li key={item.id}>{item.name}</li>
 ```
 
-When that's not the case, you can add a new ID property to your model or hash some parts of the content to generate a key. The key only has to be unique among its siblings, not globally unique.
+그렇지않은 경우 모델에 새 ID 속성을 추가하거나 콘텐츠의 일부분을 해시하여 키를 생성할 수도 있습니다. 키는 글로벌하게 고유할 필요는 없고 형제 사이에서만 고유하면 됩니다.
 
-As a last resort, you can pass an item's index in the array as a key. This can work well if the items are never reordered, but reorders will be slow.
+마지막 수단으로 배열의 아이템 인덱스를 키로써 전달할 수 있습니다. 이는 재정렬하지 않은 아이템에서는 잘 동작하지만 재정렬할 때는 느리게 동작합니다.
 
-Reorders can also cause issues with component state when indexes are used as keys. Component instances are updated and reused based on their key. If the key is an index, moving an item changes it. As a result, component state for things like controlled inputs can get mixed up and updated in unexpected ways.
+인덱스를 키로써 사용하면 재정렬을 통해 컴포넌트 state에 문제가 발생할 수도 있습니다. 컴포넌트 인스턴스는 키에 따라 업데이트되고 재사용됩니다. 만약 키가 인덱스라면 아이템을 이동하면 해당 아이템이 변경됩니다. 그 결과로 제어되는 input 같은 컴포넌트 state가 예기치 않은 방식으로 혼합되고 업데이트될 수 있습니다.
 
-[Here](codepen://reconciliation/index-used-as-key) is an example of the issues that can be caused by using indexes as keys on CodePen, and [here](codepen://reconciliation/no-index-used-as-key) is a updated version of the same example showing how not using indexes as keys will fix these reordering, sorting, and prepending issues.
+다음은 CodePen에서 인덱스를 키로 사용해서 문제가 발생한 [예제](codepen://reconciliation/index-used-as-key)이며, 같은 예제지만 인덱스를 키로 사용하지 않아서 재정렬, 정렬 및 우선처리 문제를 해결하는 다른 [예제](codepen://reconciliation/no-index-used-as-key)가 있습니다.
 
 ## Tradeoffs
 
-It is important to remember that the reconciliation algorithm is an implementation detail. React could rerender the whole app on every action; the end result would be the same. Just to be clear, rerender in this context means calling `render` for all components, it doesn't mean React will unmount and remount them. It will only apply the differences following the rules stated in the previous sections.
+재조정 알고리즘은 구현 세부 사항이라는 걸 기억하는 게 중요합니다. React가 모든 작업에서 전체 앱을 다시 렌더링할 수 있습니다. 최종 결과는 동일합니다. 이 문맥에서 다시 렌더링이란 모든 컴포넌트에 대해 `render` 를 호출하는 걸 의미하고 이는 React가 마운트를 해체하고 다시 마운트한다는 걸 의미하지는 않습니다. 이전 섹션에서 설명한 규칙에 따라 차이점에서만 적용됩니다.
 
-We are regularly refining the heuristics in order to make common use cases faster. In the current implementation, you can express the fact that a subtree has been moved amongst its siblings, but you cannot tell that it has moved somewhere else. The algorithm will rerender that full subtree.
+일반적인 사용사례를 더 빠르게 만들기 위해 경험적 방법 (heuristics)을 정기적으로 수정하고 있습니다. 현재 구현에서는 하위 트리가 형제 사이에서 이동했다는 사실을 설명할 수 있지만 다른 곳으로 이동했다고 말할수는 없습니다. 알고리즘은 전체 하위트리를 다시 렌더링합니다.
 
-Because React relies on heuristics, if the assumptions behind them are not met, performance will suffer.
+React는 경험적 방법에 의존하기 때문에 뒤의 가정이 충족하지 않으면 성능이 저하됩니다.
 
-1. The algorithm will not try to match subtrees of different component types. If you see yourself alternating between two component types with very similar output, you may want to make it the same type. In practice, we haven't found this to be an issue.
+1. 알고리즘은 다른 컴포넌트 타입의 서브트리를 일치시키려고 하지않습니다. 아주 유사한 출력을 가진 두 컴포넌트 타입을 번갈아 사용하는 경우 같은 타입으로 만들 수 있습니다. 실제로 이런 이슈를 발견하지 못했습니다.
 
-2. Keys should be stable, predictable, and unique. Unstable keys (like those produced by `Math.random()`) will cause many component instances and DOM nodes to be unnecessarily recreated, which can cause performance degradation and lost state in child components.
+2. 키는 안정적이고 예측가능하며 고유해야합니다. `Math.random()` 을 이용해 생성된 키와 같은 불안정한 키는 많은 컴포넌트 인스턴스와 DOM 노드가 불필요하게 다시 작성되어 하위 컴포넌트의 성능 저하 및 state 손실을 초래할 수 있습니다.

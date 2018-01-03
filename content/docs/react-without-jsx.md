@@ -56,4 +56,3 @@ ReactDOM.render(
 `React.createElement` 를 위한 짧은 폼을 사용하면 JSX 없이 React를 사용할 때 더 편해집니다.
 
 또는 [`react-hyperscript`](https://github.com/mlmorg/react-hyperscript) 나 [`hyperscript-helpers`](https://github.com/ohanhi/hyperscript-helpers) 같이 더 간결한 구문을 제공하는 커뮤니티 프로젝트를 참조할 수 있습니다.
-
