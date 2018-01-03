@@ -188,11 +188,11 @@ Chrome에서는
  
 ## 재조정 (Reconciliation) 피하기
 
-React builds and maintains an internal representation of the rendered UI. It includes the React elements you return from your components. This representation lets React avoid creating DOM nodes and accessing existing ones beyond necessity, as that can be slower than operations on JavaScript objects. Sometimes it is referred to as a "virtual DOM", but it works the same way on React Native.
+React는 렌더링된 UI의 내부 표현을 만들고 관리합니다. 여기에는 컴포넌트가 반환하는 React 요소도 포함됩니다. 이 표현은 React가 자바스크립트 노드 작업보다 느릴 수 있으므로 필요에 따라 DOM 노드를 만들고 기존 노드에 접근하지 못하게합니다. 때로는 "가상 DOM (virtual DOM)"이라고 하지만 React Native에서도 같은 방식으로 동작합니다.
 
-When a component's props or state change, React decides whether an actual DOM update is necessary by comparing the newly returned element with the previously rendered one. When they are not equal, React will update the DOM.
+컴포넌트의 props나 state 변경되면 React는 새로 반환된 요소를 이전에 렌더링됭 것과 비교하여 실제 DOM 업데이트가 필요한지 여부를 결정합니다. 둘이 동일하지 않다면 React는 DOM을 업데이트합니다.
 
-In some cases, your component can speed all of this up by overriding the lifecycle function `shouldComponentUpdate`, which is triggered before the re-rendering process starts. The default implementation of this function returns `true`, leaving React to perform the update:
+일부 케이스에서는 컴포넌트에서 다시 렌더링하는 프로세스가 시작되기 전에 트리거되는 라이프사이클 함수 `shouldComponentUpdate` 를 재정의하여 이러한 모든 것을 가속할 수 있습니다. 이 함수의 기본 구현체는 `true` 를 반환하고 React는 업데이트를 수행합니다.
 
 ```javascript
 shouldComponentUpdate(nextProps, nextState) {
@@ -200,25 +200,25 @@ shouldComponentUpdate(nextProps, nextState) {
 }
 ```
 
-If you know that in some situations your component doesn't need to update, you can return `false` from `shouldComponentUpdate` instead, to skip the whole rendering process, including calling `render()` on this component and below.
+일부 상황에서 컴포넌트를 업데이트할 필요가 없는 경우 `shouldComponentUpdate` 에서 `false` 를 반환하여 이 컴포넌트 및 하위에서 호출하는 `render()` 를 포함한 전체 렌더링 프로세스를 스킵할 수 있습니다.
 
 ## shouldComponentUpdate In Action
 
-Here's a subtree of components. For each one, `SCU` indicates what `shouldComponentUpdate` returned, and `vDOMEq` indicates whether the rendered React elements were equivalent. Finally, the circle's color indicates whether the component had to be reconciled or not.
+여기 컴포넌트의 서브트리가 있습니다. 각각에서, `SCU` 는 `shouldComponentUpdate` 가 무엇을 반환하는 지 나타내고, `vDOMEq` 는 렌더링된 React 요소가 동일한 지를 나타냅니다. 마지막으로 원의 색은 컴포넌트를 재조정해야하는 지 여부를 나타냅니다.
 
 <figure><img src="../images/docs/should-component-update.png" style="max-width:100%" /></figure>
 
-Since `shouldComponentUpdate` returned `false` for the subtree rooted at C2, React did not attempt to render C2, and thus didn't even have to invoke `shouldComponentUpdate` on C4 and C5.
+`shouldComponentUpdate` 는 C2를 루트로하는 서브트리에 대해 `false` 를 반환했으므로 React는 C2 렌더링을 시도하지 않습니다. 따라서 C4 및 C5에서 `shouldComponentUpdate` 를 호출할 필요가 없습니다.
 
-For C1 and C3, `shouldComponentUpdate` returned `true`, so React had to go down to the leaves and check them. For C6 `shouldComponentUpdate` returned `true`, and since the rendered elements weren't equivalent React had to update the DOM.
+C1과 C2에서는 `shouldComponentUpdate` 에서 `true` 를 반환하므로 React는 하위로 내려가서 체크해야합니다. C6에서 `shouldComponentUpdate` 가 `true` 를 반환하고 렌더링된 요소가 동일하지 않기 때문에 React가 DOM을 업데이트하였습니다.
 
-The last interesting case is C8. React had to render this component, but since the React elements it returned were equal to the previously rendered ones, it didn't have to update the DOM.
+마지막으로 흥미로운 사례는 C8입니다. React는 이 컴포넌트를 렌더링하였지만 반환된 React 요소가 이전에 렌더링된 것과 동일하기 때문에 DOM을 업데이트할 필요가 없습니다.
 
-Note that React only had to do DOM mutations for C6, which was inevitable. For C8, it bailed out by comparing the rendered React elements, and for C2's subtree and C7, it didn't even have to compare the elements as we bailed out on `shouldComponentUpdate`, and `render` was not called.
+React는 C6의 DOM 변화 (DOM mutations)을 수행해야하는 데 이는 불가피한 일임을 명심해야합니다. C8에서는 렌더링된 React 요소를 비교하여 손해를 보았고, C2의 서브트리와 C7의 경우 `shouldComponentUpdate` 를 벗어날 때 요소를 비교할 필요가 없었으므로 `render` 를 호출하지 않습니다.
 
-## Examples
+## 예제
 
-If the only way your component ever changes is when the `props.color` or the `state.count` variable changes, you could have `shouldComponentUpdate` check that:
+컴포넌트가 변경되는 유일한 방법인 `props.color` 나 `state.count` 변수가 변경될 때 `shouldComponentUpdate` 가 체크하도록 할 수 있습니다.
 
 ```javascript
 class CounterButton extends React.Component {
@@ -249,7 +249,7 @@ class CounterButton extends React.Component {
 }
 ```
 
-In this code, `shouldComponentUpdate` is just checking if there is any change in `props.color` or `state.count`. If those values don't change, the component doesn't update. If your component got more complex, you could use a similar pattern of doing a "shallow comparison" between all the fields of `props` and `state` to determine if the component should update. This pattern is common enough that React provides a helper to use this logic - just inherit from `React.PureComponent`. So this code is a simpler way to achieve the same thing:
+이 코드에서 `shouldComponentUpdate` 는 `props.color` 나 `state.count` 에 어떤 변화가 있는지만 체크합니다. 이 값들이 변하지않으면 컴포넌트는 업데이트되지않습니다. 컴포넌트가 복잡해지면 `props` 와 `state` 의 모든 필드 사이에 "얕은 비교 (shallow comparison)"를 수행하는 비슷한 패턴을 사용하여 컴포넌트를 업데이트해야하는지 결정할 수 있습니다. 이 패턴은 React가 이 로직에서 사용할 수 있는 `React.PureComponent` 에서 상속하는 헬퍼를 제공할만큼 일반적인 패턴입니다. 아래 코드는 같은 일을 수행하는 간단한 방법입니다.
 
 ```js
 class CounterButton extends React.PureComponent {
@@ -270,9 +270,9 @@ class CounterButton extends React.PureComponent {
 }
 ```
 
-Most of the time, you can use `React.PureComponent` instead of writing your own `shouldComponentUpdate`. It only does a shallow comparison, so you can't use it if the props or state may have been mutated in a way that a shallow comparison would miss.
+대부분의 경우 자신만의 `shouldComponentUpdate` 를 작성하는 대신 `React.PureComponent` 를 사용할 수 있습니다. 얕은 비교만 수행하므로, 얕은 비교가 놓칠 수 있는 방법으로 props나 state가 변경되는 경우 사용할 수 없습니다.
 
-This can be a problem with more complex data structures. For example, let's say you want a `ListOfWords` component to render a comma-separated list of words, with a parent `WordAdder` component that lets you click a button to add a word to the list. This code does *not* work correctly:
+더 복잡한 데이터 구조에서 문제가될 수 있습니다. 예를 들어, 버튼을 클릭해서 목록에 단어를 추가할 수 있는 부모 컴포넌트인 `WordAdder` 와 콤마로 구분된 목록인 단어를 렌더링하는 `ListOfWords` 컴포넌트가 있다고 합시다. 이 코드는 제대로 동작하지 *않습니다*.
 
 ```javascript
 class ListOfWords extends React.PureComponent {
@@ -308,11 +308,11 @@ class WordAdder extends React.Component {
 }
 ```
 
-The problem is that `PureComponent` will do a simple comparison between the old and new values of `this.props.words`. Since this code mutates the `words` array in the `handleClick` method of `WordAdder`, the old and new values of `this.props.words` will compare as equal, even though the actual words in the array have changed. The `ListOfWords` will thus not update even though it has new words that should be rendered.
+여기서 문제는 `PureComponent` 컴포넌트가 `this.props.words` 의 이전 값과 신규 값 사이를 단순하게 비교하는 것입니다. 이 코드는 `WordAdder` 의 `handleClick` 메서드 내부의 `words` 배열이 변경을 변경하기 때문에 배열의 실제 단어가 변경되었더라도 `this.props.words` 의 이전 값과 새로운 값은 동일하게 비교됩니다. `ListOfWords` 는 새로운 단어가 렌더링되어야하더라도 업데이트되지 않습니다.
 
-## The Power Of Not Mutating Data
+## 변하지않는 데이터의 힘
 
-The simplest way to avoid this problem is to avoid mutating values that you are using as props or state. For example, the `handleClick` method above could be rewritten using `concat` as:
+이 문제를 피하는 가장 간단한 방법은 props 또는 state에서 사용중인 값의 변경을 피하는 것입니다. 예를 들어 위에서 작성한 `handleClick` 메서드는 `concat` 을 사용하여 다시 작성해야합니다.
 
 ```javascript
 handleClick() {
@@ -322,7 +322,7 @@ handleClick() {
 }
 ```
 
-ES6 supports a [spread syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_operator) for arrays which can make this easier. If you're using Create React App, this syntax is available by default.
+ES6에서는 이를 더 단순하게 하는 [spread syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_operator)를 지원합니다. 만약 Create React App을 사용한다면 이 구문을 기본으로 사용할 수 있습니다.
 
 ```js
 handleClick() {
@@ -332,7 +332,7 @@ handleClick() {
 };
 ```
 
-You can also rewrite code that mutates objects to avoid mutation, in a similar way. For example, let's say we have an object named `colormap` and we want to write a function that changes `colormap.right` to be `'blue'`. We could write:
+비슷한 방법으로 변경을 피하기 위해 객체를 변경하는 코드를 다시 작성할 수 있습니다. 예를 들어 `colormap` 이라는 객체가 있다고 가정하고 `colormap.right` 를 `'blue'` 로 바꾸는 함수를 작성할 수 있습니다.
 
 ```js
 function updateColorMap(colormap) {
@@ -340,7 +340,7 @@ function updateColorMap(colormap) {
 }
 ```
 
-To write this without mutating the original object, we can use [Object.assign](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign) method:
+원본 객체를 변경하지 않고 이를 작성하려면 [Object.assign](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign) 메서드를 사용할 수 있습니다.
 
 ```js
 function updateColorMap(colormap) {
@@ -348,9 +348,9 @@ function updateColorMap(colormap) {
 }
 ```
 
-`updateColorMap` now returns a new object, rather than mutating the old one. `Object.assign` is in ES6 and requires a polyfill.
+`updateColorMap` 는 이전 객체를 변경하는 대신 새 객체를 반황합니다. `Object.assign` 는 ES6에서 추가되었으므로 폴리필 (polyfill)이 필요합니다.
 
-There is a JavaScript proposal to add [object spread properties](https://github.com/sebmarkbage/ecmascript-rest-spread) to make it easier to update objects without mutation as well:
+자바스크립트에 변경 없이 객체를 쉽게 업데이트할 수 있게 하는 [전개 연산자 (object spread properties)](https://github.com/sebmarkbage/ecmascript-rest-spread) 가 제안되어 추가되고 있습니다.
 
 ```js
 function updateColorMap(colormap) {
@@ -358,17 +358,17 @@ function updateColorMap(colormap) {
 }
 ```
 
-If you're using Create React App, both `Object.assign` and the object spread syntax are available by default.
+만약 Create React App을 사용한다면, `Object.assign` 및 전개 연산 구문을 기본으로 사용할 수 있습니다.
 
-## Using Immutable Data Structures
+## 불변 데이터 구조 사용하기
 
-[Immutable.js](https://github.com/facebook/immutable-js) is another way to solve this problem. It provides immutable, persistent collections that work via structural sharing:
+[Immutable.js](https://github.com/facebook/immutable-js) 는 이 문제를 해결하는 다른 방법입니다. 이는 구조 공유를 통해 작동하는 불변이고 영구적인 콜렉션을 제공합니다.
 
-* *Immutable*: once created, a collection cannot be altered at another point in time.
-* *Persistent*: new collections can be created from a previous collection and a mutation such as set. The original collection is still valid after the new collection is created.
-* *Structural Sharing*: new collections are created using as much of the same structure as the original collection as possible, reducing copying to a minimum to improve performance.
+* *Immutable*: 한번 생성된 콜렉션은 다른 시점에서 변경할 수 없습니다.
+* *Persistent*: 새로운 콜렉션은 이전 콜렉션과 세트같은 뮤테이션에서 생성될 수 있습니다. 원본 컬렉션은 새 콜렉션이 생성된 후에도 유효합니다.
+* *Structural Sharing*: 가능한한 원본 콜렉션과 동일한 구조를 사용하여 새 콜렉션이 만들어지므로 복사를 최소화하여 성능을 향상합니다.
 
-Immutability makes tracking changes cheap. A change will always result in a new object so we only need to check if the reference to the object has changed. For example, in this regular JavaScript code:
+불변성 (Immutability) 은 추적 비용을 저렴하게 만듭니다. 변경은 항상 새로운 객체를 만드므로 객체에 대한 참조가 변경되었는지 확인하기만 하면 됩니다. 예를 들어 일반적인 아래 자바스크립트 코드에서
 
 ```javascript
 const x = { foo: 'bar' };
@@ -377,7 +377,7 @@ y.foo = 'baz';
 x === y; // true
 ```
 
-Although `y` was edited, since it's a reference to the same object as `x`, this comparison returns `true`. You can write similar code with immutable.js:
+`y` 가 변경되었지만 `x` 와 같은 객체에 대한 참조이기 때문에 비교는 `true` 입니다. 비슷한 코드를 immutable.js 와 함께 아래와 같이 작성할수 있습니다. 
 
 ```javascript
 const SomeRecord = Immutable.Record({ foo: null });
@@ -388,8 +388,8 @@ x === y; // false
 x === z; // true
 ```
 
-In this case, since a new reference is returned when mutating `x`, we can use a reference equality check `(x === y)` to verify that the new value stored in `y` is different than the original value stored in `x`.
+이 경우 `x` 를 변경할 때 새로운 참조가 반환되기 때문에 `y` 에 저장된 새 값이 `x` 에 저장된 원래의 값과 다른지 확인하기 위해서 `(x === y)` 를 사용할 수 있습니다.
 
-Two other libraries that can help use immutable data are [seamless-immutable](https://github.com/rtfeldman/seamless-immutable) and [immutability-helper](https://github.com/kolodny/immutability-helper).
+불변 데이터를 사용할 때 도움을 주는 [seamless-immutable](https://github.com/rtfeldman/seamless-immutable) 과 [immutability-helper](https://github.com/kolodny/immutability-helper) 라이브러리가 있습니다.
 
-Immutable data structures provide you with a cheap way to track changes on objects, which is all we need to implement `shouldComponentUpdate`. This can often provide you with a nice performance boost.
+불변 데이터 구조는 `shouldComponentUpdate` 를 구현하는데 필요한 객체의 변경을 추적하는 저렴한 방법을 제공합니다. 이는 가끔 좋은 성능 향상을 제공합니다.
