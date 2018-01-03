@@ -1,10 +1,10 @@
 ---
 id: react-without-es6
-title: React Without ES6
+title: ES6를 사용하지않는 React
 permalink: docs/react-without-es6.html
 ---
 
-Normally you would define a React component as a plain JavaScript class:
+보통 React 컴포넌트는 순수 자바스크립트 클래스로 정의합니다.
 
 ```javascript
 class Greeting extends React.Component {
@@ -14,7 +14,7 @@ class Greeting extends React.Component {
 }
 ```
 
-If you don't use ES6 yet, you may use the `create-react-class` module instead:
+아직 ES6를 사용하지않는다면 클래스 대신 `create-react-class` 를 사용할 수 있습니다.
 
 
 ```javascript
@@ -26,11 +26,11 @@ var Greeting = createReactClass({
 });
 ```
 
-The API of ES6 classes is similar to `createReactClass()` with a few exceptions.
+ES6 클래스 API는 일부 예외를 제외하고 `createReactClass()` 와 비슷합니다.
 
-## Declaring Default Props
+## 기본 Props 선언하기
 
-With functions and ES6 classes `defaultProps` is defined as a property on the component itself:
+ES6 클래스 `defaultProps` 와 함수를 통해 컴포넌트 자체에 속성을 정의할수 있습니다.
 
 ```javascript
 class Greeting extends React.Component {
@@ -42,7 +42,7 @@ Greeting.defaultProps = {
 };
 ```
 
-With `createReactClass()`, you need to define `getDefaultProps()` as a function on the passed object:
+`createReactClass()` 를 이용할 때는 객체에 함수를 전달하기 위해 `getDefaultProps()` 를 정의할 필요가 있습니다.
 
 ```javascript
 var Greeting = createReactClass({
@@ -57,9 +57,9 @@ var Greeting = createReactClass({
 });
 ```
 
-## Setting the Initial State
+## 초기 state 설정하기
 
-In ES6 classes, you can define the initial state by assigning `this.state` in the constructor:
+ES6 클래스에서 생성자에서 `this.state` 를 할당하여 초기 state를 정의할 수 있습니다.
 
 ```javascript
 class Counter extends React.Component {
@@ -71,7 +71,7 @@ class Counter extends React.Component {
 }
 ```
 
-With `createReactClass()`, you have to provide a separate `getInitialState` method that returns the initial state:
+`createReactClass()` 를 이용할 때는 기초 state를 반환하는 개별 `getInitialState` 메서드를 사용합니다.
 
 ```javascript
 var Counter = createReactClass({
@@ -84,7 +84,7 @@ var Counter = createReactClass({
 
 ## Autobinding
 
-In React components declared as ES6 classes, methods follow the same semantics as regular ES6 classes. This means that they don't automatically bind `this` to the instance. You'll have to explicitly use `.bind(this)` in the constructor:
+Es6로 선언한 React 컴포넌트에서 메서드는 보통 ES6 클래스와 동일한 의미를 가져갑니다. 이는 인스턴스에서 `this` 가 자동으로 바인딩되지 않음을 의미합니다. 생성자에서 `.bind(this)` 를 사용해야합니다.
 
 ```javascript
 class SayHello extends React.Component {
@@ -110,7 +110,7 @@ class SayHello extends React.Component {
 }
 ```
 
-With `createReactClass()`, this is not necessary because it binds all methods:
+`createReactClass()` 에서는 모든 메서드를 바인드하기 때문에 유효하지 않습니다.
 
 ```javascript
 var SayHello = createReactClass({
@@ -132,9 +132,9 @@ var SayHello = createReactClass({
 });
 ```
 
-This means writing ES6 classes comes with a little more boilerplate code for event handlers, but the upside is slightly better performance in large applications.
+즉 ES6 클래스를 사용하면 이벤트 핸들러에서 더 많은 보일러플레이트 코드를 필요로 하지만 큰 어플리케이션에서는 성능이 약간 향상됩니다.
 
-If the boilerplate code is too unattractive to you, you may enable the **experimental** [Class Properties](https://babeljs.io/docs/plugins/transform-class-properties/) syntax proposal with Babel:
+보일러플레이트 코드가 매력없어보인다면 Babel을 사용하여 **실험 기능인** [Class Properties](https://babeljs.io/docs/plugins/transform-class-properties/) 제안 구문을 사용할 수도 있습니다.
 
 
 ```javascript
@@ -159,27 +159,27 @@ class SayHello extends React.Component {
 }
 ```
 
-Please note that the syntax above is **experimental** and the syntax may change, or the proposal might not make it into the language.
+위 구문은 **실험 기능** 이며 언어에서 명확히 제안되지 않았기 때문에 구문이 변할 수 있다는 점을 명심하시길 바랍니다.
 
-If you'd rather play it safe, you have a few options:
+오히려 안전하게 사용하기위한 몇가지 방법이 있습니다.
 
-* Bind methods in the constructor.
-* Use arrow functions, e.g. `onClick={(e) => this.handleClick(e)}`.
-* Keep using `createReactClass`.
+* 생성자에서 Bind 메서드 사용하기
+* arrow 함수 사용하기. 즉 `onClick={(e) => this.handleClick(e)}`.
+* 계속 `createReactClass` 사용하기.
 
 ## Mixins
 
 >**Note:**
 >
->ES6 launched without any mixin support. Therefore, there is no support for mixins when you use React with ES6 classes.
+> mixin 지원 없이 ES6가 출시되었습니다. 따라서 React ES6 클래스를 사용하면 mixin을 지원하지 않습니다.
 >
->**We also found numerous issues in codebases using mixins, [and don't recommend using them in the new code](/blog/2016/07/13/mixins-considered-harmful.html).**
+>**mixin을 사용한 코드베이스에서 수많은 이슈를 발견하였으며 [새 코드에서 이를 사용하지 않는 것을 권장합니다](/blog/2016/07/13/mixins-considered-harmful.html).**
 >
->This section exists only for the reference.
+>이 섹션은 레퍼런스를 위해 존재합니다.
 
-Sometimes very different components may share some common functionality. These are sometimes called [cross-cutting concerns](https://en.wikipedia.org/wiki/Cross-cutting_concern). [`createReactClass`](/docs/top-level-api.html#react.createclass) lets you use a legacy `mixins` system for that.
+가끔 아주 다른 컴포넌트끼리 같은 기능을 공유할 수도 있습니다. 이는 가끔 [cross-cutting concerns](https://en.wikipedia.org/wiki/Cross-cutting_concern) 라고 불립니다. [`createReactClass`](/docs/top-level-api.html#react.createclass) 는 이를 위해 레거시 `mixins` 시스템을 사용합니다.
 
-One common use case is a component wanting to update itself on a time interval. It's easy to use `setInterval()`, but it's important to cancel your interval when you don't need it anymore to save memory. React provides [lifecycle methods](/docs/working-with-the-browser.html#component-lifecycle) that let you know when a component is about to be created or destroyed. Let's create a simple mixin that uses these methods to provide an easy `setInterval()` function that will automatically get cleaned up when your component is destroyed.
+한 일반적인 사용 사례는 시간 interval에 따라 컴포넌트 자체가 업데이트하려는 컴포넌트입니다. `setInterval()` 을 사용하는 건 쉽지만 메모리를 절약하기 위해 더 이상 필요하지 않을 때 interval을 취소시키는 것이 중요합니다. React는 컴포넌트의 생성 및 제거 시점을 알려주는 [라이프사이클 메서드](/docs/working-with-the-browser.html#component-lifecycle) 를 제공합니다. 이 메서드를 사용하여 컴포넌트가 제거될 때 자동으로 정리되는 쉬운 `setInterval()` 함수를 제공하는 간단한 mixin을 만들어봅시다.
 
 ```javascript
 var SetIntervalMixin = {
@@ -222,4 +222,4 @@ ReactDOM.render(
 );
 ```
 
-If a component is using multiple mixins and several mixins define the same lifecycle method (i.e. several mixins want to do some cleanup when the component is destroyed), all of the lifecycle methods are guaranteed to be called. Methods defined on mixins run in the order mixins were listed, followed by a method call on the component.
+컴포넌트가 여러개의 mixin을 사용하고 여러 mixin이 동일한 라이프사이클 메서드를 정의하는 경우 (즉 컴포넌트가 제거될 때 여러 mixin이 클린업을 수행하려는 경우) 모든 라이프사이클 메서드가 호출되도록 보장합니다. mixin에 정의된 메서드는 mixin된 순서대로 작동하고 그 후에 컴포넌트에 대한 메소드 호출이 따라옵니다.

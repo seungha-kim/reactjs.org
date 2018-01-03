@@ -41,9 +41,9 @@
     - id: optimizing-performance
       title: 성능 최적화
     - id: react-without-es6
-      title: React Without ES6
+      title: ES6를 사용하지않는 React
     - id: react-without-jsx
-      title: React Without JSX
+      title: JSX를 사용하지않는 React
     - id: reconciliation
       title: Reconciliation
     - id: context
