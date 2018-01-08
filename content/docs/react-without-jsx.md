@@ -4,7 +4,7 @@ title: JSX를 사용하지않는 React
 permalink: docs/react-without-jsx.html
 ---
 
-JSX는 React를 살 때 필수사항이 아닙니다. JSX 없이 React를 사용하면 빌드 환경에서 컴파일을 세팅하지 않으려 할 때 특히 편합니다.
+JSX는 React를 할 때 필수사항이 아닙니다. JSX 없이 React를 사용하면 빌드 환경에서 컴파일을 세팅하지 않으려 할 때 특히 편합니다.
 
 각 JSX 요소는 `React.createElement(component, props, ...children)` 를 호출하는 문법 설탕입니다. 그래서 JSX에서 할 수 있는 모든 일은 순수 자바스크립트에서도 사용할 수 있습니다.
 
