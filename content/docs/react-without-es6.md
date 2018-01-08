@@ -84,7 +84,7 @@ var Counter = createReactClass({
 
 ## Autobinding
 
-Es6로 선언한 React 컴포넌트에서 메서드는 보통 ES6 클래스와 동일한 의미를 가져갑니다. 이는 인스턴스에서 `this` 가 자동으로 바인딩되지 않음을 의미합니다. 생성자에서 `.bind(this)` 를 사용해야합니다.
+ES6로 선언한 React 컴포넌트에서 메서드는 보통 ES6 클래스와 동일한 의미를 가져갑니다. 이는 인스턴스에서 `this` 가 자동으로 바인딩되지 않음을 의미합니다. 생성자에서 `.bind(this)` 를 사용해야합니다.
 
 ```javascript
 class SayHello extends React.Component {
