@@ -5,7 +5,7 @@ permalink: docs/optimizing-performance.html
 redirect_from: "docs/advanced-performance.html"
 ---
 
-React는 내부적으로 UI 업데이트를 위해 필요한 값 비싼 DOM 연산 갯수를 최소화하기 위해 몇가지 영리한 기술을 사용합니다. 많은 어플리케이션에서 React를 사용하면 성능 최적화를 위해 많은 작업을 하지 않더라도 빠른 유저 인터페이스로 이어질 것입니다. 그럼에도 불구하고 React 어플리케이션의 속도를 높이는 몇가지 방법이 있습니다.
+React는 내부적으로 UI 업데이트를 위해 필요한 값 비싼 DOM 연산 개수를 최소화하기 위해 몇가지 영리한 기술을 사용합니다. 많은 어플리케이션에서 React를 사용하면 성능 최적화를 위해 많은 작업을 하지 않더라도 빠른 유저 인터페이스로 이어질 것입니다. 그럼에도 불구하고 React 어플리케이션의 속도를 높이는 몇가지 방법이 있습니다.
 
 ## 프로덕션 빌드 사용하기
 
@@ -190,7 +190,7 @@ Chrome에서는
 
 React는 렌더링된 UI의 내부 표현을 만들고 관리합니다. 여기에는 컴포넌트가 반환하는 React 요소도 포함됩니다. 이 표현은 React가 자바스크립트 노드 작업보다 느릴 수 있으므로 필요에 따라 DOM 노드를 만들고 기존 노드에 접근하지 못하게합니다. 때로는 "가상 DOM (virtual DOM)"이라고 하지만 React Native에서도 같은 방식으로 동작합니다.
 
-컴포넌트의 props나 state 변경되면 React는 새로 반환된 요소를 이전에 렌더링됭 것과 비교하여 실제 DOM 업데이트가 필요한지 여부를 결정합니다. 둘이 동일하지 않다면 React는 DOM을 업데이트합니다.
+컴포넌트의 props나 state 변경되면 React는 새로 반환된 요소를 이전에 렌더링된 것과 비교하여 실제 DOM 업데이트가 필요한지 여부를 결정합니다. 둘이 동일하지 않다면 React는 DOM을 업데이트합니다.
 
 일부 케이스에서는 컴포넌트에서 다시 렌더링하는 프로세스가 시작되기 전에 트리거되는 라이프사이클 함수 `shouldComponentUpdate` 를 재정의하여 이러한 모든 것을 가속할 수 있습니다. 이 함수의 기본 구현체는 `true` 를 반환하고 React는 업데이트를 수행합니다.
 
@@ -348,7 +348,7 @@ function updateColorMap(colormap) {
 }
 ```
 
-`updateColorMap` 는 이전 객체를 변경하는 대신 새 객체를 반황합니다. `Object.assign` 는 ES6에서 추가되었으므로 폴리필 (polyfill)이 필요합니다.
+`updateColorMap` 는 이전 객체를 변경하는 대신 새 객체를 반환합니다. `Object.assign` 는 ES6에서 추가되었으므로 폴리필 (polyfill)이 필요합니다.
 
 자바스크립트에 변경 없이 객체를 쉽게 업데이트할 수 있게 하는 [전개 연산자 (object spread properties)](https://github.com/sebmarkbage/ecmascript-rest-spread) 가 제안되어 추가되고 있습니다.
 
@@ -365,8 +365,8 @@ function updateColorMap(colormap) {
 [Immutable.js](https://github.com/facebook/immutable-js) 는 이 문제를 해결하는 다른 방법입니다. 이는 구조 공유를 통해 작동하는 불변이고 영구적인 콜렉션을 제공합니다.
 
 * *Immutable*: 한번 생성된 콜렉션은 다른 시점에서 변경할 수 없습니다.
-* *Persistent*: 새로운 콜렉션은 이전 콜렉션과 세트같은 뮤테이션에서 생성될 수 있습니다. 원본 컬렉션은 새 콜렉션이 생성된 후에도 유효합니다.
-* *Structural Sharing*: 가능한한 원본 콜렉션과 동일한 구조를 사용하여 새 콜렉션이 만들어지므로 복사를 최소화하여 성능을 향상합니다.
+* *Persistent*: 새로운 콜렉션은 이전 콜렉션 그리고 Set과 같은 뮤테이션에서 생성될 수 있습니다. 원본 컬렉션은 새 콜렉션이 생성된 후에도 유효합니다.
+* *Structural Sharing*: 가능한 한 원본 콜렉션과 동일한 구조를 사용하여 새 콜렉션이 만들어지므로 복사를 최소화하여 성능을 향상합니다.
 
 불변성 (Immutability) 은 추적 비용을 저렴하게 만듭니다. 변경은 항상 새로운 객체를 만드므로 객체에 대한 참조가 변경되었는지 확인하기만 하면 됩니다. 예를 들어 일반적인 아래 자바스크립트 코드에서
 
