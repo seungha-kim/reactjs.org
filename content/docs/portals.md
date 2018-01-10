@@ -4,17 +4,17 @@ title: Portals
 permalink: docs/portals.html
 ---
 
-Portals provide a first-class way to render children into a DOM node that exists outside the DOM hierarchy of the parent component.
+Portals는 부모 컴포넌트의 DOM 계층 외부에 존재하는 DOM 노드로 자식에 렌더링하는 일급 방법을 제공합니다.
 
 ```js
 ReactDOM.createPortal(child, container)
 ```
 
-The first argument (`child`) is any [renderable React child](/docs/react-component.html#render), such as an element, string, or fragment. The second argument (`container`) is a DOM element.
+첫번째 인수 (`child`)는 요소, 문자열, fragment 같은 [renderable React child](/docs/react-component.html#render)입니다. 두번째 인수 (`container`)는 DOM 요소입니다.
 
-## Usage
+## 사용예시
 
-Normally, when you return an element from a component's render method, it's mounted into the DOM as a child of the nearest parent node:
+보통 컴포넌트의 render 메서드에서 요소를 반환할 때, 근처 부모 노드의 자식으로써 DOM이 마운트됩니다.
 
 ```js{4,6}
 render() {
@@ -27,7 +27,7 @@ render() {
 }
 ```
 
-However, sometimes it's useful to insert a child into a different location in the DOM:
+그러나 때로 DOM 내의 다른 위치에 자식을 넣는 것이 유용합니다.
 
 ```js{6}
 render() {
@@ -40,19 +40,19 @@ render() {
 }
 ```
 
-A typical use case for portals is when a parent component has an `overflow: hidden` or `z-index` style, but you need the child to visually "break out" of its container. For example, dialogs, hovercards, and tooltips.
+portals의 일반적인 사용 사례는 부모 컴포넌트가 `overflow: hidden` 이나 `z-index` 스타일을 가지지만, 자식이 컨테이너에서 시각적으로 "이탈해야 하는" 경우입니다. 예를 들어, 다이얼로그나, 호버카드나, 툴팁같은 게 있습니다.
 
 > Note:
 >
-> It is important to remember, when working with portals, you'll need to make sure to follow the proper accessibility guidelines.
+> portals를 사용할 때 꼭 접근성 가이드라인을 확실히 준수해야합니다.
 
 [Try it on CodePen.](https://codepen.io/gaearon/pen/yzMaBd)
 
-## Event Bubbling Through Portals
+## Portals를 통한 이벤트 버블링
 
-Even though a portal can be anywhere in the DOM tree, it behaves like a normal React child in every other way. Features like context work exactly the same regardless of whether the child is a portal, as the portal still exists in the *React tree* regardless of position in the *DOM tree*.
+portal은 DOM 트리의 어디에나 존재할 수 있지만, 다른 모든 방법으로 일반 React 자식처럼 동작합니다. context 같은 기능은 *DOM 트리* 의 위치에 상관없이 portal이 여전히 *React 트리* 내에 존재하기때문에 portal 여부에 상관없이 동일하게 동작합니다.
 
-This includes event bubbling. An event fired from inside a portal will propagate to ancestors in the containing *React tree*, even if those elements are not ancestors in the *DOM tree*. Assuming the following HTML structure:
+이는 이벤트 버블링을 포함합니다. portal 내부에서 시작된 이벤트는 *DOM 트리* 에서 조상이 아니더라도 *React 트리* 에 있는 조상에 전달됩니다. 다음 HTML 구조를 가정해봅시다.
 
 ```html
 <html>
@@ -63,7 +63,7 @@ This includes event bubbling. An event fired from inside a portal will propagate
 </html>
 ```
 
-A `Parent` component in `#app-root` would be able to catch an uncaught, bubbling event from the sibling node `#modal-root`.
+`#app-root` 내의 `Parent` 컴포넌트는 잡히지 않은, 형제 노드 `#modal-root` 에서 버블링되는 이벤트를 잡을 수 있습니다.
 
 ```js{28-31,42-49,53,61-63,70-71,74}
 // These two containers are siblings in the DOM
@@ -149,4 +149,4 @@ ReactDOM.render(<Parent />, appRoot);
 
 [Try it on CodePen.](https://codepen.io/gaearon/pen/jGBWpE)
 
-Catching an event bubbling up from a portal in a parent component allows the development of more flexible abstractions that are not inherently reliant on portals. For example, if you render a `<Modal />` component, the parent can capture its events regardless of whether it's implemented using portals.
+상위 컴포넌트의 portal에서 이벤트 버블링을 캐치하면 portal에 본질적으로 의존하지않는 보다 유연한 추상화 개발을 할 수 있습니다. 예를 들어 `<Modal />` 컴포넌트를 렌더링하면 상위에서 portals를 사용하여 구현하였는 지 여부에 관계없이 이벤트를 캡쳐할 수 있습니다.
