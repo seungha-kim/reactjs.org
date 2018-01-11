@@ -53,7 +53,7 @@
     - id: portals
       title: Portals
     - id: error-boundaries
-      title: Error Boundaries
+      title: 에러 경계 (Error Boundaries)
     - id: web-components
       title: Web Components
     - id: higher-order-components

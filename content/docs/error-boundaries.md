@@ -1,28 +1,28 @@
 ---
 id: error-boundaries
-title: Error Boundaries
+title: 에러 경계 (Error Boundaries)
 permalink: docs/error-boundaries.html
 ---
 
-In the past, JavaScript errors inside components used to corrupt React’s internal state and cause it to [emit](https://github.com/facebook/react/issues/4026) [cryptic](https://github.com/facebook/react/issues/6895) [errors](https://github.com/facebook/react/issues/8579) on next renders. These errors were always caused by an earlier error in the application code, but React did not provide a way to handle them gracefully in components, and could not recover from them.
+과거에는 컴포넌트 내부의 자바스크립트 에러로 인해 React의 내부 state가 손상되어 다음 렌더링에서 [발광하는](https://github.com/facebook/react/issues/4026) [숨겨진](https://github.com/facebook/react/issues/6895) [에러](https://github.com/facebook/react/issues/8579)가 발생하였습니다. 이러한 에러는 항상 어플리케이션 코드의 이전 코드에서 발생하였지만 React가 컴포넌트에서 정상적으로 처리할 수 있는 방법을 제공하지않았기 때문에 이를 복구할 수 없었습니다.
 
 
-## Introducing Error Boundaries
+## 에러 경계를 소개합니다
 
-A JavaScript error in a part of the UI shouldn’t break the whole app. To solve this problem for React users, React 16 introduces a new concept of an “error boundary”.
+UI의 일부분에 있는 자바스크립트 에러는 전체 앱을 망가뜨리지않습니다. React 유저가 이런 문제를 해결하기 위해 React 16부터 새로운 컨셉인 "에러 경계 (error boundary)"를 소개합니다.
 
-Error boundaries are React components that **catch JavaScript errors anywhere in their child component tree, log those errors, and display a fallback UI** instead of the component tree that crashed. Error boundaries catch errors during rendering, in lifecycle methods, and in constructors of the whole tree below them.
+에러 경계는 컴포넌트 트리가 깨지는 대신 **자식 컴포넌트 트리에서 에러를 잡아내고, 이러한 에러의 로그를 남기고, 폴백 UI를 보여주는** React 컴포넌트입니다. 에러 경계는 렌더링, 라이프사이클 메서드 및 그 아래 전체 트리 생성자에서 에러를 잡아냅니다.
 
 > Note
 > 
-> Error boundaries do **not** catch errors for:
+> 에러 경계가 잡지 **않는** 에러는 다음과 같습니다.
 >
-> * Event handlers ([learn more](#how-about-event-handlers))
-> * Asynchronous code (e.g. `setTimeout` or `requestAnimationFrame` callbacks)
-> * Server side rendering
-> * Errors thrown in the error boundary itself (rather than its children)
+> * 이벤트 핸들러 ([learn more](#how-about-event-handlers))
+> * 비동기 코드 (예를 들면 `setTimeout` 이나 `requestAnimationFrame` 콜백같은 것들)
+> * 서버 사이드 렌더링
+> * 에러 경계 자체가 내뱉는 에러 (자식보다는)
 
-A class component becomes an error boundary if it defines a new lifecycle method called `componentDidCatch(error, info)`:
+클래스 컴포넌트에서 `componentDidCatch(error, info)`라는 새로운 라이프사이클 메서드를 정의하여 에러 경계가 됩니다.
 
 ```js{7-12,15-18}
 class ErrorBoundary extends React.Component {
@@ -48,7 +48,7 @@ class ErrorBoundary extends React.Component {
 }
 ```
 
-Then you can use it as a regular component:
+그런 다음 일반 컴포넌트로 사용할 수 있습니다.
 
 ```js
 <ErrorBoundary>
@@ -56,15 +56,15 @@ Then you can use it as a regular component:
 </ErrorBoundary>
 ```
 
-The `componentDidCatch()` method works like a JavaScript `catch {}` block, but for components. Only class components can be error boundaries. In practice, most of the time you’ll want to declare an error boundary component once and use it throughout your application.
+`componentDidCatch()` 메서드는 자바스크립트 `catch {}` 블록처럼 동작하지만 컴포넌트 전용입니다. 클래스 컴포넌트에서만 에러 경계를 만들 수 있습니다. 실제로 대부분의 경우 에러 경계 컴포넌트를 한번만 선언하고 어플리케이션 전체에서 사용하려고합니다.
 
-Note that **error boundaries only catch errors in the components below them in the tree**. An error boundary can’t catch an error within itself. If an error boundary fails trying to render the error message, the error will propagate to the closest error boundary above it. This, too, is similar to how catch {} block works in JavaScript.
+**에러 경계는 트리 아래에 에러가 있는 컴포넌트에서만 에러를 잡는다는 점** 을 명심하시길 바랍니다. 에러 경계는 자기 자신을 포함하는 에러는 잡지 못합니다. 에러 경계가 에러 메시지를 렌더링하는 데 실패하면 그 에러는 그 위의 가장 가까운 에러 경계로 전파됩니다. 이 또한 자바스크립트 catch {} 블록을 캐치하는 법과 유사합니다.
 
-### componentDidCatch Parameters
+### componentDidCatch 파라미터
 
-`error` is an error that has been thrown.
+`error` 는 던져진 에러입니다.
 
-`info` is an object with `componentStack` key. The property has information about component stack during thrown error.
+`info` 는 `componentStack` 키를 가진 객체입니다. 속성에는 오류가 발생하는동안의 컴포넌트 스택에 대한 정보가 있습니다.
 
 ```js
 //...
@@ -82,49 +82,46 @@ componentDidCatch(error, info) {
 //...
 ```
 
-## Live Demo
+## 라이브 데모
 
-Check out [this example of declaring and using an error boundary](https://codepen.io/gaearon/pen/wqvxGa?editors=0010) with [React 16 beta](https://github.com/facebook/react/issues/10294).
+[React 16 beta](https://github.com/facebook/react/issues/10294) 로 구현한 [에러 경계를 사용하고 선언한 예제](https://codepen.io/gaearon/pen/wqvxGa?editors=0010)를 참고하세요.
 
+## 에러 경계를 어디에 두어야하는가
 
-## Where to Place Error Boundaries
+에러 경계의 세분성은 개발자에게 달려있습니다. 서버사이드 프레임워크가 종종 충돌을 처리하는 것처럼 "무언가 잘못되었다는" 메시지를 유저에게 보여주려면 최상위 라우트 컴포넌트를 감싸면됩니다. 또한 개별 위젯을 에러 경계로 감싸서 어플리케이션의 나머지 부분이 충돌나지않도록 할 수 있습니다.
 
-The granularity of error boundaries is up to you. You may wrap top-level route components to display a “Something went wrong” message to the user, just like server-side frameworks often handle crashes. You may also wrap individual widgets in an error boundary to protect them from crashing the rest of the application.
+## 잡히지않은 에러에 대한 새로운 동작
 
+이 변경사항은 중요한 의미를 가집니다. **React 16부터는 에러 경계에 잡히지 않은 오류로 인해 전체 React 컴포넌트 트리가 마운트 해제됩니다.**
 
-## New Behavior for Uncaught Errors
+우리는 이 결정에 대해 논의를 하였지만, 우리의 경험에 따르면 UI를 완전히 제거하는 것보다 손상된 UI를 그대로 두는 것이 더 나쁩니다. 예를 들어 메신저같은 제품에서 손상된 UI를 남겨두면 누군가가 잘못된 사람에게 메시지를 전달하도록 이끌 가능성이 있습니다. 비슷하게 결제 앱에서 잘못된 금액을 표시하는 것이 표시하지 않는 것보다 나쁩니다.
 
-This change has an important implication. **As of React 16, errors that were not caught by any error boundary will result in unmounting of the whole React component tree.**
+이 변경사항은 React 16으로 마이그레이션할 때 어플리케이션에 존재하지만 이전에 알려지지않은 충돌을 발견할 수 있음을 의미합니다. 에러 경계를 추가하면 문제가 발생할 때 더 나은 사용자 환경을 제공할 수 있습니다.
 
-We debated this decision, but in our experience it is worse to leave corrupted UI in place than to completely remove it. For example, in a product like Messenger leaving the broken UI visible could lead to somebody sending a message to the wrong person. Similarly, it is worse for a payments app to display a wrong amount than to render nothing.
+예를 들어 페이스북 메신저는 사이드바의 콘텐츠, 정보 패널, 대화 기록, 그리고 메시지 입력을 구분된 에러 경계로 감싸두었습니다. 만약 이러한 UI 영역 중 하나라도 충돌하는 경우 나머지는 대화형으로 유지됩니다.
 
-This change means that as you migrate to React 16, you will likely uncover existing crashes in your application that have been unnoticed before. Adding error boundaries lets you provide better user experience when something goes wrong.
+또한 프로덕션 환경에서 처리되지 않은 예외에 대해 알아볼 수 있도록 JS 에러 리포팅 시스템을 사용하거나 직접 빌드하고, 고치는 것이 좋습니다.
 
-For example, Facebook Messenger wraps content of the sidebar, the info panel, the conversation log, and the message input into separate error boundaries. If some component in one of these UI areas crashes, the rest of them remain interactive.
+## 컴포넌트 스택 추적
 
-We also encourage you to use JS error reporting services (or build your own) so that you can learn about unhandled exceptions as they happen in production, and fix them.
-
-
-## Component Stack Traces
-
-React 16 prints all errors that occurred during rendering to the console in development, even if the application accidentally swallows them. In addition to the error message and the JavaScript stack, it also provides component stack traces. Now you can see where exactly in the component tree the failure has happened:
+React 16은 개발 모드에서 렌더링 중에 발생한 모든 에러를, 어플리케이션이 실수로 삼킨 경우에라도 콘솔에 출력합니다. 에러 메시지와 자바스크립트 스택에 더불어, 컴포넌트 스택 추적을 제공합니다. 이제 컴포넌트 트리의 정확히 어디에서 에러가 발생했는 지 확인할 수 있습니다.
 
 <img src="../images/docs/error-boundaries-stack-trace.png" style="max-width:100%" alt="Error caught by Error Boundary component">
 
-You can also see the filenames and line numbers in the component stack trace. This works by default in [Create React App](https://github.com/facebookincubator/create-react-app) projects:
+또한 컴포넌트 스택 추적 내에서 파일명과 몇번 라인인 지 확인할 수 있습니다. 이는 [Create React App](https://github.com/facebookincubator/create-react-app) 프로젝트에서 기본적으로 동작합니다.
 
 <img src="../images/docs/error-boundaries-stack-trace-line-numbers.png" style="max-width:100%" alt="Error caught by Error Boundary component with line numbers">
 
-If you don’t use Create React App, you can add [this plugin](https://www.npmjs.com/package/babel-plugin-transform-react-jsx-source) manually to your Babel configuration. Note that it’s intended only for development and **must be disabled in production**.
+만약 Create React App을 사용하지 않는다면 Babel 설정에 수동으로 [이 플러그인](https://www.npmjs.com/package/babel-plugin-transform-react-jsx-source)을 추가할 수 있습니다. 이 기능은 개발 모드를 위해 구현하였으며 **프로덕션 모드에서는 반드시 비활성화 하여야** 합니다.
 
 > Note
 > 
 > Component names displayed in the stack traces depend on the [`Function.name`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/name) property. If you support older browsers and devices which may not yet provide this natively (e.g. IE 11), consider including a `Function.name` polyfill in your bundled application, such as [`function.name-polyfill`](https://github.com/JamesMGreene/Function.name). Alternatively, you may explicitly set the [`displayName`](/docs/react-component.html#displayname) property on all your components.
 
 
-## How About try/catch?
+## try/catch는 어떤가요?
 
-`try` / `catch` is great but it only works for imperative code:
+`try` / `catch` 는 훌륭하지만 명령형 코드에서만 동작합니다.
 
 ```js
 try {
@@ -134,21 +131,21 @@ try {
 }
 ```
 
-However, React components are declarative and specify *what* should be rendered:
+하지만 React 컴포넌트는 선언형이며 *어떤 것을* 렌더링해야한다고 정의합니다.
 
 ```js
 <Button />
 ```
 
-Error boundaries preserve the declarative nature of React, and behave as you would expect. For example, even if an error occurs in a `componentDidUpdate` hook caused by a `setState` somewhere deep in the tree, it will still correctly propagate to the closest error boundary.
+에러 경계는 React의 선언적 특성을 보존하고 예상대로 동작합니다. 예를 들어 `componentDidUpdate` 훅 내의 오류가 어딘가 깊은 트리 내의 `setState` 로 인해 발생하더라도 가장 가까운 에러 경계로 올바르게 전달됩니다.
 
-## How About Event Handlers?
+## 이벤트 핸들러는 어떤가요?
 
-Error boundaries **do not** catch errors inside event handlers.
+에러 경계는 이벤트 핸들러 내의 오류를 잡지 **않습니다.**
 
-React doesn't need error boundaries to recover from errors in event handlers. Unlike the render method and lifecycle hooks, the event handlers don't happen during rendering. So if they throw, React still knows what to display on the screen.
+React는 에러 핸들러 내의 에러를 해결하기 위해 에러 경계를 필요로하지 않습니다. 렌더 메서드나 라이프사이클 훅과 달리 이벤트 핸들러는 렌더링 시 발생하지 않습니다. 만약 이벤트 핸들러에서 에러를 던지더라도 React는 스크린에 어떤 걸 표시해야할 지 알고있습니다.
 
-If you need to catch an error inside event handler, use the regular JavaScript `try` / `catch` statement:
+만약 이벤트 핸들러 내의 오류를 잡아야한다면 일반 자바스크립트 `try` / `catch` 문을 사용하세요.
 
 ```js{8-12,16-19}
 class MyComponent extends React.Component {
@@ -174,10 +171,10 @@ class MyComponent extends React.Component {
 }
 ```
 
-Note that the above example is demonstrating regular JavaScript behavior and doesn't use error boundaries.
+위 예제는 일반적인 자바스크립트 동작을 보여주며 에러 경계를 사용하지 않습니다.
 
-## Naming Changes from React 15
+## React 15에서 이름 변경
 
-React 15 included a very limited support for error boundaries under a different method name: `unstable_handleError`. This method no longer works, and you will need to change it to `componentDidCatch` in your code starting from the first 16 beta release.
+React 15에서는 다른 이름인 `unstable_handleError` 메서드를 통해 제한적으로 에러 경계 지원을 했습니다. 이 메서드는 더 이상 동작하지않으며 첫번째 16 베타 릴리즈부터 코드에서 `componentDidCatch` 로 변경해야합니다.
 
-For this change, we’ve provided a [codemod](https://github.com/reactjs/react-codemod#error-boundaries) to automatically migrate your code.
+이 변경은 [codemod](https://github.com/reactjs/react-codemod#error-boundaries) 를 사용하여 자동으로 코드를 마이그레이션할 수 있습니다.
