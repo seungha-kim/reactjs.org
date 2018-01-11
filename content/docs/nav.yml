@@ -55,7 +55,7 @@
     - id: error-boundaries
       title: 에러 경계 (Error Boundaries)
     - id: web-components
-      title: Web Components
+      title: 웹 컴포넌트
     - id: higher-order-components
       title: Higher-Order Components
     - id: integrating-with-other-libraries
