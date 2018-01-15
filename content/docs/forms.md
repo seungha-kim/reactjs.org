@@ -27,7 +27,7 @@ HTML 폼(form) 요소는 폼 요소 자체가 내부 상태를 가지기 때문�
 
 HTML에서 `<input>`, `<textarea>`, `<select>` 같은 form 요소는 자기만의 state를 가지고 유저 입력에 따라 업데이트됩니다. React에서, 변경 가능한 state는 일반적으로 컴포넌트의 state 속성에 존재하며, [`setState()`](/docs/react-component.html#setstate) 로만 업데이트할 수 있습니다.
 
-React state를 "신뢰 가능한 단일 소스 (single source of truth)"로 만들어 두 요소를 결합할 수 있습니다. 그런 다음 렌더링 되는 React 컴포넌트는 이후에 폼에서 발생하는 유저 입력을 제어합니다. 이런 방식으로 React에 의해 제어되는 Input 폼 요소는 "제어되는 컴포넌트" 라고 부릅니다.
+React state를 "진리의 유일한 원천 (single source of truth)"으로 만들어 두 요소를 결합할 수 있습니다. 그러면 폼을 렌더링하는 React 컴포넌트는 이후에 사용자의 입력에 따라 폼에서 발생하는 일을 제어하게 됩니다. 이런 방식으로 React에 의해 제어되는 Input 폼 요소를 "제어되는 컴포넌트" 라고 부릅니다.
 
 예를 들어, 위 예제에서 이름을 입력할 때 이름을 log로 남기고싶다면, 해당 폼을 제어되는 컴포넌트로 작성할 수 있습니다.
 
@@ -66,7 +66,7 @@ class NameForm extends React.Component {
 
 [Try it on CodePen.](https://codepen.io/gaearon/pen/VmmPgp?editors=0010)
 
-`value` 속성은 폼 요소에 설정되므로 표시되는 값은 항상 `this.state.value` 가 되고 React state가 신뢰 가능한 소스가 됩니다. React state를 업데이트하기 위해 모든 키스트로크에서 `handleChange` 가 동작하기 때문에 사용자가 입력할 때 표시되는 값이 업데이트됩니다.
+`value` 속성은 폼 요소에 설정되므로 표시되는 값은 항상 `this.state.value` 가 되고 React state가 진리의 유일한 원천이 됩니다. 키 입력이 일어날 때마다 `handleChange` 가 동작하고 React state가 업데이트되므로, 사용자의 입력에 따라 표시되는 값이 업데이트됩니다.
 
 제어되는 컴포넌트를 사용하면 모든 state 변경과 연관되는 핸들러 함수가 생깁니다. 이를 통해 사용자 입력을 수정하거나 검증하는 것이 간단해집니다. 예를 들어 모든 유저의 이름을 강제로 대문자로 받고싶다면 `handleChange` 를 다음과 같이 쓸 수 있습니다.
 
@@ -78,7 +78,7 @@ handleChange(event) {
 
 ## textarea 태그
 
-HTML에서, `<textarea>` 요소는 자식으로 텍스트를 정의합니다.
+HTML에서, `<textarea>` 요소는 필드 내부의 텍스트를 자식으로서 정의합니다.
 
 ```html
 <textarea>
@@ -86,7 +86,7 @@ HTML에서, `<textarea>` 요소는 자식으로 텍스트를 정의합니다.
 </textarea>
 ```
 
-React에서 `<textarea>` 는 대신 `value` 속성을 사용합니다. 이렇게 하면 `<textarea>` 를 사용하는 폼은 한 줄 입력을 사용하는 폼과 매우 유사하게 작성할 수 있습니다.
+React에서 `<textarea>` 는 대신 `value` 속성을 사용합니다. 이렇게 하면 `<textarea>` 를 사용하는 폼은 한 줄 짜리 입력 필드와 매우 유사하게 작성할 수 있습니다.
 
 ```javascript{4-6,12-14,26}
 class EssayForm extends React.Component {
@@ -264,11 +264,11 @@ this.setState(partialState);
 
 또한, `setState()` 가 자동으로 [현재 상태에 일부 상태를 병합](/docs/state-and-lifecycle.html#state-updates-are-merged) 하기 때문에, 바뀐 부분에 대해서만 호출하면 됩니다.
 
-## 제어되는 Input Null 값
+## 제어되는 입력 필드의 Null 값
 
-[제어되는 컴포넌트](/docs/forms.html#controlled-components) 의 prop 값을 정의하면 개발자가 원하는 경우가 아니라면 사용자가 input을 변경할 수 있습니다. `value` 를 정의했지만 여전히 input이 수정 가능한 경우라면 실수로 `value` 를 `undefined` 나 `null` 로 설정했을 수 있습니다.
+[제어되는 컴포넌트](/docs/forms.html#controlled-components) 의 value prop 값을 지정해주면, 개발자가 직접 value prop을 변경하는 방법 외에는 사용자가 입력 필드의 값을 변경할 수 있는 방법이 없습니다. `value` 를 정의했지만 여전히 입력 필드가 수정 가능한 경우라면 실수로 `value` 를 `undefined` 나 `null` 로 설정했을 수 있습니다.
 
-다음 코드는 이를 보여줍니다. (처음 보이는 input은 잠겨있지만 약간의 딜레이 후 수정 가능하게 바뀝니다)
+다음 코드는 위와 같은 상황을 보여줍니다. (처음 보이는 input은 잠겨있지만 약간의 시간이 지난 후 수정 가능하게 바뀝니다)
 
 ```javascript
 ReactDOM.render(<input value="hi" />, mountNode);
@@ -279,6 +279,6 @@ setTimeout(function() {
 
 ```
 
-## 제외되는 컴포넌트 대안
+## 제어되는 컴포넌트에 대한 대안책
 
-데이터를 변경하는 모든 방법에 대한 이벤트 핸들러를 작성하고 React 컴포넌트에서 모든 input state를 파이프해야하기 때문에 제어되는 컴포넌트를 사용하는 것이 떄로 지루할 수 있습니다. 기존 코드베이스를 React로 변경하거나 React 어플리케이션을 React가 아닌 라이브러리와 통합할 때 이 작업은 성가신 작업일 수 있습니다. 이런 상황에서는 입력 폼을 구현하기 위한 대체 기술인 [제어되지않는 컴포넌트](/docs/uncontrolled-components.html) 를 확인할 수 있습니다.
+제어되는 컴포넌트를 사용하는 일은 종종 따분할 수 있는데, 왜냐하면 데이터를 변경하는 모든 방법에 대한 이벤트 핸들러를 작성해야하고 또 하나의 React 컴포넌트에 모든 input state를 전달해야하기 때문입니다. 기존 코드베이스를 React로 변경하거나 React 어플리케이션을 React가 아닌 라이브러리와 통합할 때 이 작업은 성가신 작업일 수 있습니다. 이런 상황에서는 입력 폼을 구현하기 위한 대체 기술인 [제어되지 않는 컴포넌트](/docs/uncontrolled-components.html) 를 확인해보세요.
