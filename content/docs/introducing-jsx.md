@@ -12,21 +12,21 @@ next: rendering-elements.html
 const element = <h1>Hello, world!</h1>;
 ```
 
-이 재미있는 태그 문법은 문자열도 HTML도 아닙니다.
+위의 이상한 태그 문법은 문자열도 HTML도 아닙니다.
 
-이 문법은 JSX라고 부르며, 자바스크립트의 문법 확장입니다. JSX를 리액트와 함께 사용하여 UI가 실제로 어떻게 보일 지 설명하는 걸 권장합니다. JSX는 템플릿 언어처럼 보일 수 있지만, 자바스크립트를 기반으로 하고 있습니다.
+이 문법은 JSX라고 부르며, 자바스크립트의 확장 문법입니다. JSX를 리액트와 함께 사용하면, UI가 실제로 어떻게 보일지 서술할 수 있습니다. JSX는 템플릿 언어처럼 보일 수 있지만, 오로지 자바스크립트를 기반으로 동작하고 있습니다.
 
 JSX는 React "요소"를 만듭니다. 그 요소가 어떻게 DOM에 렌더링 되는 지는 [다음 섹션](/docs/rendering-elements.html) 에서 설명합니다. 아래에서 JSX를 시작하는 데 필요한 기본 사항을 확인할 수 있습니다.
 
 ### 왜 JSX인가?
 
-React는 렌더링 로직이 다른 UI 로직과 본질적으로 결합되어 있다는 사실, 이벤트 처리 방법, 시간에 따른 상태 변경 방법 및 데이터 표시 준비 방법을 포함하고 있습니다.
+React는 렌더링 로직이 다른 UI 로직과 본질적으로 결합되어 있다는 사실을 인정합니다. 즉 이벤트의 처리 과정, 시간에 따른 상태 변화, 표시할 데이터가 어디로부터 오는지가 **렌더링 로직**과 결합되어 있다는 것입니다.
 
-React는 별도의 파일에 마크업과 로직을 넣어 *기술* 을 인위적으로 분리하는 대신, 둘 다 포함하는 "컴포넌트"라고 부르는 느슨하게 연결된 유닛으로 [*관심사*를 분리](https://en.wikipedia.org/wiki/Separation_of_concerns) 합니다. [이후 섹션](/docs/components-and-props.html) 에서 다시 컴포넌트로 돌아오겠지만 JS에 마크업을 넣는게 익숙해지지 않는다면 [이 이야기](https://www.youtube.com/watch?v=x7cQ3mrcKaY) 가 확신을 줄 것입니다.
+React는 별도의 파일에 마크업과 로직을 넣어 *기술* 을 인위적으로 분리하는 대신, 둘 다 포함하는 "컴포넌트"라고 부르는 단위를 이용해 [*관심사*를 분리](https://en.wikipedia.org/wiki/Separation_of_concerns) 합니다. [이후 섹션](/docs/components-and-props.html) 에서 다시 컴포넌트로 돌아오겠지만 JS에 마크업을 넣는게 익숙해지지 않는다면 [이 이야기](https://www.youtube.com/watch?v=x7cQ3mrcKaY) 가 확신을 줄 것입니다.
 
-React는 JSX 사용을 [필수로 하지 않습니다](/docs/react-without-jsx.html), 하지만 대부분의 사람들은 자바스크립트 코드 내부의 UI로 작업할 때 시각적으로 더 도움된다고 생각합니다. 또한 React가 보다 도움이 되는 에러 및 경고 메시지를 표시할 수 있습니다.
+React를 사용하기 위해 [반드시 JSX를 사용해야 하는 것은 아닙니다만](/docs/react-without-jsx.html), 많은 사람들이 자바스크립트 코드 안에서 UI 작업을 할 때 시각적으로 더 편하다고 느끼고 있습니다. 또한 JSX를 사용하면 React가 유용한 에러 및 경고 메시지를 표시해줄 수 있습니다.
 
-우선 한번 시작해봅시다!
+그러면 시작해봅시다!
 
 ### JSX에 표현식 포함하기
 
@@ -58,13 +58,13 @@ ReactDOM.render(
 
 [](codepen://introducing-jsx).
 
-가독성을 좋게 하기 위해 JSX를 여러줄로 나눴습니다. 필수는 아니지만 이 작업을 수행할 때 [자동 세미콜론 삽입](http://stackoverflow.com/q/2846283) 을 피하기 위해 괄호로 묶는 것이 좋습니다.
+가독성을 좋게 하기 위해 JSX를 여러줄로 나눴습니다. 필수는 아니지만, 이 작업을 수행할 때는 [자동 세미콜론 삽입](http://stackoverflow.com/q/2846283)의 함정을 피하기 위해 괄호로 묶는 것이 좋습니다.
 
 ### JSX 또한 표현식이다
 
-컴파일이 끝나면, JSX 표현식이 정규 자바스크립트 함수 호출이 되고 자바스크립트 객체로 인식됩니다.
+컴파일이 끝나면, JSX 표현식이 일반적인 자바스크립트 함수 호출이 되고, 결과적으로 자바스크립트 객체로 평가됩니다.
 
-이 말은 `if` 문이나 `for` 반복 내에서 JSX를 사용할 수 있으며, 변수에 할당하거나 매개 변수로 전달하거나 함수에서 반환할 수 있음을 의미합니다.
+이 말은 `if` 문이나 `for` 문 내에서 JSX를 사용할 수 있으며, 변수에 할당하거나 매개변수로 전달하거나 함수에서 반환할 수 있음을 의미합니다.
 
 ```js{3,5}
 function getGreeting(user) {
@@ -75,25 +75,25 @@ function getGreeting(user) {
 }
 ```
 
-### JSX 속성 정의
+### JSX 어트리뷰트 정의
 
-속성에 따옴표를 이용해 문자열 리터럴을 정의할 수 있습니다.
+어트리뷰트에서 따옴표를 사용해서 문자열 리터럴을 정의할 수 있습니다.
 
 ```js
 const element = <div tabIndex="0"></div>;
 ```
 
-속성에 중괄호를 이용해 자바스크립트 표현식을 포함시킬 수 있습니다.
+어트리뷰트에 중괄호를 사용하면, 자바스크립트 표현식을 포함시킬 수 있습니다.
 
 ```js
 const element = <img src={user.avatarUrl}></img>;
 ```
 
-속성에서 자바스크립트 표현식을 포함시킬 때 중괄호를 따옴표로 묶지 마세요. 따옴표 (문자열 값인 경우) 또는 중괄호 (표현식인 경우) 중 하나를 사용해야 하며, 둘 다 같은 속성에 사용할 수 있는 게 아닙니다.
+어트리뷰트에 자바스크립트 표현식을 포함시킬 때 중괄호를 따옴표로 묶지 마세요. 따옴표 (문자열 값인 경우) 또는 중괄호 (표현식인 경우) 중 하나를 사용해야 하며, 하나의 어트리뷰트에 둘 다 사용할 수 있는 것이 아닙니다.
 
 >**경고:**
 >
->JSX는 HTML보다는 자바스크립트에 가깝기 때문에, React DOM은 HTML 속성 이름 대신 `camelCase` 속성 이름 컨벤션을 사용합니다.
+>JSX는 HTML보다는 자바스크립트에 가깝기 때문에, React DOM은 HTML 어트리뷰트 이름 대신 `camelCase` 어트리뷰트 이름 컨벤션을 사용합니다.
 >
 > 예를 들어, JSX에서 `class` 는 [`className`](https://developer.mozilla.org/en-US/docs/Web/API/Element/className) 이 되며, `tabindex` 는 [`tabIndex`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/tabIndex) 가 됩니다.
 
@@ -118,7 +118,7 @@ const element = (
 
 ### JSX 인젝션 공격 예방
 
-유저 입력을 JSX 내에 포함시키는 것이 안전합니다.
+사용자가 입력한 내용을 JSX 내에 포함시켜도 안전합니다.
 
 ```js
 const title = response.potentiallyMaliciousInput;
@@ -150,7 +150,7 @@ const element = React.createElement(
 );
 ```
 
-`React.createElement()` 는 버그 없는 코드를 작성하는 데 도움을 주는 몇가지 체크를 하지만 기본적으로는 아래와 같은 객체를 생성합니다.
+`React.createElement()` 는 버그 없는 코드를 작성하는 데 도움을 주는 몇 가지 체크를 하긴 하지만, 기본적으로는 아래와 같은 객체를 생성합니다.
 
 ```js
 // Note: this structure is simplified
@@ -163,7 +163,7 @@ const element = {
 };
 ```
 
-이 객체는 "React elements"라고 부릅니다. 화면에서 볼 수 있는 내용에 대한 설명으로 생각할 수 있습니다. React는 이 객체를 읽어들이고 이를 사용하여 DOM을 구성하고 최신 상태로 유지합니다.
+이 객체를 "React 요소"라고 부릅니다. 화면에서 보고자 하는 내용에 대한 설명 내지 서술로 생각할 수 있습니다. React는 이 객체를 읽어들이고 이를 사용하여 DOM을 만들어낸 뒤 최신 상태로 유지합니다.
 
 다음 섹션에서 React 요소를 DOM에 렌더링 하는 방법을 살펴보겠습니다.
 
