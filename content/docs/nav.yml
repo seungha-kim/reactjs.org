@@ -23,13 +23,13 @@
     - id: lifting-state-up
       title: State 끌어올리기
     - id: composition-vs-inheritance
-      title: 구성 (composition) vs 상속 (inheritance)
+      title: 합성 (composition) vs 상속 (inheritance)
     - id: thinking-in-react
-      title: React스럽게 생각하기
+      title: React 방식으로 생각하기
 - title: Advanced Guides
   items:
     - id: jsx-in-depth
-      title: JSX 톺아보기
+      title: JSX 더 알아보기
     - id: typechecking-with-proptypes
       title: Proptypes를 이용한 타입 체크
     - id: static-type-checking
