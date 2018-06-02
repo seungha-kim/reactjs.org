@@ -45,7 +45,7 @@
     - id: react-without-jsx
       title: JSX를 사용하지않는 React
     - id: reconciliation
-      title: 재조정 (Reconciliation)
+      title: 비교조정 (Reconciliation)
     - id: context
       title: Context
     - id: fragments

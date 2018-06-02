@@ -1,6 +1,6 @@
 ---
 id: reconciliation
-title: 재조정 (Reconciliation)
+title: 비교조정 (Reconciliation)
 permalink: docs/reconciliation.html
 ---
 

@@ -186,7 +186,7 @@ Chrome에서는
 
 [React Virtualized](https://bvaughn.github.io/react-virtualized/) 는 유명한 윈도잉 라이브러리입니다. 목록, 그리드, 표 데이터를 표현하기 위한 여러가지 재사용가능한 컴포넌트를 제공합니다. 어플리케이션의 특정 케이스에 더 적합한 것을 원한다면 [Twitter](https://medium.com/@paularmstrong/twitter-lite-and-high-performance-react-progressive-web-apps-at-scale-d28a00e780a3) 처럼 독자적인 윈도잉 컴포넌트를 만들 수도 있습니다.
  
-## 재조정 (Reconciliation) 피하기
+## 비교조정 (Reconciliation) 피하기
 
 React는 렌더링된 UI의 내부 표현을 만들고 관리합니다. 여기에는 컴포넌트가 반환하는 React 요소도 포함됩니다. 이 표현은 React가 자바스크립트 노드 작업보다 느릴 수 있으므로 필요에 따라 DOM 노드를 만들고 기존 노드에 접근하지 못하게합니다. 때로는 "가상 DOM (virtual DOM)"이라고 하지만 React Native에서도 같은 방식으로 동작합니다.
 
@@ -204,7 +204,7 @@ shouldComponentUpdate(nextProps, nextState) {
 
 ## shouldComponentUpdate In Action
 
-여기 컴포넌트의 서브트리가 있습니다. 각각에서, `SCU` 는 `shouldComponentUpdate` 가 무엇을 반환하는 지 나타내고, `vDOMEq` 는 렌더링된 React 요소가 동일한 지를 나타냅니다. 마지막으로 원의 색은 컴포넌트를 재조정해야하는 지 여부를 나타냅니다.
+여기 컴포넌트의 서브트리가 있습니다. 각각에서, `SCU` 는 `shouldComponentUpdate` 가 무엇을 반환하는 지 나타내고, `vDOMEq` 는 렌더링된 React 요소가 동일한 지를 나타냅니다. 마지막으로 원의 색은 컴포넌트를 비교조정해야하는 지 여부를 나타냅니다.
 
 <figure><img src="../images/docs/should-component-update.png" style="max-width:100%" /></figure>
 
