@@ -13,6 +13,8 @@ permalink: docs/refs-and-the-dom.html
 
 React의 전형적인 데이터 흐름 상에서는, [props](/docs/components-and-props.html)만이 자식 컴포넌트와 부모 컴포넌트 간에 상호작용을 할 수 있는 유일한 방법입니다. 자식의 내용을 변경하기 위해서, 새 prop을 가지고 다시 렌더링을 합니다. 하지만 가끔은 전형적인 데이터 흐름 밖에서 자식을 명령형으로 변경해야 할 필요가 있습니다. 여기서 변경될 자식이란 React 컴포넌트의 인스턴스일 수도 있고, DOM 엘리먼트일 수도 있습니다. React는 양쪽 경우 모두를 위한 비상구를 제공합니다.
 
+(역주: React 16.3 버전에서 ref를 위한 새로운 API인 `React.createRef()`가 도입되었습니다. 자세한 내용은 [공식문서](https://reactjs.org/docs/refs-and-the-dom.html)를 참고하세요.)
+
 ### 언제 ref를 사용해야 합니까?
 
 Ref의 바람직한 사용 사례로 다음과 같은 것을 들 수 있습니다.
