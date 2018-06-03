@@ -1,6 +1,6 @@
 ---
 id: uncontrolled-components
-title: 제어되지않는 컴포넌트
+title: 제어되지 않는 컴포넌트
 permalink: docs/uncontrolled-components.html
 ---
 
@@ -42,7 +42,7 @@ class NameForm extends React.Component {
 
 특정 상황에서 어떤 타입의 컴포넌트를 사용해야하는 지 아직 명확하지 않은 경우 [제어되지 않는 input vs 제어되는 input](http://goshakkk.name/controlled-vs-uncontrolled-inputs-react/)이라는 아티클이 도움이 될 것입니다.
 
-### 기본 값
+### 기본값 지정하기
 
 React 렌더링 라이프사이클에서 form 요소의 `value` 속성은 DOM의 값보다 우선시합니다. 제어되지않는 컴포넌트를 사용하는 경우 React가 초기값을 지정하고 후속 업데이트를 제어하지않는 것이 좋습니다. 이런 케이스를 다루기 위해 `value` 대신 `defaultValue` 속성을 지정할 수 있습니다.
 
