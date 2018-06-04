@@ -9,7 +9,7 @@ redirect_from:
   - "docs/forms-zh-CN.html"
 ---
 
-HTML 폼(form) 요소는 폼 요소 자체가 내부 상태를 가지기 때문에 React에서 다른 DOM 요소가 조금 다르게 동작합니다. 예를 들어, 순수한 HTML에서 이 폼은 이름을 받습니다.
+HTML 폼(form) 요소는 그 자체가 내부 상태를 가지기 때문에, React에서는 다른 DOM 요소들과는 조금 다르게 동작합니다. 예를 들어, 순수한 HTML에서 이 폼은 이름을 입력받습니다.
 
 ```html
 <form>
@@ -21,15 +21,15 @@ HTML 폼(form) 요소는 폼 요소 자체가 내부 상태를 가지기 때문�
 </form>
 ```
 
-위 폼은 유저가 폼을 전송(submit)하면 새로운 페이지로 이동하는 기본 HTML 폼 동작을 수행합니다. 만약 React에서 똑같은 동작을 원한다면, 그냥 그렇게 사용하면 됩니다. 그러나 대부분의 경우, 자바스크립트 함수를 만들어서 form 제출을 처리하고 사용자가 form에 입력한 데이터에 접근하도록 만드는 게 편합니다. 이를 위해 널리 사용되는 방식은 "제어되는 컴포넌트 (Controlled Components)"를 사용하는 것입니다.
+위 폼에서 유저가 폼을 전송(submit)하면, 새로운 페이지로 이동하는 기본 HTML 폼 동작을 수행합니다. 만약 React에서 똑같은 동작을 원한다면, 그냥 그렇게 사용하면 됩니다. 그러나 대부분의 경우, 자바스크립트 함수를 만들어서 form 제출을 처리하고 사용자가 form에 입력한 데이터에 접근하도록 만드는 게 좋습니다. 이를 위해 널리 사용되는 방식은 "제어되는 컴포넌트 (Controlled Components)"를 사용하는 것입니다.
 
 ## 제어되는 컴포넌트 (Controlled Components)
 
-HTML에서 `<input>`, `<textarea>`, `<select>` 같은 form 요소는 자기만의 state를 가지고 유저 입력에 따라 업데이트됩니다. React에서, 변경 가능한 state는 일반적으로 컴포넌트의 state 속성에 존재하며, [`setState()`](/docs/react-component.html#setstate) 로만 업데이트할 수 있습니다.
+HTML에서 `<input>`, `<textarea>`, `<select>` 같은 form 요소는 자기만의 상태를 가지고 사용자의 입력에 따라 업데이트됩니다. 반면에 React에서는, 변경 가능한 상태를 일반적으로 컴포넌트의 state 속성에 위치시키며, 이는 [`setState()`](/docs/react-component.html#setstate)로만 업데이트할 수 있습니다.
 
-React state를 "진리의 유일한 원천 (single source of truth)"으로 만들어 두 요소를 결합할 수 있습니다. 그러면 폼을 렌더링하는 React 컴포넌트는 이후에 사용자의 입력에 따라 폼에서 발생하는 일을 제어하게 됩니다. 이런 방식으로 React에 의해 제어되는 Input 폼 요소를 "제어되는 컴포넌트" 라고 부릅니다.
+React state를 "진리의 유일한 원천 (single source of truth)"으로 만들어 두 세계를 결합할 수 있습니다. 이렇게 하면 사용자의 입력에 따라 폼에서 발생되는 일을 React 컴포넌트 측에서 제어하게 됩니다. 이런 방식으로, React에 의해 제어되는 input 폼 요소를 "제어되는 컴포넌트" 라고 부릅니다.
 
-예를 들어, 위 예제에서 이름을 입력할 때 이름을 log로 남기고싶다면, 해당 폼을 제어되는 컴포넌트로 작성할 수 있습니다.
+위 예제를 바꾸어서 폼이 전송될 때 이름을 출력하기 위해, 폼을 제어되는 컴포넌트로 만들어주었습니다:
 
 ```javascript{4,10-12,24}
 class NameForm extends React.Component {
@@ -66,7 +66,7 @@ class NameForm extends React.Component {
 
 [Try it on CodePen.](https://codepen.io/gaearon/pen/VmmPgp?editors=0010)
 
-`value` 속성은 폼 요소에 설정되므로 표시되는 값은 항상 `this.state.value` 가 되고 React state가 진리의 유일한 원천이 됩니다. 키 입력이 일어날 때마다 `handleChange` 가 동작하고 React state가 업데이트되므로, 사용자의 입력에 따라 표시되는 값이 업데이트됩니다.
+`value` 어트리뷰트가 폼 요소에 설정되었기 때문에, 표시되는 값은 항상 `this.state.value` 가 됩니다. 즉, React state가 진리의 유일한 원천이 됩니다. 키 입력이 일어날 때마다 `handleChange` 가 동작하고 React state가 업데이트되므로, 표시되는 값은 사용자의 입력에 따라 업데이트됩니다.
 
 제어되는 컴포넌트를 사용하면 모든 state 변경과 연관되는 핸들러 함수가 생깁니다. 이를 통해 사용자 입력을 수정하거나 검증하는 것이 간단해집니다. 예를 들어 모든 유저의 이름을 강제로 대문자로 받고싶다면 `handleChange` 를 다음과 같이 쓸 수 있습니다.
 
@@ -78,7 +78,7 @@ handleChange(event) {
 
 ## textarea 태그
 
-HTML에서, `<textarea>` 요소는 필드 내부의 텍스트를 자식으로서 정의합니다.
+HTML에서, `<textarea>` 요소는 필드 내부의 텍스트를 자식으로서 지정합니다.
 
 ```html
 <textarea>
@@ -86,7 +86,7 @@ HTML에서, `<textarea>` 요소는 필드 내부의 텍스트를 자식으로서
 </textarea>
 ```
 
-React에서 `<textarea>` 는 대신 `value` 속성을 사용합니다. 이렇게 하면 `<textarea>` 를 사용하는 폼은 한 줄 짜리 입력 필드와 매우 유사하게 작성할 수 있습니다.
+React에서 `<textarea>` 는 대신 `value` 어트리뷰트를 사용합니다. 이렇게 하면 `<textarea>` 를 사용하는 폼은 한 줄 짜리 입력 필드와 매우 유사하게 작성할 수 있습니다.
 
 ```javascript{4-6,12-14,26}
 class EssayForm extends React.Component {
@@ -123,7 +123,7 @@ class EssayForm extends React.Component {
 }
 ```
 
-`this.state.value` 를 생성자 함수에서 초기화하기 때문에, 일부 텍스트를 가진채로 text area를 시작할 수 있습니다.
+`this.state.value` 를 생성자 함수에서 초기화하기 때문에, 텍스트를 가진 채로 textarea를 표시해줄 수 있습니다.
 
 ## select 태그
 
@@ -138,7 +138,7 @@ HTML에서, `<select>` 는 드롭 다운 목록을 만듭니다. 예를 들어, 
 </select>
 ```
 
-Coconut 옵션에 `selected` 속성이 있기 때문에 기본적으로 선택되는 걸 주목합시다. React에서는 `selected` 속성을 사용하는 대신 루트 `select` 태그에 `value` 속성을 사용합니다. 한 곳에서 업데이트만 하면 되기 때문에 제어되는 컴포넌트에서 사용하기 더 편합니다. 예를 들어,
+Coconut 옵션에 `selected` 어트리뷰트가 있기 때문에 기본적으로 선택되는 걸 주목합시다. React에서는 `selected` 어트리뷰트를 사용하는 대신 `select` 태그에 `value` 어트리뷰트를 사용합니다. 제어되는 컴포넌트를 쓸 때는 이 방식이 더 편한데, 한 곳에서만 업데이트를 해주면 되기 때문입니다. 예를 들어 보겠습니다:
 
 ```javascript{4,10-12,24}
 class FlavorForm extends React.Component {
@@ -180,11 +180,11 @@ class FlavorForm extends React.Component {
 
 [Try it on CodePen.](https://codepen.io/gaearon/pen/JbbEzX?editors=0010)
 
-전반적으로 이렇게 하면 `<input type="text">`, `<textarea>`, `<select>` 가 비슷하게 동작합니다. 모두 제어되는 컴포넌트를 구현할 때 `value` 속성을 사용할 수 있습니다.
+정리하겠습니다. 이 방식을 통해 `<input type="text">`, `<textarea>`, `<select>` 모두 비슷하게 동작합니다. 즉, `value` 어트리뷰트를 사용해 제어되는 컴포넌트를 구현할 수 있습니다.
 
-> Note
+> 주의
 >
-> `select` 태그에서 여러개의 옵션을 사용하고 싶다면, `value` 속성에 배열을 전달할 수도 있습니다.
+> `select` 태그에서 여러 개의 옵션을 사용하고 싶다면, `value` 어트리뷰트에 배열을 전달할 수도 있습니다.
 >
 >```js
 ><select multiple={true} value={['B', 'C']}>
@@ -192,9 +192,9 @@ class FlavorForm extends React.Component {
 
 ## 여러 Input 제어하기
 
-여러개의 `input` 요소를 제어해야할 때 각 요소에 `name` 속성을 추가한 후 `event.target.name` 값을 기반으로 핸들러 함수를 고를 수 있습니다.
+여러 개의 `input` 요소를 제어해야할 때, 각 요소에 `name` 속성을 추가하면 `event.target.name` 값을 기반으로 핸들러 함수가 무엇을 해야 할지를 결정할 수 있습니다.
 
-예를 들어,
+예를 들어 봅시다:
 
 ```javascript{15,18,28,37}
 class Reservation extends React.Component {
@@ -246,7 +246,7 @@ class Reservation extends React.Component {
 
 [Try it on CodePen.](https://codepen.io/gaearon/pen/wgedvV?editors=0010)
 
-주어진 input 이름에 해당하는 state 키를 업데이트하기 위해 ES6 [computed property name](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Object_initializer#Computed_property_names) 구문을 사용하고 있습니다.
+input의 name에 해당하는 state 키를 업데이트하기 위해 ES6 [computed property name](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Object_initializer#Computed_property_names) 문법을 사용하고 있습니다.
 
 ```js{2}
 this.setState({
@@ -254,7 +254,7 @@ this.setState({
 });
 ```
 
-ES5 코드에선 이렇게 작성합니다.
+ES5 코드에선 이렇게 작성합니다:
 
 ```js{2}
 var partialState = {};
@@ -262,7 +262,7 @@ partialState[name] = value;
 this.setState(partialState);
 ```
 
-또한, `setState()` 가 자동으로 [현재 상태에 일부 상태를 병합](/docs/state-and-lifecycle.html#state-updates-are-merged) 하기 때문에, 바뀐 부분에 대해서만 호출하면 됩니다.
+또한, `setState()` 가 자동으로 [현재 상태에 객체를 병합](/docs/state-and-lifecycle.html#state-updates-are-merged) 하기 때문에, 바뀐 부분에 대해서만 `setState()`를 호출해주면 됩니다.
 
 ## 제어되는 입력 필드의 Null 값
 
