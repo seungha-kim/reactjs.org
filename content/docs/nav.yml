@@ -35,7 +35,7 @@
     - id: static-type-checking
       title: 정적 타입 체크
     - id: refs-and-the-dom
-      title: Refs와 DOM
+      title: Ref와 DOM
     - id: uncontrolled-components
       title: 제어되지않는 컴포넌트
     - id: optimizing-performance

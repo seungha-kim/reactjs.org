@@ -1,6 +1,6 @@
 ---
 id: refs-and-the-dom
-title: Refs와 DOM
+title: Ref와 DOM
 redirect_from:
   - "docs/working-with-the-browser.html"
   - "docs/more-about-refs.html"
@@ -11,13 +11,13 @@ redirect_from:
 permalink: docs/refs-and-the-dom.html
 ---
 
-React의 전형적인 데이터 흐름 상에서는, [props](/docs/components-and-props.html)만이 자식 컴포넌트와 부모 컴포넌트 간에 상호작용을 할 수 있는 유일한 방법입니다. 자식의 내용을 변경하기 위해서, 새 prop을 가지고 다시 렌더링을 합니다. 하지만 가끔은 전형적인 데이터 흐름 밖에서 자식을 명령형으로 변경해야 할 필요가 있습니다. 여기서 변경될 자식이란 React 컴포넌트의 인스턴스일 수도 있고, DOM 엘리먼트일 수도 있습니다. React는 양쪽 경우 모두를 위한 비상구를 제공합니다.
+Ref는 render 메소드에서 생성된 DOM 노드 혹은 React 엘리먼트 객체에 접근할 수 있는 방법을 제공합니다.
 
-(역주: React 16.3 버전에서 ref를 위한 새로운 API인 `React.createRef()`가 도입되었습니다. 자세한 내용은 [공식문서](https://reactjs.org/docs/refs-and-the-dom.html)를 참고하세요.)
+전형적인 React 데이터 흐름에서는, 부모 컴포넌트에서 자식 엘리먼트를 조작하기 위해 [props](/docs/components-and-props.html)만을 사용합니다. 즉, 자식 엘리먼트를 수정하기 위해 새 prop을 가지고 다시 렌더링을 해줍니다. 하지만 가끔은 전형적인 데이터 흐름 밖에서 자식을 명령형으로 변경해야 할 필요가 있습니다. 여기서 변경될 자식이란 React 컴포넌트의 인스턴스일 수도 있고, DOM 엘리먼트일 수도 있습니다. React는 양쪽 경우 모두를 위한 비상구를 제공합니다.
 
-### 언제 ref를 사용해야 합니까?
+### 언제 ref를 사용해야 하나요?
 
-Ref의 바람직한 사용 사례로 다음과 같은 것을 들 수 있습니다.
+Ref의 바람직한 사용 사례로 다음과 같은 것을 들 수 있습니다:
 
 * 포커스, 텍스트 선택영역, 혹은 미디어의 재생을 관리할 때
 * 명령형 애니메이션을 발동시킬 때
@@ -25,38 +25,75 @@ Ref의 바람직한 사용 사례로 다음과 같은 것을 들 수 있습니�
 
 선언적으로 할 수 있는 작업에 대해서는 ref의 사용을 피하세요.
 
-예를 들어, `Dialog` 컴포넌트에 `open()`과 `close()`라는 메소드를 두는 대신 `isOpen`이라는 prop을 넘겨주세요.
+예를 들어, `Dialog` 컴포넌트에 `open()`과 `close()`라는 메소드를 두는 대신 `isOpen`과 같은 prop을 넘겨주세요.
 
 ### Ref의 남용은 금물입니다
 
-여러분의 앱에 "어떤 일이 일어나게"하기 위해 ref를 사용하는 쪽으로 마음이 기울 수 있습니다. 이 때에는, 잠시 작업을 멈추고 앱의 상태를 컴포넌트 계층의 어떤 부분에서 소유해야 하는지를 다시 한 번 생각해보세요. 많은 경우, 상태를 "소유"해야 할 적절한 장소는 계층의 상위에 있는 컴포넌트라는 결론이 날 것입니다. 이에 대한 예제를 [State 끌어올리기](/docs/lifting-state-up.html) 가이드에서 확인하세요.
+여러분의 앱에 "어떤 일이 일어나게"하기 위해 ref를 사용하는 쪽으로 마음이 기울 수 있습니다. 이 때에는, 잠시 작업을 멈추고 앱의 상태를 컴포넌트 계층의 어떤 부분에서 소유해야 하는지를 다시 한 번 생각해보세요. 많은 경우, 상태를 "소유"해야 할 적절한 장소는 계층의 상위에 있는 컴포넌트라는 결론이 날 것입니다. 이에 대한 예제를 [상태 끌어올리기](/docs/lifting-state-up.html) 가이드에서 확인하세요.
 
-### DOM 엘리먼트에 ref 추가하기
+> 주의
+>
+> 아래 예제에서는 React 16.3 버전에서 도입된 `React.createRef()`를 사용하고 있습니다. 이전 버전의 React를 사용중이라면, 대신 [callback refs](#callback-refs)를 사용하세요.
 
-React는 어떤 컴포넌트에든 사용할 수 있는 특별한 속성을 지원합니다. `ref` 속성은 콜백 함수를 받으며, 그 콜백 함수는 컴포넌트가 마운트 혹은 언마운트 되자마자 실행될 것입니다.
+### Ref 생성하기
 
-`ref` 속성이 HTML 엘리먼트에 사용되면, `ref` 콜백은 하부의 DOM 엘리먼트를 인자로 받습니다. 예를 들어, 아래의 코드는 `ref` 콜백을 사용해 DOM 노드에 대한 참조를 저장하고 있습니다:
+Ref는 `React.createRef()`를 통해 생성한 뒤 React 엘리먼트의 `ref` 어트리뷰트에 붙여줄 수 있습니다. Ref는 대개 컴포넌트의 인스턴스가 만들어질 때 인스턴스의 속성에 저장해주며, 이를 통해 컴포넌트 내부 코드에서 자유롭게 사용될 수 있습니다.
 
-```javascript{8,9,19}
+```javascript{4,7}
+class MyComponent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.myRef = React.createRef();
+  }
+  render() {
+    return <div ref={this.myRef} />;
+  }
+}
+```
+
+### Ref 사용하기
+
+`render` 메소드에서 반환하는 엘리먼트에 ref가 넘겨지면, ref의 `current` 속성을 통해 해당 노드에 접근할 수 있게 됩니다.
+
+```javascript
+const node = this.myRef.current;
+```
+
+ref의 값은 노드의 유형에 따라 달라집니다:
+
+- HTML 엘리먼트에 `ref` 어트리뷰트가 사용되면, ref의 `current` 속성은 DOM 엘리먼트 객체를 가리킵니다.
+- 클래스 컴포넌트에 `ref` 어트리뷰트가 사용되면, ref의 `current` 속성은 해당 컴포넌트로부터 생성된 인스턴스를 가리킵니다.
+- **함수형 컴포넌트는 인스턴스를 가질 수 없기 때문에 `ref` 어트리뷰트 역시 사용할 수 없습니다.**
+
+아래 예제를 통해 차이점을 확인해보세요.
+
+#### DOM 엘리먼트에 ref 사용하기
+
+아래 코드에서는 DOM 노드를 참조하기 위해 `ref`를 사용하고 있습니다:
+
+```javascript{5,12,22}
 class CustomTextInput extends React.Component {
   constructor(props) {
     super(props);
+    // input DOM 엘리먼트에 접근하기 위해 ref를 만들었습니다.
+    this.textInput = React.createRef();
     this.focusTextInput = this.focusTextInput.bind(this);
   }
 
   focusTextInput() {
-    // Explicitly focus the text input using the raw DOM API
-    this.textInput.focus();
+    // DOM API를 사용해서 명시적으로 input에 포커스를 두는 코드입니다.
+    // 주의: "current" 속성을 사용해 DOM 노드에 접근하고 있습니다.
+    this.textInput.current.focus();
   }
 
   render() {
-    // Use the `ref` callback to store a reference to the text input DOM
-    // element in an instance field (for example, this.textInput).
+    // <input> ref와 `textInput`이 연결되어 있다는 사실을
+    // React한테 알려줍니다.
     return (
       <div>
         <input
           type="text"
-          ref={(input) => { this.textInput = input; }} />
+          ref={this.textInput} />
         <input
           type="button"
           value="Focus the text input"
@@ -68,30 +105,32 @@ class CustomTextInput extends React.Component {
 }
 ```
 
-React는 컴포넌트가 마운트될 때는 DOM 엘리먼트를 가지고 `ref` 콜백을 호출하고, 언마운트될 때는 `null`을 가지고 호출할 것입니다. `ref` 콜백은 `componentDidMount` 나 `componentDidUpdate` 라이프사이클 훅 전에 호출됩니다.
+Reaect는 컴포넌트가 마운트되면 `textInput`의 `current` 속성에 DOM 엘리먼트 객체를 할당하며, 언마운트가 되었을 때 다시 `null`로 되돌릴 것입니다. `ref`의 갱신은 `componentDidMount`와 `componentDidUpdate` 라이프사이클 훅 직전에 일어납니다.
 
-단순히 클래스의 속성을 지정하는 `ref` 콜백을 사용하는 것은 DOM 엘리먼트에 접근하기 위해 흔히 사용되는 패턴입니다. 위 예제처럼 `ref` 콜백에서 속성을 지정하는 것이 React에서 선호되는 방식입니다. 심지어 이것을 더 짧게 쓸 수 있습니다: `ref={input => this.textInput = input}`.
+#### 클래스 컴포넌트에 ref 사용하기
 
-### 클래스 컴포넌트에 ref 추가하기
+아래 코드에서는 `CustomTextInput`을 감싼 새 컴포넌트를 만들어서 마운트 되자마자 포커스가 이동하도록 했습니다. 여기서는 `CustomTextInput` 인스턴스에 접근하기 위해 ref를 사용했고 `focusTextInput`을 직접 호출해 주었습니다:
 
-클래스의 형태로 선언된 자체 제작 컴포넌트에 `ref`가 사용됐을 때는, 마운트된 컴포넌트 인스턴스가 `ref` 콜백의 인수로 넘겨집니다. 예를 들어, 위에서 봤던 `CustomTextInput`를 감싸서 마운트된 직후에 마치 클릭이 된 것처럼 동작시키려면 다음과 같이 하면 됩니다:
-
-```javascript{3,9}
+```javascript{4,8,13}
 class AutoFocusTextInput extends React.Component {
+  constructor(props) {
+    super(props);
+    this.textInput = React.createRef();
+  }
+
   componentDidMount() {
-    this.textInput.focusTextInput();
+    this.textInput.current.focusTextInput();
   }
 
   render() {
     return (
-      <CustomTextInput
-        ref={(input) => { this.textInput = input; }} />
+      <CustomTextInput ref={this.textInput} />
     );
   }
 }
 ```
 
-`CustomTextInput`가 클래스의 형태로 선언되었을 때에만 이와 같이 동작한다는 사실을 기억하세요:
+주의할 점은, `CustomTextInput`가 클래스로 선언되었을 때만 이 코드가 동작한다는 점입니다:
 
 ```js{1}
 class CustomTextInput extends React.Component {
@@ -99,63 +138,122 @@ class CustomTextInput extends React.Component {
 }
 ```
 
-### 함수형 컴포넌트와 ref
+#### Ref와 함수형 컴포넌트
 
-**함수형 컴포넌트에 대해서는 `ref` 속성을 사용할 수가 없는데** 이는 함수형 컴포넌트가 인스턴스를 갖지 않기 때문입니다.
+**함수형 컴포넌트는 인스턴스를 가질 수 없기 때문에 `ref` 어트리뷰트 역시 사용할 수 없습니다:**
 
-```javascript{1,7}
+```javascript{1,8,13}
 function MyFunctionalComponent() {
   return <input />;
 }
 
 class Parent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.textInput = React.createRef();
+  }
   render() {
-    // This will *not* work!
+    // 이 코드는 동작하지 않습니다!
     return (
-      <MyFunctionalComponent
-        ref={(input) => { this.textInput = input; }} />
+      <MyFunctionalComponent ref={this.textInput} />
     );
   }
 }
 ```
 
-만약 ref를 사용하실 원한다면 컴포넌트를 클래스로 바꾸어주어야 합니다. 라이프사이클 메소드나 state를 사용하려고 할 때처럼 말이죠.
+Ref를 사용하기 위해서는 컴포넌트를 클래스로 바꾸어주어야 합니다. 라이프사이클 메소드나 state를 사용해야 할 때처럼 말이죠.
 
-다만, DOM 엘리먼트나 클래스 컴포넌트를 참조하는 한 **함수형 컴포넌트의 내부에서 `ref`를 사용하는 것은 가능합니다.**
+다만, DOM 엘리먼트가 클래스 컴포넌트의 인스턴스에 접근하기 위해 **함수형 컴포넌트 안에서 `ref` 어트리뷰트를 사용하는 것**은 얼마든지 가능합니다:
 
 ```javascript{2,3,6,13}
 function CustomTextInput(props) {
-  // textInput must be declared here so the ref callback can refer to it
-  let textInput = null;
+  // textInput은 반드시 여기에서 선언되어야 합니다.
+  let textInput = React.createRef();
 
   function handleClick() {
-    textInput.focus();
+    textInput.current.focus();
   }
 
   return (
     <div>
       <input
         type="text"
-        ref={(input) => { textInput = input; }} />
+        ref={textInput} />
       <input
         type="button"
         value="Focus the text input"
         onClick={handleClick}
       />
     </div>
-  );  
+  );
 }
 ```
 
-### 부모 컴포넌트에 DOM ref 노출하기
+### Exposing DOM Refs to Parent Components
 
-드문 경우지만, 부모 컴포넌트에서 자식의 DOM 노드에 접근하고 싶은 경우도 있습니다. 이는 일반적으로 권장되지 않는데, 왜냐하면 이 방식은 컴포넌트 캡슐화를 망치기 때문입니다. 하지만 자식 DOM 노드에 포커스를 옮기거나 크기 혹은 위치를 측정하는 등이 작업을 하는 데 있어서는 위 방식이 유용할 수 있습니다.
+In rare cases, you might want to have access to a child's DOM node from a parent component. This is generally not recommended because it breaks component encapsulation, but it can occasionally be useful for triggering focus or measuring the size or position of a child DOM node.
 
-[자식 컴포넌트에 ref를 추가](#adding-a-ref-to-a-class-component)할 수도 있지만, DOM 노드 대신에 컴포넌트 인스턴스를 받게 되므로 이상적인 방법은 아닙니다. 또한, 이 방법은 함수형 컴포넌트에 대해서는 동작하지 않을 것입니다.
+While you could [add a ref to the child component](#adding-a-ref-to-a-class-component), this is not an ideal solution, as you would only get a component instance rather than a DOM node. Additionally, this wouldn't work with functional components.
 
-그 대신 자식에 대해 특별한 prop을 사용하는 것을 권장합니다. 자식은 함수 prop을 받을 수 있고, 그 이름은 어떤 것이든 될 수 있습니다. (예를 들면 `inputRef`) 이 함수를 DOM 노드의 `ref` 속성으로 붙이세요. 이 방식을 통해 부모의 ref 콜백을 중간에 있는 컴포넌트를 거쳐 자식의 DOM node에 넘겨줄 수 있습니다.
+If you use React 16.3 or higher, we recommend to use [ref forwarding](/docs/forwarding-refs.html) for these cases. **Ref forwarding lets components opt into exposing any child component's ref as their own**. You can find a detailed example of how to expose a child's DOM node to a parent component [in the ref forwarding documentation](/docs/forwarding-refs.html#forwarding-refs-to-dom-components).
 
-이 방법은 클래스 컴포넌트나 함수형 컴포넌트를 가리지 않고 잘 동작합니다.
+If you use React 16.2 or lower, or if you need more flexibility than provided by ref forwarding, you can use [this alternative approach](https://gist.github.com/gaearon/1a018a023347fe1c2476073330cc5509) and explicitly pass a ref as a differently named prop.
+
+When possible, we advise against exposing DOM nodes, but it can be a useful escape hatch. Note that this approach requires you to add some code to the child component. If you have absolutely no control over the child component implementation, your last option is to use [`findDOMNode()`](/docs/react-dom.html#finddomnode), but it is discouraged.
+
+### Callback Refs
+
+React also supports another way to set refs called "callback refs", which gives more fine-grain control over when refs are set and unset.
+
+Instead of passing a `ref` attribute created by `createRef()`, you pass a function. The function receives the React component instance or HTML DOM element as its argument, which can be stored and accessed elsewhere. 
+
+The example below implements a common pattern: using the `ref` callback to store a reference to a DOM node in an instance property.
+
+```javascript{5,7-9,11-14,19,29,34}
+class CustomTextInput extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.textInput = null;
+
+    this.setTextInputRef = element => {
+      this.textInput = element;
+    };
+
+    this.focusTextInput = () => {
+      // Focus the text input using the raw DOM API
+      if (this.textInput) this.textInput.focus();
+    };
+  }
+
+  componentDidMount() {
+    // autofocus the input on mount
+    this.focusTextInput();
+  }
+
+  render() {
+    // Use the `ref` callback to store a reference to the text input DOM
+    // element in an instance field (for example, this.textInput).
+    return (
+      <div>
+        <input
+          type="text"
+          ref={this.setTextInputRef}
+        />
+        <input
+          type="button"
+          value="Focus the text input"
+          onClick={this.focusTextInput}
+        />
+      </div>
+    );
+  }
+}
+```
+
+React will call the `ref` callback with the DOM element when the component mounts, and call it with `null` when it unmounts. `ref` callbacks are invoked before `componentDidMount` or `componentDidUpdate` lifecycle hooks.
+
+You can pass callback refs between components like you can with object refs that were created with `React.createRef()`.
 
 ```javascript{4,13}
 function CustomTextInput(props) {
@@ -177,51 +275,16 @@ class Parent extends React.Component {
 }
 ```
 
-위 예제에서, `Parent`는 ref 콜백을 `inputRef` prop을 통해 `CustomTextInput`에 넘겨주고, `CustomTextInput`는 이 콜백을 `<input>`의 `ref` 속성으로 넘겨주고 있습니다. 결과적으로, `Parent`의 `this.inputElement`에는 `CustomTextInput` 안에 있는 `<input>` 엘리먼트를 가리키는 DOM 노드가 저장되게 됩니다.
+In the example above, `Parent` passes its ref callback as an `inputRef` prop to the `CustomTextInput`, and the `CustomTextInput` passes the same function as a special `ref` attribute to the `<input>`. As a result, `this.inputElement` in `Parent` will be set to the DOM node corresponding to the `<input>` element in the `CustomTextInput`.
 
-위 예제의 `inputRef` prop의 이름은 특별한 의미를 갖지 않으며, 그저 일반적인 컴포넌트 prop에 지나지 않는다는 사실에 주의하세요. 다만, `<input>`에 사용된 `ref`은 중요하며, 이것은 React에게 ref 콜백을 DOM 노드에 붙여야 한다는 사실을 알려주는 역할을 합니다.
+### Legacy API: String Refs
 
-이 방법은 `CustomTextInput`가 함수형 컴포넌트인 경우에도 잘 동작합니다. `ref`라는 특별한 속성이 [오로지 DOM 엘리먼트와 클래스 컴포넌트에만 지정될 수 있는 것](#refs-and-functional-components)과는 다르게, `inputRef`와 같은 일반적인 prop에 대해서는 그런 제약이 없습니다.
+If you worked with React before, you might be familiar with an older API where the `ref` attribute is a string, like `"textInput"`, and the DOM node is accessed as `this.refs.textInput`. We advise against it because string refs have [some issues](https://github.com/facebook/react/pull/8333#issuecomment-271648615), are considered legacy, and **are likely to be removed in one of the future releases**. 
 
-이 패턴의 또다른 장점은 여러 컴포넌트가 겹쳐져 있을 때도 문제가 없다는 것입니다. 예를 들어, `Parent`라는 컴포넌트는 DOM 노드를 필요로 하지 않지만, `Parent`를 렌더링 한 컴포넌트(이를테면 `Grandparent`)는 그 노드를 필요로 한다고 가정해봅시다. 이 경우 우리는 `Grandparent`에서 `Parent`에 `inputRef` prop을 지정하고, 또 이를 `Parent`에서 `CustomTextInput`로 전달해줄 수 있습니다:
+> Note
+>
+> If you're currently using `this.refs.textInput` to access refs, we recommend using either the [callback pattern](#callback-refs) or the [`createRef` API](#creating-refs) instead.
 
-```javascript{4,12,22}
-function CustomTextInput(props) {
-  return (
-    <div>
-      <input ref={props.inputRef} />
-    </div>
-  );
-}
+### Caveats with callback refs
 
-function Parent(props) {
-  return (
-    <div>
-      My input: <CustomTextInput inputRef={props.inputRef} />
-    </div>
-  );
-}
-
-
-class Grandparent extends React.Component {
-  render() {
-    return (
-      <Parent
-        inputRef={el => this.inputElement = el}
-      />
-    );
-  }
-}
-```
-
-위를 보시면, ref 콜백은 맨 처음에 `Grandparent`에 의해 만들어졌습니다. 그 뒤에 `inputRef`라는 일반적인 prop으로서 `Parent`에 전달되었고, `Parent`는 이것을 다시 `CustomTextInput`에 전달해주었습니다. 마지막으로, `CustomTextInput`는 `inputRef` prop에 들어있는 함수를 읽어와서 `<input>`의 `ref` 속성에 붙여주었습니다. 그 결과로, `Grandparent`의 `this.inputElement`에는 `CustomTextInput` 안에 있는 `<input>`를 가리키는 DOM 노드가 저장되게 되었습니다.
-
-거의 모든 경우에 우리는 DOM 노드를 노출시키지 않는 것을 권장하지만, 이것이 유용한 비상구의 역할을 해 줄 때도 있습니다. 이 방법을 사용하기 위해서는 여러분이 자식 컴포넌트에 코드를 추가해야 합니다. 자식 컴포넌트의 구현체를 전혀 다룰 수 없는 상황에 쓸 수 있는 최후의 수단으로 [`findDOMNode()`](/docs/react-dom.html#finddomnode)이 있긴 하지만, 이는 권장되지 않습니다.
-
-### 구식 API: 문자열 ref
-
-이전에 React를 사용해 본 적이 있다면, 아마 `ref` 속성으로 `"textInput"`와 같은 문자열을 사용하는 예전 API를 본 적이 있으실 겁니다. 이 때에 `this.refs.textInput`를 통해 DOM 노드에 접근할 수 있습니다. 우리는 이 방법을 사용하지 않는 것을 권장하는데 문자열 ref가 [몇 가지 문제점](https://github.com/facebook/react/pull/8333#issuecomment-271648615)을 가지고 있기 때문입니다. 그래서 이 방법은 구식으로 취급되며, **추후 릴리즈되는 버전에서 삭제될 예정입니다.** 현재 ref를 다루기 위해 `this.refs.textInput`와 같은 방법을 사용하고 계시다면, 콜백 패턴을 대신 사용하는 것을 추천드립니다.
-
-### 주의 사항
-
-만약 `ref` 콜백이 인라인 함수의 형태로 정의되었다면, 컴포넌트 갱신 시 이 함수가 두 번 호출되는데, 첫 번째로 `null` 인자로 호출이 되고 그 다음 DOM 엘리먼트 인자로 다시 호출이 될 것입니다. 이는 렌더링이 될 때마다 인라인 함수가 다시 생성되기 때문입니다. 따라서 React로서는 이전 렌더링 시의 ref를 없애고 새 ref를 지정해 주어야 합니다. 이를 피하기 위해서는 클래스에 엮인 메소드를 `ref` 콜백으로 사용하면 됩니다. 하지만 대개의 경우 이것이 큰 문제가 되지는 않습니다.
+If the `ref` callback is defined as an inline function, it will get called twice during updates, first with `null` and then again with the DOM element. This is because a new instance of the function is created with each render, so React needs to clear the old ref and set up the new one. You can avoid this by defining the `ref` callback as a bound method on the class, but note that it shouldn't matter in most cases.
