@@ -31,9 +31,9 @@ function Toolbar(props) {
 
 function ThemedButton(props) {
   // highlight-range{1-3,6}
-  // Use a Consumer to read the current theme context.
-  // React will find the closest theme Provider above and use its value.
-  // In this example, the current theme is "dark".
+  // 테마 context를 읽어오려면 Consumer를 사용하세요.
+  // React는 가장 가까운 Provider를 찾아서 그 값을 사용할 것입니다.
+  // 이 예제에서, theme 값은 "dark"가 됩니다.
   return (
     <ThemeContext.Consumer>
       {theme => <Button {...props} theme={theme} />}

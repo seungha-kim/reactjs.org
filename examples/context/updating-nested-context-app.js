@@ -15,8 +15,8 @@ class App extends React.Component {
     };
 
     // highlight-range{1-2,5}
-    // State also contains the updater function so it will
-    // be passed down into the context provider
+    // state가 갱신 함수도 포함하고 있기 때문에, 갱신함수 역시
+    // provider로 넘겨질 것입니다.
     this.state = {
       theme: themes.light,
       toggleTheme: this.toggleTheme,
@@ -25,7 +25,7 @@ class App extends React.Component {
 
   render() {
     // highlight-range{1,3}
-    // The entire state is passed to the provider
+    // 전체 state를 provider에 넘겨줍니다.
     return (
       <ThemeContext.Provider value={this.state}>
         <Content />

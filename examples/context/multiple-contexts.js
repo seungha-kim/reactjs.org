@@ -10,7 +10,7 @@ class App extends React.Component {
   render() {
     const {signedInUser, theme} = this.props;
 
-    // App component that provides initial context values
+    // App 컴포넌트에서 context 값을 제공하고 있습니다.
     // highlight-range{2-3,5-6}
     return (
       <ThemeContext.Provider value={theme}>
@@ -31,7 +31,7 @@ function Layout() {
   );
 }
 
-// A component may consume multiple contexts
+// 하나의 컴포넌트에서 여러 context의 값을 가져올 수 있습니다.
 function Content() {
   // highlight-range{2-10}
   return (
