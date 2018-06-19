@@ -4,29 +4,29 @@ title: 고차 컴포넌트 (Higher-Order Components)
 permalink: docs/higher-order-components.html
 ---
 
-고차 컴포넌트 (HOC, higher-order component)는 컴포넌트 로직을 재사용하기 위한 React의 고급 기술입니다. 고차 컴포넌트는 그 자체로는 React API의 일부분이 아닙니다. 고차 컴포넌트는 React의 컴포넌트적 성격에서 나타나는 패턴입니다.
+고차 컴포넌트(HOC: Higher-Order Component)는 컴포넌트 로직을 재사용하기 위해 사용되는 테크닉을 말합니다. HOC는 React API의 일부가 아닙니다. 조합이 용이한 React의 특성으로부터 생겨난 패턴입니다.
 
-구체적으로 **고차 컴포넌트는 컴포넌트를 취하여 새로운 컴포넌트를 반환하는 함수입니다.**
+구체적으로 말하자면, **HOC는 컴포넌트를 인자로 받아서 새로운 컴포넌트를 반환하는 함수입니다.**
 
 ```js
 const EnhancedComponent = higherOrderComponent(WrappedComponent);
 ```
 
-컴포넌트가 UI를 props로 변환하는 반면, 고차 컴포넌트는 컴포넌트를 다른 컴포넌트로 변환합니다.
+컴포넌트는 props를 UI로 변환하는 반면, HOC는 컴포넌트를 다른 컴포넌트로 변환합니다.
 
-고차 컴포넌트는 Redux의 [`connect`](https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options) 나 Relay의 [`createContainer`](https://facebook.github.io/relay/docs/api-reference-relay.html#createcontainer-static-method) 같은 타사 React 라이브러리에서 흔히 쓰입니다.
+HOC는 Redux의 [`connect`](https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options), Relay의 [`createContainer`](https://facebook.github.io/relay/docs/api-reference-relay.html#createcontainer-static-method)와 같이, 서드파티 라이브러리에서 흔히 사용되고 있습니다.
 
-이 문서에서 고차 컴포넌트가 왜 유용한 지 이야기하고 어떻게 작성하는 지 설명합니다.
+이 문서에서는 HOC가 유용한 이유와 HOC의 작성법을 다룹니다.
 
-## 크로스 커팅 문제에 고차 컴포넌트 사용하기
+## 횡단 관심사(Cross-Cutting Concerns)를 위해 HOC 사용하기
 
-> **Note**
+> **주의**
 >
-> 이전에는 크로스 커팅 문제를 제어하기 위해 mixin 사용을 권장했습니다. 하지만 mixin의 사용으로 얻는 이점보다 더 많은 문제를 일으킨다는 것을 깨달았습니다. 우리가 mixin을 더 이상 권장하지않는 이유와 기존 컴포넌트를 어떻게 변환하는 지에 대해서 [이 글](/blog/2016/07/13/mixins-considered-harmful.html)을 읽어보세요.
+> 이전에 우리는 믹스인을 사용해 횡단 관심사를 다루는 것을 추천했습니다. 그 이후에 우리는 믹스인의 가치에 비해 그것이 만들어내는 문제가 더 크다는 것을 깨달았습니다. 우리가 믹스인을 왜 버렸는지, 그리고 이미 믹스인을 사용해 만들어진 컴포넌트를 어떻게 변경할 수 있는지 알고 싶다면 [이 글](/blog/2016/07/13/mixins-considered-harmful.html)를 참고하세요.
 
-컴포넌트는 React에서 코드 재사용의 기본 단위입니다. 그러나 일부 패턴은 기존 컴포넌트에 적합하지않습니다.
+컴포넌트는 리액트의 코드 재사용을 위한 기본적인 단위입니다. 하지만, 어떤 패턴은 전통적인 컴포넌트 구조에는 딱 맞지 않을 수 있습니다.
 
-예를 들어 외부로부터 데이터를 구독하여 덧글 목록을 렌더링하는 `CommentList` 컴포넌트가 있다고 합시다.
+예를 들어, `CommentList`라는 컴포넌트가 외부의 데이터를 받아와서 댓글 목록을 렌더링한다고 가정해봅시다:
 
 ```js
 class CommentList extends React.Component {
@@ -68,7 +68,7 @@ class CommentList extends React.Component {
 }
 ```
 
-나중에 블로그 포스트를 구독하기 위해 비슷한 패턴으로 컴포넌트를 작성합니다.
+그 이후에, 비슷한 패턴으로 하나의 블로그 포스트를 받아오는 컴포넌트를 작성한다고 해봅시다:
 
 ```js
 class BlogPost extends React.Component {
@@ -100,15 +100,15 @@ class BlogPost extends React.Component {
 }
 ```
 
-`CommentList` 와 `BlogPost` 는 동일하지 않습니다. 두 컴포넌트는 `DataSource` 에서 서로 다른 메서드를 호출하며 다른 렌더링 결과를 보여줍니다. 하지만 대부분의 구현체는 동일합니다.
+`CommentList`와 `BlogPost`의 로직이 완전히 동일하지는 않습니다. 다시 말해, 이 둘은 각각 `DataSource`의 다른 메소드를 호출하고 또 다른 결과물을 렌더링합니다. 하지만 대부분의 구현이 동일합니다:
 
-- 마운트되면, change 리스너를 `DataSource` 에 추가합니다.
-- 리스너 안에서, 데이터 소스가 변경되면 `setState` 를 호출합니다.
-- 마운트 해제되면 change 리스너를 제거합니다.
+- 마운트 시에, `DataSource`의 변경에 대한 리스너를 등록합니다.
+- 데이터 소스가 변경될 때마다 리스너 내부에서 `setState`를 호출합니다.
+- 언마운트 시에 리스너를 제거합니다.
 
-큰 어플리케이션에서 `DataSource` 를 구독하고 `setState` 를 호출하는 동일한 패턴이 반복적으로 발생한다고 상상할 수 있습니다. 이 로직을 한 곳에서 정의하고 많은 컴포넌트에서 로직을 공유할 수 있게하는 추상화가 필요로합니다. 이 때 고차 컴포넌트가 탁월합니다.
+이와 같은 패턴, 즉 `DataSource`를 구독하고 `setState`를 호출하는 작업을 끝없이 반복하는 대규모 앱을 상상해 보십시오. 로직을 한 곳에서 정의하고 여러 컴포넌트에 걸쳐 공유할 수 있는 추상화 수단이 필요합니다. 이 곳이 바로 HOC가 활약하는 지점입니다.
 
-`DataSource` 를 구독하는 `CommentList` 나 `BlogPost` 같은 컴포넌트를 생성하는 함수를 작성할 수 있습니다. 데이터를 prop으로 구독하여 전달받는 자식 컴포넌트를 파라미터 중 하나로 받는 함수를 만듭니다. 이 함수를 `withSubscription` 라고 이름지어봅시다.
+**컴포넌트를 생성하는 함수**를 만들어서 `CommentList` 나 `BlogPost` 같은 컴포넌트들이 `DataSource` 를 구독하게 만들 수 있습니다. 이 함수는 자식 컴포넌트를 인자로 받는데, 이 컴포넌트는 구독한 데이터를 prop으로 받습니다. 이 함수를 `withSubscription`이라 부릅시다:
 
 ```js
 const CommentListWithSubscription = withSubscription(
@@ -122,9 +122,9 @@ const BlogPostWithSubscription = withSubscription(
 );
 ```
 
-첫번째 파라미터는 래핑된 컴포넌트입니다. 두번째 파라미터는 우리가 관심을 가지는 데이터를 검색합니다. 여기서는 `DataSource` 와 현재 prosp를 줍니다.
+첫 번째 인수는 감싸지는 컴포넌트입니다. 두 번째 인수로 주어진 함수는 `DataSource` 와 props를 이용해 필요한 데이터를 받아옵니다.
 
-`CommentListWithSubscription` 과 `BlogPostWithSubscription` 가 렌더링될 때 `CommentList` 와 `BlogPost` 는 `DataSource` 에서 가장 최근에 검색된 데이터를 `data` prop으로 전달합니다.
+`CommentListWithSubscription`와 `BlogPostWithSubscription`가 렌더링될 때, `CommentList`와 `BlogPost`에는 `DataSource`로부터 받은 가장 최신의 데이터가 data prop으로 전달될 것입니다:
 
 ```js
 // This function takes a component...
@@ -162,18 +162,17 @@ function withSubscription(WrappedComponent, selectData) {
   };
 }
 ```
+HOC는 입력받은 컴포넌트를 수정하지도, 상속받지도 않는다는 사실에 주목하십시오. 대신, HOC는 원래의 컴포넌트를 다른 컴포넌트로 *감싸는* 식으로 *합성*합니다. HOC는 부작용을 갖지 않는 순수 함수입니다.
 
-고차 컴포넌트는 입력 컴포넌트를 수정하지 않으며 상속을 사용하여 동작을 복사하지도 않습니다. 오히려 고차 컴포넌트는 원래 컴포넌트를 컨테이너 컴포넌트에 *래핑하여* *조정합니다*. 고차 컴포넌트는 사이드 이펙트가 없는 순수 함수입니다.
+이게 전부입니다! 감싸진 컴포넌트는 바깥쪽 컴포넌트로부터 새로운 prop을 포함한 모든 prop을 건네받으며, 여기에서는 결과를 렌더링하기 위해 `data`라는 prop을 받았습니다. HOC는 데이터가 왜 사용되는지, 어떻게 사용되는지에 대해서는 관심을 두지 않으며, 감싸진 컴포넌트는 데이터가 어디서 왔는지는 신경쓰지 않습니다.
 
-그리고 그게 다입니다. 래핑된 컴포넌트는 출력물을 렌더링하는 데 사용되는 `data`, 새로운 prop을 포함한 컨테이너의 모든 props를 받습니다. 고차 컴포넌트는 데이터가 사용되는 이유 및 방법과 연관이 없으며 래핑된 컴포넌트는 데이터가 어디서부터 왔는지와 연관이 없습니다.
+`withSubscription`은 일반적인 함수이기 때문에, 인자의 개수는 원하는 대로 정할 수 있습니다. 예를 들어, HOC와 감싸지는 컴포넌트를 좀 더 분리시키기 위해 data prop의 이름을 설정할 수 있도록 만들 수도 있습니다. 또는 `shouldComponentUpdate`를 설정하는 인자를 받거나, 데이터 소스를 설정하는 인자를 받을 수도 있을 것입니다. HOC가 컴포넌트를 어떻게 정의할 지 완전히 제어할 수 있기 때문에 위와 같은 작업이 모두 가능합니다.
 
-`withSubscription` 는 일반 함수이기때문에 원하는 갯수의 인수를 추가할 수 있습니다. 예를 들어 래핑된 컴포넌트로부터 고차 컴포넌트를 더 격리시키기 위해 `data` prop 이름을 설정 가능하게 만들 수 있습니다. 혹은 `shouldComponentUpdate` 설정을 위한 인수를 받게 하거나 데이터 소스를 설정하는 인수를 받게할 수도 있습니다. 고차 컴포넌트가 컴포넌트 정의 방법을 완전히 제어할 수 있기 때문에 이러한 작업들이 모두 가능합니다.
+일반적인 컴포넌트와 마찬가지로, `withSubscription`과 감싸진 컴포넌트 사이의 연결은 모두 prop을 통해서 이루어집니다. 이렇게 함으로써 한 HOC를 같은 props를 제공하는 다른 HOC로 쉽게 교체할 수 있습니다. 예를 들어 데이터를 외부로부터 가져오는 라이브러리를 교체할 때 이 특성이 유용할 수 있습니다.
 
-컴포넌트와 마찬가지로 `withSubscription` 과 래핑된 컴포넌트 간 맺음은 완전히 props 기반입니다. 이렇게하면 래핑된 컴포넌트에 동일한 props를 제공한다면 다른 고차 컴포넌트를 쉽게 교차할 수 있습니다. 예를 들어 데이터를 가져오는 라이브러리를 변경하는 경우 유용하게 사용할 수 있습니다.
+## 원래 컴포넌트를 변경하지 마세요. 합성을 사용하세요.
 
-## 원본 컴포넌트를 변환하지마세요. 구성을 사용하세요.
-
-고차 컴포넌트 내부에서 컴포넌트의 프로토타입을 수정(또는 변형)하려는 유혹에 저항하세요.
+HOC 안에서 컴포넌트의 프로토타입을 (혹은 무엇이든) 변경하고픈 유혹에 저항하시기 바랍니다.
 
 ```js
 function logProps(InputComponent) {
@@ -190,11 +189,11 @@ function logProps(InputComponent) {
 const EnhancedComponent = logProps(InputComponent);
 ```
 
-여기에는 몇가지 문제가 있습니다. 하나는 입력 컴포넌트를 향상된 컴포넌트와 별도로 재사용할 수 없다는 것입니다. 더 중요한 것은 `EnhancedComponent`에 또 다른 고차 컴포넌트를 적용하여 `componentWillReceiveProps` *또한* 변형시키면 첫번째 고차 컴포넌트의 기능이 오버라이드됩니다. 이 고차 컴포넌트는 라이프사이클 메서드가 없는 함수 컴포넌트에서는 동작하지않습니다.
+이러한 방식에는 몇 가지 문제가 있습니다. 먼저 입력된 컴포넌트가 `EnhancedComponent`와는 별개로 다른 곳에서 재사용될 수 없다는 문제가 있습니다. 더욱이, `componentWillReceiveProps`를 재차 변경하는 다른 HOC를 `EnhancedComponent`에 적용하면, 처음에 적용한 HOC의 기능이 덮어씌워진다는 문제가 있습니다! 또한 이 HOC는 라이프사이클 메소드가 없는 함수 컴포넌트에는 작동하지 않을 것입니다.
 
-변형 고차 컴포넌트는 새는 추상화입니다. 다른 고차 컴포넌트와 충돌을 피하기 위한 구현방법을 알아야합니다.
+컴포넌트를 변경하는 HOC는 잘못된 추상화입니다 — 다른 HOC들과의 충돌을 피하려면 그들이 어떻게 구현되어있는지를 알아야만 합니다.
 
-고차 컴포넌트에서 변형을 사용하는 대신 입력 컴포넌트를 컨테이너 컴포넌트로 래핑하여 구성을 사용해야합니다.
+컴포넌트를 변경하는 대신, HOC는 합성(입력 컴포넌트를 컨테이너 컴포넌트로 감싸는 방법)을 사용해야 합니다.
 
 ```js
 function logProps(WrappedComponent) {
@@ -211,15 +210,15 @@ function logProps(WrappedComponent) {
 }
 ```
 
-이 고차 컴포넌트는 변형된 버전과 동일하게 움직이지만 충돌 가능성은 배제하고있습니다. 클래스 및 함수형 컴포넌트에서 잘 동작합니다. 그리고 순수한 함수이기 때문에 다른 고차 컴포넌트와 같이 구성하거나 심지어 자체적으로 구성할 수 있습니다.
+위 HOC는 컴포넌트를 변경하는 버전과 같은 기능을 하지만 잠재적인 충돌의 위험을 피하고 있습니다. 또한 클래스 컴포넌트든 함수 컴포넌트든 할 것 없이 잘 동작합니다. 그리고 순수 함수이기 때문에, 다른 HOC 혹은 심지어 자기 자신과도 합성을 할 수 있습니다.
 
-고차 컴포넌트와 **컨테이너 컴포넌트** 라 불리는 패턴이 유사함을 느꼈을 수 있습니다. 컨테이너 컴포넌트는 상위 수준과 하위 수준 관심사를 분리하는 전략의 일부입니다. 컨테이너는 구독 및 state 같은 것을 관리하고 UI 렌더링같은 것을 처리하는 컴포넌트에 props를 전달합니다. 고차 컴포넌트는 컨테이너를 그 구현체 중 일부에 사용하고있습니다. 고차 컴포넌트는 파라미터화된 컨테이너 컴포넌트 정의로 생각할 수 있습니다.
+아마 여러분들께서는 HOC 패턴과 **컨테이너 컴포넌트**라 불리는 패턴 사이의 유사점을 눈치채셨을 겁니다. 컨테이너 컴포넌트는 고수준 관심사와 저수준 관심사에 대한 책임의 분리를 위한 전략의 일부분입니다. 컨테이너는 구독과 상태 같은 것들을 관리하고, UI를 렌더링하는 컴포넌트에 prop을 전달합니다. HOC는 그 구현 속에 컨테이너를 사용하고 있습니다. HOC는 '컨테이너 컴포넌트의 파라미터화된 정의다'라 생각해도 좋습니다.
 
-## 컨벤션: 래핑된 컴포넌트를 통해 관련없는 Props 전달하기
+## 관례: HOC와 무관한 prop은 감싸진 컴포넌트에 넘기세요.
 
-고차 컴포넌트는 컴포넌트에 기능을 추가합니다. 고차 컴포넌트는 맺음을 과감하게 변경해서는 안됩니다. 고차 컴포넌트는 반환된 컴포넌트에서는 래핑된 컴포넌트와 비슷한 인터페이스가 있어야합니다.
+HOC는 컴포넌트에 기능을 추가합니다. 그러므로 컴포넌트의 사용법을 극단적으로 바꾸어서는 안 됩니다. HOC로부터 반환된 컴포넌트는 감싸진 컴포넌트와 유사한 사용법을 갖도록 하는 것이 일반적입니다.
 
-고차 컴포넌트는 특정 관심사과 관련이 없는 props를 통해야합니다. 대부분의 고차 컴포넌트에는 다음과 같은 렌더링 메서드가 포함되어있습니다.
+HOC는 그 자신의 관심사와 관계없는 props를 감싸진 컴포넌트에 그대로 넘겨야 합니다. 대부분의 HOC는 아래와 유사한 render 메소드를 갖습니다:
 
 ```js
 render() {
@@ -241,29 +240,29 @@ render() {
 }
 ```
 
-이 컨벤션은 고차 컴포넌트가 최대한 유연하고 재사용 가능한 지 확인하는데 도움이 됩니다.
+이 관례를 통해 최대한 유연하고 재사용 가능한 HOC를 만들 수 있습니다.
 
-## 컨벤션: 합성 가능성 최대화하기
+## 관례: 합성을 최대한 활용하세요.
 
-모든 고차 컴포넌트가 똑같이 보이지 않습니다. 때때로 단일 인수로 래핑된 컴포넌트만 받을 때도 있습니다.
+모든 HOC가 똑같이 생긴 것은 아닙니다. 때때로 HOC는 하나의 인자, 즉 감싸지는 컴포넌트만을 인자로 받습니다.
 
 ```js
 const NavbarWithRouter = withRouter(Navbar);
 ```
 
-일반적으로 고차 컴포넌트는 추가 인수를 허용합니다. Relay 예제에서 config 객체는 컴포넌트의 데이터 의존성을 지정하기 위해 사용합니다.
+하지만 보통의 경우, HOC는 추가로 인자를 받습니다. 아래의 Relay 예제는, 컴포넌트의 데이터 의존성을 설정하기 위한 설정 객체를 인자로 받습니다.
 
 ```js
 const CommentWithRelay = Relay.createContainer(Comment, config);
 ```
 
-고차 컴포넌트에 대한 가장 일반적인 서명은 다음과 같습니다.
+HOC의 가장 일반적인 모양은 이렇게 생겼습니다.
 
 ```js
 // React Redux's `connect`
 const ConnectedComment = connect(commentSelector, commentActions)(CommentList);
 ```
-*뭐?!* 이걸 분해해보면 무슨 일이 일어나고 있는지 쉽게 알 수 있습니다.
+*이게 무슨 뜻일까요?* 나누어서 보면, 어떻게 돌아가고 있는 건지 알아보기 쉽습니다.
 
 ```js
 // connect is a function that returns another function
@@ -273,9 +272,9 @@ const enhance = connect(commentListSelector, commentListActions);
 const ConnectedComment = enhance(CommentList);
 ```
 
-다르게 말하면 `connect` 는 고차 컴포넌트를 반환하는 고차 함수입니다.
+다시 말해서, `connect`는 HOC를 반환하는 고차 함수입니다!
 
-이 형태는 혼란스럽거나 유효하지않게 보일 수 있지만 매우 유용한 속성입니다. `connect` 함수에 의해 반환된 것과 같은 단일 인수 고차 컴포넌트는 `Component => Component` 서명을 가지고 있습니다. 출력 타입이 입력 타입과 동일한 함수는 정말 쉽게 조합할 수 있습니다.
+이 방식은 혼란스럽고 불필요해 보일 수 있지만, 유용한 특징을 가지고 있습니다. `connect`가 반환하는 것과 같은 단일 인자 HOC의 모양은 `Component => Component`와 같습니다. (컴포넌트를 입력받아 컴포넌트를 반환함) 입력 형태와 출력 형태가 같은 함수는 여러 개를 합성하기 굉장히 쉽습니다.
 
 ```js
 // Instead of doing this...
@@ -291,15 +290,15 @@ const enhance = compose(
 const EnhancedComponent = enhance(WrappedComponent)
 ```
 
-(이 속성을 사용하면 `connect` 및 다른 인핸서 스타일 고차 컴포넌트를 데코레이터로 사용할 수 있으나, 이는 실험적 자바스크립트 제안입니다.)
+(이와 같은 특성은 connect 및 다른 enhancer 스타일의 HOC가 decorator로 사용되어질 수 있도록 합니다. Decorator는 실험적으로 제안된 JavaScript의 기능입니다.)
 
-`compose` 유틸리티 함수는 lodash (as [`lodash.flowRight`](https://lodash.com/docs/#flowRight)), [Redux](http://redux.js.org/docs/api/compose.html), [Ramda](http://ramdajs.com/docs/#compose)를 포함한 많은 타사 라이브러리에서 제공합니다.
+`compose` 유틸리티 함수는 많은 서드파티 라이브러리에서 제공하고 있습니다. lodash ([`lodash.flowRight`](https://lodash.com/docs/#flowRight)), [Redux](http://redux.js.org/docs/api/compose.html), 그리고 [Ramda](http://ramdajs.com/docs/#compose)를 살펴보세요.
 
-## 컨벤션: 쉬운 디버깅을 위한 디스플레이 네임 감싸기
+## 관례: 원활한 디버깅을 위해 displayName도 감싸주세요.
 
-고차 컴포넌트로 만든 컨테이너 컴포넌트는 다른 컴포넌트처럼 [React Developer Tools](https://github.com/facebook/react-devtools)에 보입니다. 디버깅을 쉽게 하려면 고차 컴포넌트의 결과인 것을 나타내는 디스플레이 네임을 선택하세요.
+HOC에 의해 만들어진 컨테이너 컴포넌트는 다른 컴포넌트와 마찬가지로 [React Developer Tools](https://github.com/facebook/react-devtools)에서 볼 수 있습니다. 디버깅을 쉽게 하기 위해, HOC에 의해 반환되는 컴포넌트의 displayName을 설정해주는 것이 좋습니다.
 
-가장 일반적인 기술은 래핑된 컴포넌트의 디스플레이 네임을 감싸는 것입니다. 그래서 만약 고차 컴포넌트의 이름이 `withSubscription` 이고 래핑된 컴포넌트의 디스플레이 네임이 `CommentList` 라면 디스플레이 네임으로 `WithSubscription(CommentList)` 를 사용합니다.
+널리 사용되는 방법은 감싸지는 안쪽 컴포넌트의 displayName을 HOC의 이름으로 감싸는 것입니다. 예를 들어 HOC의 이름이 `withSubscription`이고 감싸지는 컴포넌트의 displayName이 `CommentList`이면, `WithSubscription(CommentList)`와 같은 displayName을 써주면 됩니다.
 
 ```js
 function withSubscription(WrappedComponent) {
@@ -315,13 +314,13 @@ function getDisplayName(WrappedComponent) {
 
 ## 주의사항
 
-고차원 컴포넌트에는 React를 처음 접하는 사람이라면 즉시 알 수 없는 몇가지 주의사항이 있습니다.
+React를 막 시작한 사람들에게는 명확히 와닿지 않을 주의사항이 몇 가지 있습니다.
 
-### render 메서드 안에서 고차 컴포넌트를 사용하지마세요.
+### render 메소드 안에서 HOC를 사용하지 마세요.
 
-React의 비교 알고리즘 (조정이라고 부름)은 컴포넌트 ID를 사용하여 기존 서브트리를 업데이트해야하는지 아니면 버리고 새로운 노드를 마운트해야 하는지를 결정합니다. `render` 에서 반환된 컴포넌트가 이전 렌더링의 컴포넌트와 동일하다면 (`===`) React가 새 트리와 비교하여 반복적으로 서브트리를 업데이트합니다. 만약 동일하지 않다면 이전 서브트리는 완전히 마운트 해제됩니다.
+React의 diffing 알고리즘(reconciliation)은 컴포넌트가 같은 지 판별하고 이를 이용해서 이미 존재하는 서브트리를 갱신할 지, 또는 서브트리를 날려버리고 새로운 것을 마운트할 지를 결정합니다. 만약 `render` 메소드에서 반환된 컴포넌트가 이전에 반환된 컴포넌트와 동일하다면 (`===`) React는 서브트리를 새로운 것과 비교해 재귀적으로 갱신합니다. 만약 두 개가 같지 않다면, 이전의 서브트리는 완전히 언마운트(unmount)됩니다.
 
-보통 이것에 대해 생각할 필요가 없습니다. 그러나 컴포넌트의 렌더링 메서드 안에서 컴포넌트에 고차 컴포넌트를 적용할 수 없기 때문에 고차 컴포넌트에서 중요합니다.
+일반적으로, 여러분이 이런 문제를 직접 고민할 필요는 없습니다. 하지만 HOC에 대해서는 이 문제가 중요한데, render 메소드 안에서는 HOC를 적용할 수 없다는 것을 뜻하기 때문입니다.
 
 ```js
 render() {
@@ -333,17 +332,17 @@ render() {
 }
 ```
 
-여기서 문제는 성능상의 문제만 있는 것이 아닙니다. 컴포넌트를 다시 마운트하면 컴포넌트의 state와 모든 하위 항목이 손실됩니다.
+이 문제는 비단 성능에 관한 것만은 아닙니다 — 컴포넌트를 다시 마운트하면 해당 컴포넌트와 그 자식 컴포넌트들의 상태(state)를 잃어버리게 됩니다.
 
-대신 컴포넌트 정의 외부에서 고차 컴포넌트를 적용하여 결과 컴포넌트가 한번만 생성되도록 해야합니다. 그런 다음 ID가 렌더링간에 일관되게 유지됩니다. 이것이 대체로 원하는 것입니다.
+위와 같이 하는 대신, HOC를 컴포넌트 정의의 바깥에서 적용해서 반환되는 컴포넌트가 단 한 번만 만들어지도록 하세요. 그러면 여러 번 렌더링을 하더라도 컴포넌트의 동일성(identity)이 유지될 수 있습니다. 대개 이것이 우리가 원하는 결과입니다.
 
-드물게 고차 컴포넌트를 동적으로 적용해야하는 경우에도 컴포넌트의 라이프사이클 메서드 또는 생성자 내에서 고차 컴포넌트를 수행할 수도 있습니다.
+그럴 일은 잘 없겠지만 HOC를 동적으로 적용하고 싶은 경우에도, 다른 라이프사이클 메소드나 생성자에서 HOC를 적용할 수 있습니다.
 
-### 정적 메서드는 복사해야합니다.
+### 정적 메소드는 반드시 복사되어야 합니다.
 
-React 컴포넌트에서 정적 메서드를 정의하는 것이 유용할 때가 있습니다. 예를 들어, Relay 컴포넌트는 정적 메서드인 `getFragment` 를 GraphQL framents 구성을 용이하게 하기 위해 사용합니다.
+React 컴포넌트에 정의한 정적 메소드는 유용하게 쓸 수 있습니다. 예를 들어, Relay 컨테이너는 `getFragment`라는 정적 메소드를 이용해 GraphQL 프래그먼트를 조합하도록 합니다.
 
-고차 컴포넌트를 컴포넌트에 적용할 때 원본 컴포넌트는 컨테이너 컴포넌트에 감싸집니다. 즉 새 컴포넌트에는 원본 컴포넌트의 정적 메서드가 없습니다.
+그런데 HOC를 컴포넌트에 적용하면, 원래 컴포넌트는 컨테이너 컴포넌트에 의해 감싸지게 됩니다. 즉, 새로운 컴포넌트는 원래 컴포넌트가 가지고 있던 정적 메소드를 하나도 갖고 있지 않게 됩니다.
 
 ```js
 // Define a static method
@@ -355,7 +354,7 @@ const EnhancedComponent = enhance(WrappedComponent);
 typeof EnhancedComponent.staticMethod === 'undefined' // true
 ```
 
-이 문제를 해결하기 위해 메서드를 반환하기 전에 컨테이너에 메서드를 복사할 수 있습니다.
+이 문제를 해결하기 위해, 컨테이너 컴포넌트를 반환하기 전에 정적 메소드를 직접 복사할 수 있습니다.
 
 ```js
 function enhance(WrappedComponent) {
@@ -366,7 +365,7 @@ function enhance(WrappedComponent) {
 }
 ```
 
-그러나 이렇게하려면 어떤 메서드를 복사해야하는 지 정확히 알아야합니다. 모든 React가 아닌 정적 메서드를 자동으로 복사하기 위해 [hoist-non-react-statics](https://github.com/mridgway/hoist-non-react-statics)를 사용할 수 있습니다.
+하지만, 위와 같은 방법을 사용하려면 정확히 어떤 메소드를 복사할 지 미리 알고 있어야 합니다. 대신 [hoist-non-react-statics](https://github.com/mridgway/hoist-non-react-statics)를 사용해서 React 내장 정적 메소드가 아닌 모든 정적 메소드를 자동으로 복사하게 만들 수 있습니다.
 
 ```js
 import hoistNonReactStatic from 'hoist-non-react-statics';
@@ -377,7 +376,7 @@ function enhance(WrappedComponent) {
 }
 ```
 
-다른 긍정적인 해결방법은 정적 메서드를 컴포넌트 자체와 별도로 내보내는 것입니다.
+정적 메소드를 직접 export해서 사용하는 방법도 가능합니다.
 
 ```js
 // Instead of...
@@ -391,32 +390,8 @@ export { someFunction };
 import MyComponent, { someFunction } from './MyComponent.js';
 ```
 
-### Refs는 전달할 수 없습니다.
+### Ref는 전달되지 않습니다.
 
-고차 컴포넌트에 대한 컨벤션은 모든 props를 래핑된 컴포넌트로 전달하는 것이지만 refs를 전달하는 것은 불가능합니다. 이 이유는 `ref` 가 prop이 아니기 때문입니다. `key` 처럼 React가 특별히 처리합니다. 컴포넌트가 고차 컴포넌트의 결과인 요소에 대한 ref를 추가하면 ref는 래핑된 컴포넌트가 아닌 가장 바깥쪽 컨테이너 컴포넌트의 인스턴스를 참조합니다.
+모든 prop을 안쪽 컴포넌트에 전달하는 것이 HOC의 관례입니다만, ref를 전달하는 것은 불가능합니다. 이것은 ref가 진짜 prop이 아니고, key와 마찬가지로 React에 의해 특별 취급되기 때문입니다. 만약 여러분이 HOC에서 반환하고자 하는 컴포넌트에 ref를 추가한다면, 그 ref는 안쪽 컴포넌트가 아니라 가장 바깥쪽의 컨테이너 컴포넌트에 대한 인스턴스를 가리키게 될 것입니다.
 
-만약 이런 문제에 직면했을 때 가장 이상적인 해결방법은 `ref` 를 사용을 피하는 방법을 찾는 것입니다. 때때로 React 패러다임에 익숙하지 않은 유저는 prop이 더 잘 작동하는 환경에서도 refs에 의존합니다.
-
-refs가 유효한 탈출구일 때도 있습니다. React는 그들을 다르게 지원하지 않을 것입니다. 입력 필드에 포커스를 맞추는 것을 컴포넌트의 필수 제어가 필요한 경우로 예를 들 수 있습니다. 이 케이스에서 한가지 방법은 ref 콜백을 일반 prop으로써 전달하고, 다른 이름을 부여하는 것입니다.
-
-```js
-function Field({ inputRef, ...rest }) {
-  return <input ref={inputRef} {...rest} />;
-}
-
-// Wrap Field in a higher-order component
-const EnhancedField = enhance(Field);
-
-// Inside a class component's render method...
-<EnhancedField
-  inputRef={(inputEl) => {
-    // This callback gets passed through as a regular prop
-    this.inputEl = inputEl
-  }}
-/>
-
-// Now you can call imperative methods
-this.inputEl.focus();
-```
-
-어떤 방법으로도 완벽한 해결 방법은 아닙니다. ref가 주동으로 처리하도록 요구하기보다는 라이브러리의 관심사로 남아있기를 선호합니다. 이 문제를 해결할 수 있는 방법을 모색 중이므로 고차 컴포넌트 사용은 관찰할 수 없습니다.
+이 문제를 해결하려면, React 16.3 버전에서 추가된 `React.forwardRef` API를 사용하면 됩니다.
