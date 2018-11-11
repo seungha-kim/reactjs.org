@@ -12,90 +12,45 @@ redirect_from:
   - "docs/tutorial-zh-CN.html"
 ---
 
-## Before We Start
+## 시작하기 전에
 
-### What We're Building
+### 우리가 만들 것
 
-Today, we're going to build an interactive tic-tac-toe game.
+여기서는 동작하는 틱택토 게임을 만들어 볼 것입니다.
 
-If you like, you can check out the final result here: [Final Result](https://codepen.io/gaearon/pen/gWWZgR?editors=0010). Don't worry if the code doesn't make sense to you yet, or if it uses an unfamiliar syntax. We will be learning how to build this game step by step throughout this tutorial.
+최종 결과를 바로 확인하고 싶다면, [이 페이지](https://codepen.io/gaearon/pen/gWWZgR?editors=0010)를 방문하세요. 지금은 이 코드가 이해되지도 않고 문법도 익숙치 않으실 겁니다. 이 튜토리얼을 통해 이러한 게임을 어떻게 만들 수 있는지 차근차근 배워볼 것입니다.
 
-Try playing the game. You can also click on a button in the move list to go "back in time" and see what the board looked like just after that move was made.
+게임을 플레이 해보세요. 버튼을 클릭해서 이전 턴으로 돌아갈 수도 있으니 확인해주세요.
 
-Once you get a little familiar with the game, feel free to close that tab, as we'll start from a simpler template in the next sections.
+어느 정도 게임을 플레이했다면 탭을 닫으시고, 단순한 템플릿부터 시작해봅시다.
 
-### Prerequisites
+### 필요한 지식
 
-We'll assume some familiarity with HTML and JavaScript, but you should be able to follow along even if you haven't used them before.
+이 문서는 여러분이 HTML과 JavaScript에 익숙하다는 가정 하에 쓰여졌습니다.
 
-If you need a refresher on JavaScript, we recommend reading [this guide](https://developer.mozilla.org/en-US/docs/Web/JavaScript/A_re-introduction_to_JavaScript). Note that we're also using some features from ES6, a recent version of JavaScript. In this tutorial, we're using [arrow functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions), [classes](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes), [`let`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let), and [`const`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const) statements. You can use the [Babel REPL](babel://es5-syntax-example) to check what ES6 code compiles to.
+### 튜토리얼을 따라오는 방법
 
-### How to Follow Along
+이 튜토리얼을 완성하는 데 두 가지 방법이 있습니다. 브라우저에서 코드를 작성할 수도 있고, 컴퓨터에 개발 환경을 설치할 수도 있습니다. 편하신 쪽을 선택하세요.
 
-There are two ways to complete this tutorial: you could either write the code right in the browser, or you could set up a local development environment on your machine. You can choose either option depending on what you feel comfortable with.
+#### 브라우저에서 코드를 작성하고 싶다면
 
-#### If You Prefer to Write Code in the Browser
+이 방법이 가장 빠른 방법입니다!
 
-This is the quickest way to get started!
+먼저, 이 [시작 코드](https://codepen.io/gaearon/pen/oWWQNa?editors=0010)를 새 탭에서 열어주세요. 텅 빈 틱틱토 게임판이 나타날 것입니다. 튜토리얼을 따라 해당 게임판의 코드를 작성해주세요.
 
-First, open this [starter code](https://codepen.io/gaearon/pen/oWWQNa?editors=0010) in a new tab. It should display an empty tic-tac-toe field. We will be editing that code during this tutorial.
+다음 섹션은 건너뛰고 개요를 바로 읽어보세요.
 
-You can now skip the next section about setting up a local development environment and head straight to the [overview](#overview).
+#### 사용중인 에디터에서 코드를 작성하고 싶다면
 
-#### If You Prefer to Write Code in Your Editor
+~생략~
 
-Alternatively, you can set up a project on your computer.
+## 개요
 
-Note: **this is completely optional and not required for this tutorial!**
+### React가 무엇인가요?
 
-This is more work, but lets you work from the comfort of your editor.
+React는 선언적이고, 효율적이며, 유연한 JavaScript 라이브러리입니다. React는 UI를 제작할 때 사용하기 위해 만들어졌습니다. React를 사용하면, "컴포넌트"라 불리는 여러 격리된 코드 조각을 조합해서, 복잡한 UI를 쉽게 만들 수 있습니다.
 
-If you want to do it, here are the steps to follow:
-
-1. Make sure you have a recent version of [Node.js](https://nodejs.org/en/) installed.
-2. Follow the [installation instructions](/docs/installation.html#creating-a-new-application) to create a new project.
-
-```bash
-npm install -g create-react-app
-create-react-app my-app
-```
-
-3. Delete all files in the `src/` folder of the new project (don't delete the folder, just its contents).
-
-```bash
-cd my-app
-rm -f src/*
-```
-
-4. Add a file named `index.css` in the `src/` folder with [this CSS code](https://codepen.io/gaearon/pen/oWWQNa?editors=0100).
-
-5. Add a file named `index.js` in the `src/` folder with [this JS code](https://codepen.io/gaearon/pen/oWWQNa?editors=0010).
-
-6. Add these three lines to the top of `index.js` in the `src/` folder:
-
-```js
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-```
-
-Now if you run `npm start` in the project folder and open `http://localhost:3000` in the browser, you should see an empty tic-tac-toe field.
-
-We recommend following [these instructions](http://babeljs.io/docs/editors) to configure syntax highlighting for your editor.
-
-### Help, I'm Stuck!
-
-If you get stuck, check out the [community support resources](/community/support.html). In particular, [Reactiflux chat](/community/support.html#reactiflux-chat) is a great way to get quick help. If you don't get a good answer anywhere, please file an issue, and we'll help you out.
-
-With this out of the way, let's get started!
-
-## Overview
-
-### What is React?
-
-React is a declarative, efficient, and flexible JavaScript library for building user interfaces.
-
-React has a few different kinds of components, but we'll start with `React.Component` subclasses:
+React의 컴포넌트에는 두 가지 종류가 있습니다. 일단은 `React.Component`의 서브클래스부터 봅시다:
 
 ```javascript
 class ShoppingList extends React.Component {
@@ -113,14 +68,14 @@ class ShoppingList extends React.Component {
   }
 }
 
-// Example usage: <ShoppingList name="Mark" />
+// 사용 예제: <ShoppingList name="Mark" />
 ```
 
-We'll get to the funny XML-like tags in a second. Your components tell React what you want to render – then React will efficiently update and render just the right components when your data changes.
+XML과 비슷하게 생긴 위 태그의 사용법을 곧 살펴볼 것입니다. 우리는 화면을 어떻게 그릴지를 React에게 알려주기 위해 컴포넌트를 사용합니다. 데이터가 변경되면, React는 컴포넌트를 효율적으로 갱신합니다. (즉, 다시 그립니다.)
 
-Here, ShoppingList is a **React component class**, or **React component type**. A component takes in parameters, called `props`, and returns a hierarchy of views to display via the `render` method.
+위에서 본 ShoppingList는 **React 컴포넌트 클래스**입니다. 컴포넌트는 props ("properties"의 줄임말)이라 불리는 매개변수를 받아서, `render` 메소드에서 뷰의 계층 구조를 반환합니다.
 
-The `render` method returns a *description* of what you want to render, and then React takes that description and renders it to the screen. In particular, `render` returns a **React element**, which is a lightweight description of what to render. Most React developers use a special syntax called JSX which makes it easier to write these structures. The `<div />` syntax is transformed at build time to `React.createElement('div')`. The example above is equivalent to:
+`render` 메소드는 무엇을 그릴지에 대한 *설명*을 반환합니다. 그러면 React는 그것을 받아 화면에 그려줍니다. 여기서 `render`가 반환하는 것은 **React 엘리먼트**로, '무엇을 그릴지'에 대한 정보를 담고있는 객체입니다. 대부분의 React 개발자들은 이러한 구조를 쉽게 표현할 수 있는 JSX라는 특별한 문법을 사용합니다. `<div />`라는 JSX 코드는, 빌드 과정에서 `React.createElement('div')`로 변환됩니다. 위 예제는 사실 아래 코드와 같습니다:
 
 ```javascript
 return React.createElement('div', {className: 'shopping-list'},
@@ -129,31 +84,31 @@ return React.createElement('div', {className: 'shopping-list'},
 );
 ```
 
-[See full expanded version.](babel://tutorial-expanded-version)
+[전체 예제를 여기서 확인하세요.](babel://tutorial-expanded-version)
 
-If you're curious, `createElement()` is described in more detail in the [API reference](/docs/react-api.html#createelement), but we won't be using it directly in this tutorial. Instead, we will keep using JSX.
+좀 더 알고싶으시다면, [API reference](/docs/react-api.html#createelement)에서 `createElement()`에 대한 자세한 설명을 읽어보세요. 하지만 이 튜토리얼에서는 이 함수를 직접 사용하지 않을 것입니다. 대신, 우리는 JSX를 계속 사용합시다.
 
-You can put any JavaScript expression within braces inside JSX. Each React element is a real JavaScript object that you can store in a variable or pass around your program.
+JSX 안에서는 JavaScript를 자유롭게 활용할 수 있습니다. JSX 중괄호 안에는 어떤 JavaScript 표현식도 넣을 수 있습니다. 그리고 React 엘리먼트는 JavaScript 객체로, 변수에 담거나 프로그램의 다른 부분으로 넘기는 것이 가능합니다.
 
-The `ShoppingList` component only renders built-in DOM components, but you can compose custom React components just as easily, by writing `<ShoppingList />`. Each component is encapsulated so it can operate independently, which allows you to build complex UIs out of simple components.
+위 예제의 ShoppingList 컴포넌트는 브라우저에 내장된 DOM 컴포넌트(`<div />`, `<li />`)만 그려주고 있습니다. 하지만 React 컴포넌트를 조합해서 그리는 것도 가능합니다. 예를 들어, 우리는 전체 쇼핑 목록을 그리기 위해 `<ShoppingList />`와 같이 쓸 수 있습니다. 각각의 React 컴포넌트는 독립적이며 캡슐화되어 있습니다. 이 성질은 우리가 단순한 컴포넌트로부터 복잡한 UI를 만드는 일을 가능하게 해 줍니다.
 
-### Getting Started
+### 시작 코드 살펴보기
 
-Start with this example: [Starter Code](https://codepen.io/gaearon/pen/oWWQNa?editors=0010).
+[시작 코드](https://codepen.io/gaearon/pen/oWWQNa?editors=0010)를 열어서 시작해봅시다.
 
-It contains the shell of what we're building today. We've provided the styles so you only need to worry about the JavaScript.
+우리는 이 시작 코드 위에서 작업을 할 것입니다. CSS 코드를 미리 작성해두었으니 React를 배우는 데에만 집중하세요.
 
-In particular, we have three components:
+코드를 살펴보면, 세 개의 React 컴포넌트가 있습니다.
 
 * Square
 * Board
 * Game
 
-The Square component renders a single `<button>`, the Board renders 9 squares, and the Game component renders a board with some placeholders that we'll fill in later. None of the components are interactive at this point.
+Square 컴포넌트는 하나의 `<button>`을 그리고, Board 컴포넌트는 9개의 Square을 그리며, Game 컴포넌트는 Board를 그리고 있고 조금 뒤에 우리가 빈 부분을 채워넣을 것입니다. 아직은 사용자와 상호작용을 할 수 있는 컴포넌트가 없습니다.
 
 ### Passing Data Through Props
 
-Just to get our feet wet, let's try passing some data from the Board component to the Square component.
+이제 직접 코드를 작성해 볼 차례입니다. Board 컴포넌트에서 Square 컴포넌트로 데이터를 넘겨줘봅시다.
 
 In Board's `renderSquare` method, change the code to pass a `value` prop to the Square:
 
@@ -164,7 +119,7 @@ class Board extends React.Component {
   }
 ```
 
-Then change Square's `render` method to show that value by replacing `{/* TODO */}` with `{this.props.value}`:
+Square 컴포넌트의 `render` 메소드를 고쳐서, 위에서 받은 값을 표시하도록 만들어보세요.
 
 ```js{5}
 class Square extends React.Component {
@@ -178,19 +133,21 @@ class Square extends React.Component {
 }
 ```
 
-Before:
+코드를 수정하기 전에는:
 
 ![React Devtools](../images/tutorial/tictac-empty.png)
 
-After: You should see a number in each square in the rendered output.
+코드를 수정하고 난 뒤: 사각형 안에 숫자가 표시되어야 합니다.
 
 ![React Devtools](../images/tutorial/tictac-numbers.png)
 
-[View the current code.](https://codepen.io/gaearon/pen/aWWQOG?editors=0010)
+[현재 단계의 코드를 확인해보세요.](https://codepen.io/gaearon/pen/aWWQOG?editors=0010)
 
-### An Interactive Component
+축하합니다! 여러분은 방금 부모인 Board 컴포넌트로부터 자식인 Square 컴포넌트에게 "prop을 넘겼습니다". React 앱에서는, 이렇게 정보가 부모로부터 자식에게 흐릅니다. "Prop을 넘김으로써" 말이죠.
 
-Let's make the Square component fill in an "X" when you click it. Try changing the button tag returned in the `render()` function of the Square like this:
+### 상호작용을 하는 컴포넌트 만들기
+
+이제, Square 컴포넌트를 클릭했을 때 "X" 표시가 되도록 만들어봅시다. 먼저, Square 컴포넌트의 `render()` 메소드에서 반환하고 있는 button 태그를 아래와 같이 고쳐봅시다.
 
 ```javascript{4}
 class Square extends React.Component {
@@ -204,13 +161,15 @@ class Square extends React.Component {
 }
 ```
 
-If you click on a square now, you should get an alert in your browser.
+이제 사각형을 클릭하면, 브라우저 경고창이 뜰 것입니다.
 
-This uses the new JavaScript [arrow function](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Functions/Arrow_functions) syntax. Note that we're passing a function as the `onClick` prop. Doing `onClick={alert('click')}` would alert immediately instead of when the button is clicked.
+이 코드는 [화살표 함수](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Functions/Arrow_functions) 문법을 사용하고 있습니다. 우리가 `onClick` prop에 **함수**를 넘겼다는 사실에 주목하세요. 코드를 `onClick={alert('click')}` 이렇게 작성하면, 클릭했을 때 경고창이 뜨는 게 아니라 바로 뜨게 될 것입니다. 이는 초보자들이 자주 하는 실수입니다.
 
-React components can have state by setting `this.state` in the constructor, which should be considered private to the component. Let's store the current value of the square in state, and change it when the square is clicked.
+다음으로, 스스로가 클릭되었다는 사실을 Square 컴포넌트가 "기억"하게 만들어 봅시다. 무언가를 "기억"하기 위해, 컴포넌트는 **state**를 사용합니다.
 
-First, add a constructor to the class to initialize the state:
+React 컴포넌트의 생성자에서 `this.state` 속성을 넣어주면, 이 컴포넌트는 **상태를 갖게 됩니다.** 이 상태를 갖고 있는 컴포넌트만이 상태를 변경할 수 있습니다. 이제 사각형에 표시될 값을 state에 저장하고, 클릭되었을 때 그 값이 변경되게 만들어봅시다.
+
+먼저, state를 초기화하기 위해 생성자를 추가합시다.
 
 ```javascript{2-7}
 class Square extends React.Component {
@@ -231,14 +190,18 @@ class Square extends React.Component {
 }
 ```
 
-In [JavaScript classes](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes), you need to explicitly call `super();` when defining the constructor of a subclass.
+[JavaScript 클래스](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes)를 사용할 때, 서브클래스의 생성자를 정의할 때는 반드시 `super`를 호출해주어야 합니다. 생성자를 갖는 모든 React 컴포넌트 클래스는 그 생성자가 반드시 `super(props)`로 시작해야 합니다.
 
-Now change the Square `render` method to display the value from the current state, and to toggle it on click:
+이제 사각형을 클릭하면 현재 값을 표시하도록 `render` 메소드를 바꾸어 봅시다.
 
 * Replace `this.props.value` with `this.state.value` inside the `<button>` tag.
 * Replace the `() => alert()` event handler with `() => this.setState({value: 'X'})`.
 
-Now the `<button>` tag looks like this:
+* `<button>` 태그 안에 있는 `this.props.value`를 `this.state.value`로 바꾸세요.
+* `() => alert()` 이벤트 핸들러를 `() => this.setState({value: 'X'})`로 바꾸세요.
+* `className`과 `onClick` prop을 서로 다른 줄에 배치해 읽기 좋게 만듭시다.
+
+이제 `<button>`는 다음과 같은 모습이 되었습니다.
 
 ```javascript{10-12}
 class Square extends React.Component {
@@ -259,47 +222,52 @@ class Square extends React.Component {
 }
 ```
 
-Whenever `this.setState` is called, an update to the component is scheduled, causing React to merge in the passed state update and rerender the component along with its descendants. When the component rerenders, `this.state.value` will be `'X'` so you'll see an X in the grid.
+Square의 `render` 메소드 안에 있는 `onClick` 핸들러 안에서 `this.setState`를 호출하면, 
+**`<button>`이 클릭될 때마다 화면을 다시 그려야 한다**는 사실을 React에게 알려줄 수 있습니다.
+그 뒤, `this.state.value`는 `'X'`가 될 것이고, 이로 인해 게임판에 X가 표시됩니다. 이제 사각형을 클릭해서, X가 표시되는지 확인해보세요.
 
-If you click on any square, an X should show up in it.
+컴포넌트 안에서 `setState`를 호출하면, React는 해당 컴포넌트가 품고 있는 자식 컴포넌트까 모두 새로 그려줍니다.
 
-[View the current code.](https://codepen.io/gaearon/pen/VbbVLg?editors=0010)
+[현재 단계의 코드를 확인해보세요.](https://codepen.io/gaearon/pen/VbbVLg?editors=0010)
 
-### Developer Tools
+### 개발자 도구
 
-The React Devtools extension for [Chrome](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=en) and [Firefox](https://addons.mozilla.org/en-US/firefox/addon/react-devtools/) lets you inspect a React component tree in your browser devtools.
+[Chrome](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=en)과 [Firefox](https://addons.mozilla.org/en-US/firefox/addon/react-devtools/)의 React Devtools 확장 프로그램을 사용하면, 브라우저 개발자 도구 안에서 React 컴포넌트 트리를 관찰해볼 수 있습니다.
 
 <img src="../images/tutorial/devtools.png" alt="React Devtools" style="max-width: 100%">
 
-It lets you inspect the props and state of any of the components in your tree.
 
-After installing it, you can right-click any element on the page, click "Inspect" to open the developer tools, and the React tab will appear as the last tab to the right.
+React DevTools를 사용해서 React 컴포넌트의 prop과 state를 관찰할 수 있습니다.
 
-**However, note there are a few extra steps to get it working with CodePen:**
+브라우저에서 오른쪽 클릭을 한 뒤 요소검사를 하면, 개발자 도구가 열리고 맨 오른쪽에 React 탭이 있을 것입니다.
 
-1. Log in or register and confirm your email (required to prevent spam).
-2. Click the "Fork" button.
-3. Click "Change View" and then choose "Debug mode".
-4. In the new tab that opens, the devtools should now have a React tab.
+**다만, CodePen에서 개발자 도구를 사용하려면 몇 가지 단계가 추가로 필요합니다.**
 
-## Lifting State Up
+1. 로그인하세요.
+2. "Fork" 버튼을 클릭하세요.
+3. "Change View"를 클릭한 다음 "Debug mode"를 선택하세요.
+4. 새 탭이 열리면, 거기서 개발자 도구를 연 다음 React 탭을 확인하세요.
 
-We now have the basic building blocks for a tic-tac-toe game. But right now, the state is encapsulated in each Square component. To make a fully-working game, we now need to check if one player has won the game, and alternate placing X and O in the squares. To check if someone has won, we'll need to have the value of all 9 squares in one place, rather than split up across the Square components.
+## 게임 완성하기
 
-You might think that Board should just inquire what the current state of each Square is. Although it is technically possible to do this in React, it is discouraged because it tends to make code difficult to understand, more brittle, and harder to refactor.
+이제 우리는 틱택토 게임을 만들기 위한 준비를 마쳤습니다. 게임을 완성하려면, "X"와 "O" 표시가 번갈아가며 게임판에 나타나야 하고, 또 승자를 결정할 수 있어야 합니다.
 
-Instead, the best solution here is to store this state in the Board component instead of in each Square – and the Board component can tell each Square what to display, like how we made each square display its index earlier.
+### 상태 끌어올리기
 
-**When you want to aggregate data from multiple children or to have two child components communicate with each other, move the state upwards so that it lives in the parent component. The parent can then pass the state back down to the children via props, so that the child components are always in sync with each other and with the parent.**
+현재, 각각의 Square 컴포넌트가 게임 상태를 저장하고 있습니다. 승자를 결정할 수 있으려면, 9개의 Square 컴포넌트에 저장되어 있는 값을 한 곳으로 모을 방법이 필요합니다.
 
-Pulling state upwards like this is common when refactoring React components, so let's take this opportunity to try it out. Add a constructor to the Board and set its initial state to contain an array with 9 nulls, corresponding to the 9 squares:
+Board 컴포넌트에서 Square 컴포넌트의 상태를 가져오는 방법도 생각해 볼 수 있습니다만, 이런 접근방식은 권장되지 않습니다. 이 방식으로 코드를 작성했을 때 이해하기 어렵고, 버그가 발생하기 쉽고, 또 수정하기 어려운 코드가 되기 쉽기 때문입니다. 대신, 권장되는 방식은 게임의 상태를 Square 대신에 부모인 Board 컴포넌트에 저장하는 것입니다. Board 컴포넌트는 (위에서 숫자를 넘겼던 것처럼) Square 컴포넌트에게 prop을 넘겨줌으로써 무엇을 표시해야하는지를 알려줄 수 있습니다.
+
+**여러 자식 컴포넌트에 저장되어 있는 데이터를 읽어와야 할 때, 혹은 자식 컴포넌트끼리 통신을 해야 할 필요가 있을 때는, 부모 컴포넌트에서 상태를 공유하세요. 부모 컴포넌트에서는 prop을 통해 자식 컴포넌트에게 상태를 내려줄 수 있습니다. 이 방법을 통해 부모 컴포넌트와 자식 컴포넌트가 따로 놀지 않게 만들 수 있습니다.**
+
+상태를 부모 컴포넌트로 끌어올리는 작업은 React 컴포넌트를 개선할 때 많이들 하는 작업입니다. 이제 직접 작업을 해봅시다. Board 컴포넌트에 생성자를 추가하고, 아홉 개의 null이 들어있는 배열을 초기 상태에 집어넣읍시다.
 
 ```javascript{2-7}
 class Board extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      squares: Array(9).fill(null),
+      squares: new Array(9).fill(null),
     };
   }
 
@@ -334,7 +302,7 @@ class Board extends React.Component {
 }
 ```
 
-We'll fill it in later so that a board looks something like
+나중에 우리가 상태를 채워넣게 되면, 게임판은 아래와 같은 모양이 될 것입니다:
 
 ```javascript
 [
@@ -344,7 +312,7 @@ We'll fill it in later so that a board looks something like
 ]
 ```
 
-Board's `renderSquare` method currently looks like this:
+다시 `renderSquare` 메소드를 보면, 지금은 아래와 같은 상태입니다:
 
 ```javascript
   renderSquare(i) {
@@ -352,7 +320,9 @@ Board's `renderSquare` method currently looks like this:
   }
 ```
 
-Modify it to pass a `value` prop to Square.
+아까 전에, 우리는 사각형에 숫자를 표시하기 위해 prop을 내려보냈습니다. 그 이후, 숫자를 "X" 표시로 바꾸어 주었고 이는 Square 컴포넌트의 상태에 저장되고 있습니다. 이 때문에 방금 우리가 내려준 `value` prop이 Square 컴포넌트에서 무시되고 있습니다.
+
+이제 다시 prop 내려주기 메커니즘을 적용해봅시다. Board 컴포넌트를 수정해서, 각각의 Square 컴포넌트에게 자신의 현재 값((`'X'`, `'O'`, 혹은 `null`)을 알려주도록 만들어줍시다. 우리는 이미 Board 컴포넌트의 생성자에 `squares` 배열을 가지고 있고, `renderSquare` 메소드에서 이를 읽어오도록 만들어 줍시다.
 
 ```javascript{2}
   renderSquare(i) {
@@ -360,11 +330,11 @@ Modify it to pass a `value` prop to Square.
   }
 ```
 
-[View the current code.](https://codepen.io/gaearon/pen/gWWQPY?editors=0010)
+[현재 단계의 코드를 확인해보세요.](https://codepen.io/gaearon/pen/gWWQPY?editors=0010)
 
-Now we need to change what happens when a square is clicked. The Board component now stores which squares are filled, which means we need some way for Square to update the state of Board. Since component state is considered private, we can't update Board's state directly from Square.
+이제 사각형을 클릭했을 때의 처리를 해주어야 합니다. Board 컴포넌트가 게임 상태를 저장하고 있으므로, **Square 컴포넌트에서 Board 컴포넌트의 상태를 변경할 방법**이 필요합니다. 컴포넌트의 상태에는 자기 자신만 접근할 수 있으므로, Square 컴포넌트에서 Board 컴포넌트의 상태를 **직접 변경**할 수 있는 방법은 없습니다.
 
-The usual pattern here is pass down a function from Board to Square that gets called when the square is clicked. Change `renderSquare` in Board again so that it reads:
+이런 경우, 부모 컴포넌트인 Board에서 **상태를 바꾸는 함수**를 만들어 Square에 내려줌으로써 문제를 해결할 수 있습니다. 이 함수를 Square가 클릭되는 순간 호출해줍시다. 일단 Board 컴포넌트의 `renderSquare` 메소드를 고쳐봅시다. (참고: 아래 코드는 아직 동작하지 않습니다.)
 
 ```javascript{5}
   renderSquare(i) {
@@ -377,15 +347,15 @@ The usual pattern here is pass down a function from Board to Square that gets ca
   }
 ```
 
-We split the returned element into multiple lines for readability, and added parentheses around it so that JavaScript doesn't insert a semicolon after `return` and break our code.
+코드를 읽기 쉽게 엘리먼트를 여러 줄로 나누고, 또 괄호를 둘러주었습니다.
 
-Now we're passing down two props from Board to Square: `value` and `onClick`. The latter is a function that Square can call. Let's make the following changes to Square:
+이제 Board에서는 `value`와 `onClick`이라는 두 개의 prop을 Square로 내려보내주고 있습니다. 후자는 Square 컴포넌트에서 호출할 수 있는 함수입니다. 이제 Square 컴포넌트를 수정해봅시다.
 
-* Replace `this.state.value` with `this.props.value` in Square's `render`.
-* Replace `this.setState()` with `this.props.onClick()` in Square's `render`.
-* Delete `constructor` definition from Square because it doesn't have state anymore.
+* `render` 메소드 내부의 `this.state.value`를 `this.props.value`로 바꾸세요.
+* `render` 메소드 내부의 `this.setState()`를 `this.props.onClick()`로 바꾸세요.
+* `constructor`를 지우세요. 상태를 가질 필요가 없기 때문에 생성자도 지워줍시다.
 
-After these changes, the whole Square component looks like this:
+코드를 수정하면 아래와 같이 됩니다.
 
 ```javascript{1,2,4,5}
 class Square extends React.Component {
@@ -399,17 +369,17 @@ class Square extends React.Component {
 }
 ```
 
-Now when the square is clicked, it calls the `onClick` function that was passed by Board. Let's recap what happens here:
+이제 Square를 클릭하면, Board가 넘겨준 onClick 함수가 호출됩니다. 이 때 일어나는 일을 정리해봅시다:
 
-1. The `onClick` prop on the built-in DOM `<button>` component tells React to set up a click event listener.
-2. When the button is clicked, React will call the `onClick` event handler defined in Square's `render()` method.
-3. This event handler calls `this.props.onClick()`. Square's props were specified by the Board.
-4. Board passed `onClick={() => this.handleClick(i)}` to Square, so, when called, it runs `this.handleClick(i)` on the Board.
-5. We have not defined the `handleClick()` method on the Board yet, so the code crashes.
+1. React에 내장된 DOM 컴포넌트인 `<button>` 컴포넌트의 `onClick` prop에 함수를 넘겨주면, React는 클릭 이벤트 리스너를 등록합니다.
+2. 버튼을 클릭하면, React는 `onClick`에 넘겨준 이벤트 핸들러 함수를 호출합니다.
+3. 이 이벤트 핸들러는 `this.props.onClick()`를 호출합니다. 이 `onClick` prop은 Board 컴포넌트에서 넘겨준 것입니다.
+4. Board 컴포넌트는 Square에게 `onClick={() => this.handleClick(i)}`를 넘겨주었으므로, 이 함수가 호출되면 Board에서 `this.handleClick(i)`가 호출됩니다.
+5. 아직 `handleClick()`를 Board에 정의해주지 않았으므로, 에러가 발생합니다.
 
-Note that DOM `<button>` element's `onClick` attribute has a special meaning to React, but we could have named Square's `onClick` prop or Board's `handleClick` method differently. It is, however, conventional in React apps to use `on*` names for the attributes and `handle*` for the handler methods.
+DOM `<button>` 엘리먼트의 `onClick` prop은 React가 특별하게 취급합니다. (즉, 이벤트 리스너로 등록됩니다.) Square의 `onClick`이나 Board의 `handleClick`은 특별하게 취급되는 것이 아니므로, 다른 이름을 사용할 수는 있습니다. 하지만, React 앱에서 (이벤트 리스너로 사용할) prop의 이름을 `on*`과 같이 짓고, 거기에 넘겨줄 핸들러 메소드의 이름을 `handle*`과 같이 짓는 것은 널리 사용되는 관례입니다.
 
-Try clicking a square – you should get an error because we haven't defined `handleClick` yet. Add it to the Board class.
+사각형을 클릭하면 에러가 나는데, 우리가 아직 `handleClick` 메소드를 만들지 않았기 때문입니다. 이를 Board 클래스에 만들어줍시다.
 
 ```javascript{9-13}
 class Board extends React.Component {
@@ -462,13 +432,13 @@ class Board extends React.Component {
 }
 ```
 
-[View the current code.](https://codepen.io/gaearon/pen/ybbQJX?editors=0010)
+[현재 상태의 코드를 확인해보세요.](https://codepen.io/gaearon/pen/ybbQJX?editors=0010)
 
-We call `.slice()` to copy the `squares` array instead of mutating the existing array. Jump ahead a [section](/tutorial/tutorial.html#why-immutability-is-important) to learn why immutability is important.
+이제, 우리는 다시 사각형을 클릭해 표시를 할 수 있게 되었습니다. 하지만, 이제 게임 상태는 Board 컴포넌트에 저장되고 있습니다. Board의 상태가 바뀌면, Square 컴포넌트는 자동으로 다시 그려집니다. 사각형에 대한 모든 상태를 Board 컴포넌트에 둠으로써, 이제 승자를 결정할 수도 있게 되었습니다.
 
-Now you should be able to click in squares to fill them again, but the state is stored in the Board component instead of in each Square, which lets us continue building the game. Note how whenever Board's state changes, the Square components rerender automatically.
+Square 컴포넌트가 상태를 갖지 않게 됨으로써, Square 컴포넌트는 Board 컴포넌트로부터 정보를 받고, 클릭되었을 때 그 사실을 Board 컴포넌트에게 알려줍니다. React 용어로 설명하면, Square 컴포넌트는 이제 **제어되는 컴포넌트**가 되었습니다. Board 컴포넌트가 이들을 완전히 제어하고 있습니다.
 
-Square no longer keeps its own state; it receives its value from its parent Board and informs its parent when it's clicked. We call components like this **controlled components**.
+`handleClick` 내부에서 `.slice()` 메소드를 사용해서 배열을 통째로 복사한 부분에 주목하세요. 왜 이렇게 했는지 다음 섹션에서 설명하겠습니다.
 
 ### Why Immutability Is Important
 
@@ -512,11 +482,13 @@ The biggest benefit of immutability in React comes when you build simple _pure c
 
 To learn more about `shouldComponentUpdate()` and how you can build *pure components* take a look at [Optimizing Performance](/docs/optimizing-performance.html#examples).
 
-### Functional Components
+### 함수형 컴포넌트
 
-We've removed the constructor, and in fact, React supports a simpler syntax called **functional components** for component types like Square that only consist of a `render` method. Rather than define a class extending `React.Component`, simply write a function that takes props and returns what should be rendered.
+이제 Square를 **함수형 컴포넌트**로 만들어보겠습니다.
 
-Replace the whole Square class with this function:
+**함수형 컴포넌트**는, 상태를 갖지 않고, `render` 메소드만 있는 컴포넌트를 좀 더 편하게 작성할 수 있는 방법입니다. `React.Component`를 상속받는 클래스를 만드는 대신, `props`를 입력받아서 무엇을 그려야 할지를 반환하는 함수를 만드세요. 함수형 컴포넌트는 클래스에 비해 빨리 작성할 수 있으며, 많은 컴포넌트들이 함수형 컴포넌트로 작성될 수 있습니다.
+
+Square 클래스를 통째로 아래 코드로 바꾸세요.
 
 ```javascript
 function Square(props) {
@@ -528,17 +500,18 @@ function Square(props) {
 }
 ```
 
-You'll need to change `this.props` to `props` both times it appears. Many components in your apps will be able to be written as functional components: these components tend to be easier to write and React will optimize them more in the future.
+두 군데에 `this.props`라고 되어 있는 부분을 `props`로 바꾸어 주었습니다.
 
-While we're cleaning up the code, we also changed `onClick={() => props.onClick()}` to just `onClick={props.onClick}`, as passing the function down is enough for our example. Note that `onClick={props.onClick()}` would not work because it would call `props.onClick` immediately instead of passing it down.
+[현재 상태의 코드를 확인해보세요.](https://codepen.io/gaearon/pen/QvvJOv?editors=0010)
 
-[View the current code.](https://codepen.io/gaearon/pen/QvvJOv?editors=0010)
 
-### Taking Turns
+`onClick={() => this.props.onClick()}`을 `onClick={props.onClick}`과 같이 작성한 부분에 주목하세요. `<button>` 내장 컴포넌트의 `onClick` prop에는 이렇게 함수를 직접 넘겨줄 수도 있습니다. 부모 컴포넌트로부터 받은 함수를 넘겨줄 때는 이렇게 해도 문제가 없어서 이런 코드가 많이 사용됩니다. 하지만, (특히 클래스 컴포넌트에서) `this` 때문에 문제가 생길 수도 있으니 주의해주세요!
 
-An obvious defect in our game is that only X can play. Let's fix that.
+### 턴 넘기기
 
-Let's default the first move to be by 'X'. Modify our starting state in our Board constructor:
+우리 게임의 큰 문제점은 오직 X만 플레이할 수 있다는 것입니다. 현재 "O"가 게임판에 표시되지 않고 있습니다. 이를 고쳐봅시다.
+
+처음에는 X의 차례로 시작하는 것으로 합시다. 이 규칙을 반영해서, 이제 Board 컴포넌트의 초기 상태를 아래와 같이 고쳐봅시다.
 
 ```javascript{6}
 class Board extends React.Component {
@@ -553,6 +526,8 @@ class Board extends React.Component {
 
 Each time we move we shall toggle `xIsNext` by flipping the boolean value and saving the state. Now update Board's `handleClick` function to flip the value of `xIsNext`:
 
+플레이어가 한 수 둘 때마다, `xIsNext`의 값이 뒤집혀서 다음 플레이어가 누군지 가리키게 만들어 봅시다. `xIsNext`를 뒤집기 위해 Board의 `handleClick` 메소드를 수정해봅시다.
+
 ```javascript{3,6}
   handleClick(i) {
     const squares = this.state.squares.slice();
@@ -564,7 +539,7 @@ Each time we move we shall toggle `xIsNext` by flipping the boolean value and sa
   }
 ```
 
-Now X and O take turns. Next, change the "status" text in Board's `render` so that it also displays who is next:
+이제 "X"와 "O"가 교대로 바뀝니다. 이제 "status" 텍스트를 바꾸어 현재 플레이어가 누군지 표시해줍시다.
 
 ```javascript{2}
   render() {
@@ -631,11 +606,11 @@ class Board extends React.Component {
 }
 ```
 
-[View the current code.](https://codepen.io/gaearon/pen/KmmrBy?editors=0010)
+[현재 상태의 코드를 확인해보세요.](https://codepen.io/gaearon/pen/KmmrBy?editors=0010)
 
 ### Declaring a Winner
 
-Let's show when a game is won. Add this helper function to the end of the file:
+이제 승자를 결정하는 것만 남았습니다. 미리 작성된 아래 함수를 코드의 최하단에 추가해주세요.
 
 ```javascript
 function calculateWinner(squares) {
@@ -663,6 +638,8 @@ You can call it in Board's `render` function to check if anyone has won the game
 
 Replace the `status` declaration in Board's `render` with this code:
 
+이제 Board의 `render` 함수에서 `calculateWinner(squares)`를 호출해서, 누군가가 승리했는지를 확인합시다. 만약 둘 중 한명이 이겼다면, 누가 이겼는지를 표시해줄 수 있습니다. 이를 위해 Board의 `render` 메소드에서 status를 수정해봅시다.
+
 ```javascript{2-8}
   render() {
     const winner = calculateWinner(this.state.squares);
@@ -677,7 +654,7 @@ Replace the `status` declaration in Board's `render` with this code:
       // the rest has not changed
 ```
 
-You can now change `handleClick` in Board to return early and ignore the click if someone has already won the game or if a square is already filled:
+이제 Board의 `handleClick`을 수정해서, 만약 승자가 결정되었거나 사각형이 이미 채워져있는 상태라면 함수를 바로 종료하게 만들어봅시다.
 
 ```javascript{3-5}
   handleClick(i) {
@@ -693,9 +670,9 @@ You can now change `handleClick` in Board to return early and ignore the click i
   }
 ```
 
-Congratulations! You now have a working tic-tac-toe game. And now you know the basics of React. So *you're* probably the real winner here.
+축하합니다! 이제 제대로 동작하는 틱택토 게임이 되었습니다. 그리고 여러분은 React의 기초적인 내용에 대해 알게 되었습니다. 여기에서의 **진정한 승자는 여러분인 것 같네요!**
 
-[View the current code.](https://codepen.io/gaearon/pen/LyyXgK?editors=0010)
+[현재 상태의 코드를 확인해보세요.](https://codepen.io/gaearon/pen/LyyXgK?editors=0010)
 
 ## Storing a History
 
