@@ -162,7 +162,7 @@ class SignUpDialog extends React.Component {
 
 [Try it on CodePen.](https://codepen.io/gaearon/pen/gwZbYa?editors=0010)
 
-## 그래서 상속이 무엇인가요?
+## 그래서, 상속은 사용하지 않는 건가요?
 
 Facebook에서는 수천 개의 React 컴포넌트를 사용하고 있지만, 컴포넌트 상속 계층구조를 사용해야할 만한 사례를 발견하지 못했습니다.
 
