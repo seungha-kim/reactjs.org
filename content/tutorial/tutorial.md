@@ -194,9 +194,6 @@ class Square extends React.Component {
 
 이제 사각형을 클릭하면 현재 값을 표시하도록 `render` 메소드를 바꾸어 봅시다.
 
-* Replace `this.props.value` with `this.state.value` inside the `<button>` tag.
-* Replace the `() => alert()` event handler with `() => this.setState({value: 'X'})`.
-
 * `<button>` 태그 안에 있는 `this.props.value`를 `this.state.value`로 바꾸세요.
 * `() => alert()` 이벤트 핸들러를 `() => this.setState({value: 'X'})`로 바꾸세요.
 * `className`과 `onClick` prop을 서로 다른 줄에 배치해 읽기 좋게 만듭시다.
@@ -524,8 +521,6 @@ class Board extends React.Component {
   }
 ```
 
-Each time we move we shall toggle `xIsNext` by flipping the boolean value and saving the state. Now update Board's `handleClick` function to flip the value of `xIsNext`:
-
 플레이어가 한 수 둘 때마다, `xIsNext`의 값이 뒤집혀서 다음 플레이어가 누군지 가리키게 만들어 봅시다. `xIsNext`를 뒤집기 위해 Board의 `handleClick` 메소드를 수정해봅시다.
 
 ```javascript{3,6}
@@ -549,7 +544,7 @@ Each time we move we shall toggle `xIsNext` by flipping the boolean value and sa
       // the rest has not changed
 ```
 
-After these changes you should have this Board component:
+코드를 수정한 뒤, Board 컴포넌트는 아래와 같은 모양이 됩니다.
 
 ```javascript{6,11-16,29}
 class Board extends React.Component {
@@ -633,10 +628,6 @@ function calculateWinner(squares) {
   return null;
 }
 ```
-
-You can call it in Board's `render` function to check if anyone has won the game and make the status text show "Winner: [X/O]" when someone wins.
-
-Replace the `status` declaration in Board's `render` with this code:
 
 이제 Board의 `render` 함수에서 `calculateWinner(squares)`를 호출해서, 누군가가 승리했는지를 확인합시다. 만약 둘 중 한명이 이겼다면, 누가 이겼는지를 표시해줄 수 있습니다. 이를 위해 Board의 `render` 메소드에서 status를 수정해봅시다.
 
